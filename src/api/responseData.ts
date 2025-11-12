@@ -1,0 +1,16 @@
+export interface ResponseData<T> {
+  code: number
+  message: string
+  data: T
+}
+export interface DataListResponse<T> {
+  count: number
+  list: T[]
+  page: number
+  pageSize: number
+}
+export interface ResponseListData<T> {
+  code: number
+  message: string
+  data: DataListResponse<T>
+}

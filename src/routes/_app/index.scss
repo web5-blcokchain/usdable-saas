@@ -1,0 +1,32 @@
+.ant-form .ant-form-item {
+  .ant-row .ant-form-item-label {
+    padding-bottom: 1rem;
+  }
+}
+
+.ant-upload-wrapper.UploadCard {
+  width: 100%;
+  .ant-upload {
+    width: 100%;
+    display: block;
+    .ant-upload > div > div {
+      width: 100%;
+    }
+  }
+}
+
+.ant-input,
+.ant-select {
+  @apply h-12.5 bg-#1E2328 b-#374151;
+}
+
+.ant-form-item-control-input-content .ant-select .ant-select-selector {
+  background-color: transparent;
+}
+
+.upload-card{
+  border: 1px solid #30363D;
+  background-color: #161B22;
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+}

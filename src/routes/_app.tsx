@@ -1,0 +1,32 @@
+import MainLayout from '@/components/layouts/main'
+import { useRouteGuard } from '@/hooks/route-guard'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
+import ReactDOM from 'react-dom'
+import { ToastContainer } from 'react-toastify'
+
+export const Route = createFileRoute('/_app')({
+  component: AppLayoutComponent
+})
+
+function AppLayoutComponent() {
+  // 使用路由守卫
+  useRouteGuard()
+
+  return (
+    <div className="app-content h-100vh overflow-hidden overflow-y-scroll">
+      <PortalToast />
+      <div className="bg-background text-text">
+        <MainLayout>
+          <Outlet />
+        </MainLayout>
+      </div>
+    </div>
+  )
+}
+
+const PortalToast: FC = () => {
+  return ReactDOM.createPortal(
+    <ToastContainer position="top-center" hideProgressBar />,
+    document.body
+  )
+}
