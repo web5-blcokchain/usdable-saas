@@ -89,7 +89,7 @@ function RouteComponent() {
         <Link to="/assete/addAssete">
           <Button className="h-10.5 fcc gap-2 b b-#00E5FF b-solid bg-#00E2FF1A px-4.5 text-#00E5FF">
             <div className="i-tabler:plus text-4 text-#00E5FF"></div>
-            <div>{t('assete.addAsset')}</div>
+            <div>{t('assete.addAssetBtn')}</div>
           </Button>
         </Link>
       </div>
@@ -97,7 +97,7 @@ function RouteComponent() {
       <div className="grid cols-4 mt-6 gap-4 max-md:cols-1">
         {
           assetStatus.map(item => (
-          // hover 添加阴影 移动到右上10px
+            // hover 添加阴影 移动到右上10px
             <div
               key={item.title}
               className="flex justify-between gap-3 rounded-2 bg-#161B22 px-5 py-10 backdrop-blur-4 transition-all-300 hover:translate-[4px,-4px] hover:shadow-2xl"
@@ -130,7 +130,7 @@ function RouteComponent() {
         <div className="grid cols-4 mt-6 gap-4 max-md:cols-1">
           {
             assetOperatingStatus.map(item => (
-            // hover 添加阴影 移动到右上10px
+              // hover 添加阴影 移动到右上10px
               <div
                 key={item.title}
                 className="flex justify-between gap-3 rounded-2 bg-#161B22 px-5 py-10 backdrop-blur-4 transition-all-300 hover:translate-[4px,-4px] hover:shadow-2xl"

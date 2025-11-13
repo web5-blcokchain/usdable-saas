@@ -10,7 +10,7 @@ export default function MainHeader() {
 
   return (
     <header className="sticky left-0 top-0 z-99 bg-#0c0f13">
-      <div className="fyc justify-between px-10 py-6">
+      <div className="fyc justify-between px-10 py-3">
         <div className="fyc gap-2">
           <Link to="/">
             {' '}
