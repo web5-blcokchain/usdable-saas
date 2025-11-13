@@ -1,6 +1,11 @@
 {
-  "header":{
-    "login":"登录"
+  "common": {
+    "table": {
+      "showTotal": "显示 {{start}}-{{end}} 条，共 {{total}} 条"
+    }
+  },
+  "header": {
+    "login": "登录"
   },
   "home": {
     "selectIdentity": "选择您的身份",
@@ -14,6 +19,64 @@
     "lawOffice": "律师事务所",
     "lawOfficeDesc": "提供法律服务、合规审查和法律意见的专业机构",
     "legalCompliance": "法律合规支持"
+  },
+  "assete": {
+    "assetOnChainStatus": "资产上链状态",
+    "addAsset": "添加资产",
+    "assetOnChainDetails": "资产上链明细",
+    "searchAsset": "搜索资产",
+    "assetOperatingStatusTitle": "资产运营状态",
+    "propertyOperatingDetails": "房产运营状态明细",
+    "assetStatus": {
+      "totalOnChain": "总上链资产",
+      "verifying": "验证中资产",
+      "onChainSuccess": "已上链资产",
+      "onChainFailed": "上链失败",
+      "lawyerConfirming": "律师确认中",
+      "pendingEvaluation": "待评估",
+      "rejected": "驳回"
+    },
+    "assetOperatingStatus": {
+      "monthlyRent": "本月应缴租金",
+      "pendingProperties": "待缴房产",
+      "defaultAssets": "违约资产"
+    },
+    "assetType": {
+      "residential": "住宅地产",
+      "commercial": "商业地产",
+      "complex": "商业综合体",
+      "unknown": "未知"
+    },
+    "table": {
+      "assetName": "资产名称",
+      "valuation": "估值",
+      "assetType": "资产类型",
+      "updateTime": "更新时间",
+      "status": "状态",
+      "processor": "处理方",
+      "action": "操作",
+      "view": "查看"
+    },
+    "operatingStatus": {
+      "normal": "正常",
+      "pending": "待缴",
+      "default": "违约",
+      "overdue": "逾期",
+      "paid": "已缴纳",
+      "payRent": "缴租"
+    },
+    "operatingTable": {
+      "assetName": "资产名称",
+      "tenant": "租户",
+      "contractPeriod": "合约期",
+      "monthlyRent": "月租金",
+      "paymentStatus": "缴纳状态",
+      "nextPaymentDate": "下次缴租日",
+      "action": "操作",
+      "overdue": "逾期",
+      "days": "天",
+      "defaultDetails": "违约详情"
+    }
   },
   "register": {
     "asset": {
@@ -42,15 +105,15 @@
       "back": "返回",
       "enterAssetCenter": "进入资产上传中心",
       "user": "用户",
-      "namePlaceholder":"请输入姓名",
-      "emailPlaceholder":"请输入邮箱",
-      "phonePlaceholder":"请输入手机号",
-      "phoneErrorPlaceholder":"请输入手机号格式不正确",
-      "idNumberPlaceholder":"请输入身份证号",
-      "complianceDeclarationPlaceholder":"请阅读并同意资产上链合规声明",
-      "amlCommitmentPlaceholder":"请阅读并同意反洗钱承诺",
-      "creditCodePlaceholder":"请输入统一社会信用代码",
-      "legalPersonNamePlaceholder":"请输入法定代表人姓名"
+      "namePlaceholder": "请输入姓名",
+      "emailPlaceholder": "请输入邮箱",
+      "phonePlaceholder": "请输入手机号",
+      "phoneErrorPlaceholder": "请输入手机号格式不正确",
+      "idNumberPlaceholder": "请输入身份证号",
+      "complianceDeclarationPlaceholder": "请阅读并同意资产上链合规声明",
+      "amlCommitmentPlaceholder": "请阅读并同意反洗钱承诺",
+      "creditCodePlaceholder": "请输入统一社会信用代码",
+      "legalPersonNamePlaceholder": "请输入法定代表人姓名"
     },
     "evaluator": {
       "title": "评估机构注册",
@@ -135,20 +198,20 @@
       "notice3": "请确保所提供的信息真实有效，如有虚假将承担相应法律责任",
       "submit": "提交注册",
       "back": "返回",
-      "fileSupport":"支持 JPG， PNG， PDF 格式，文件大小不超过 10MB",
-      "officeNamePlaceholder":"请输入律所名称",
-      "registrationAddressPlaceholder":"请选择注册国家/地址",
-      "licenseNumberPlaceholder":"请输入律所执业许可证号",
-      "contactPlaceholder":"请输入联系方式",
-      "lawyerNamePlaceholder":"请输入律师姓名",
-      "licenseNoPlaceholder":"请输入执业证号",
-      "yearsOfPracticePlaceholder":"请选择执业年限",
-      "specializationPlaceholder":"请选择专业领域",
-      "uploadOfficeLicenseError":"请上传律师事务所执照扫描件",
-      "uploadLawyerLicenseError":"请上传律师执业证扫描件",
-      "uploadBarProofError":"请上传会员证明",
-      "readServiceAgreement":"请阅读并同意法律服务合规协议",
-      "agreeTermsError":"请同意该条款"
+      "fileSupport": "支持 JPG， PNG， PDF 格式，文件大小不超过 10MB",
+      "officeNamePlaceholder": "请输入律所名称",
+      "registrationAddressPlaceholder": "请选择注册国家/地址",
+      "licenseNumberPlaceholder": "请输入律所执业许可证号",
+      "contactPlaceholder": "请输入联系方式",
+      "lawyerNamePlaceholder": "请输入律师姓名",
+      "licenseNoPlaceholder": "请输入执业证号",
+      "yearsOfPracticePlaceholder": "请选择执业年限",
+      "specializationPlaceholder": "请选择专业领域",
+      "uploadOfficeLicenseError": "请上传律师事务所执照扫描件",
+      "uploadLawyerLicenseError": "请上传律师执业证扫描件",
+      "uploadBarProofError": "请上传会员证明",
+      "readServiceAgreement": "请阅读并同意法律服务合规协议",
+      "agreeTermsError": "请同意该条款"
     },
     "status": {
       "success": "注册成功",

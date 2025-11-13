@@ -1,37 +1,45 @@
-
+import type { MenuProps } from 'antd'
 import logo from '@/assets/images/logo.png'
 import { useUserStore } from '@/stores/user'
 import { Link } from '@tanstack/react-router'
-import { Button, Dropdown, MenuProps } from 'antd'
+import { Button, Dropdown } from 'antd'
 
 export default function MainHeader() {
   const { userData } = useUserStore()
   const { t } = useTranslation()
 
-  return (<header className=' sticky top-0 left-0 bg-#191a1f z-99'>
-    <div className="fyc justify-between py-6 px-10">
-      <div className='fyc gap-2'>
-        <Link to="/"> <img className='h-14 ' src={logo} alt="" /></Link>
-        {/* <div className='text-4'>
+  return (
+    <header className="sticky left-0 top-0 z-99 bg-#0c0f13">
+      <div className="fyc justify-between px-10 py-6">
+        <div className="fyc gap-2">
+          <Link to="/">
+            {' '}
+            <img className="h-14" src={logo} alt="" />
+          </Link>
+          {/* <div className='text-4'>
         资产
       </div> */}
-      </div>
-      <div className='fyc gap-3'>
-        {
-          !userData.id ? (
-            <div>
-              {/* 无背景按钮，border:1px solid #00E5FF */}
-              <Button className='border-1 bg-none border-#00E5FF text-#00E5FF '>{t('header.login')}</Button>
-            </div>
-          ) : (
-            <div>已登录</div>
-          )
-        }
-        <LanguageSelect />
-      </div>
+        </div>
+        <div className="fyc gap-3">
+          {
+            !userData.id
+              ? (
+                  <div>
+                    <Button className="border-1 border-#00E5FF bg-none text-#00E5FF">
+                      {t('header.login')}
+                    </Button>
+                  </div>
+                )
+              : (
+                  <div>已登录</div>
+                )
+          }
+          <LanguageSelect />
+        </div>
 
-    </div>
-  </header>)
+      </div>
+    </header>
+  )
 }
 
 function LanguageSelect() {

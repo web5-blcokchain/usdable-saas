@@ -1,6 +1,11 @@
 {
-  "header":{
-    "login":"ログイン"
+  "common": {
+    "table": {
+      "showTotal": "{{start}}-{{end}}件を表示、合計{{total}}件"
+    }
+  },
+  "header": {
+    "login": "ログイン"
   },
   "home": {
     "selectIdentity": "あなたの身分を選択してください",
@@ -14,6 +19,64 @@
     "lawOffice": "法律事務所",
     "lawOfficeDesc": "法律サービス、コンプライアンス審査、法律意見を提供する専門機関",
     "legalCompliance": "法的コンプライアンスサポート"
+  },
+  "assete": {
+    "assetOnChainStatus": "資産のブロックチェーン化状況",
+    "addAsset": "資産を追加",
+    "assetOnChainDetails": "資産のブロックチェーン化詳細",
+    "searchAsset": "資産を検索",
+    "assetOperatingStatusTitle": "資産運用状況",
+    "propertyOperatingDetails": "不動産運用状況詳細",
+    "assetStatus": {
+      "totalOnChain": "総ブロックチェーン化資産",
+      "verifying": "検証中資産",
+      "onChainSuccess": "ブロックチェーン化済資産",
+      "onChainFailed": "ブロックチェーン化失敗",
+      "lawyerConfirming": "弁護士確認中",
+      "pendingEvaluation": "評価待ち",
+      "rejected": "却下"
+    },
+    "assetOperatingStatus": {
+      "monthlyRent": "今月の納付家賃",
+      "pendingProperties": "未納物件",
+      "defaultAssets": "違約資産"
+    },
+    "assetType": {
+      "residential": "住宅不動産",
+      "commercial": "商業不動産",
+      "complex": "商業複合施設",
+      "unknown": "不明"
+    },
+    "table": {
+      "assetName": "資産名",
+      "valuation": "評価額",
+      "assetType": "資産タイプ",
+      "updateTime": "更新時間",
+      "status": "状態",
+      "processor": "処理方",
+      "action": "操作",
+      "view": "表示"
+    },
+    "operatingStatus": {
+      "normal": "正常",
+      "pending": "未納",
+      "default": "違約",
+      "overdue": "延滞",
+      "paid": "納付済",
+      "payRent": "家賃納付"
+    },
+    "operatingTable": {
+      "assetName": "資産名",
+      "tenant": "テナント",
+      "contractPeriod": "契約期間",
+      "monthlyRent": "月額家賃",
+      "paymentStatus": "納付状況",
+      "nextPaymentDate": "次回納付日",
+      "action": "操作",
+      "overdue": "延滞",
+      "days": "日",
+      "defaultDetails": "違約詳細"
+    }
   },
   "register": {
     "asset": {

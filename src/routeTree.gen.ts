@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AppImport } from './routes/_app'
 import { Route as AppIndexImport } from './routes/_app/index'
 import { Route as AppAsseteIndexImport } from './routes/_app/assete/index'
+import { Route as AppAsseteAddAsseteIndexImport } from './routes/_app/assete/addAssete/index'
 
 // Create/Update Routes
 
@@ -31,6 +32,12 @@ const AppIndexRoute = AppIndexImport.update({
 const AppAsseteIndexRoute = AppAsseteIndexImport.update({
   id: '/assete/',
   path: '/assete/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppAsseteAddAsseteIndexRoute = AppAsseteAddAsseteIndexImport.update({
+  id: '/assete/addAssete/',
+  path: '/assete/addAssete/',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -59,6 +66,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAsseteIndexImport
       parentRoute: typeof AppImport
     }
+    '/_app/assete/addAssete/': {
+      id: '/_app/assete/addAssete/'
+      path: '/assete/addAssete'
+      fullPath: '/assete/addAssete'
+      preLoaderRoute: typeof AppAsseteAddAsseteIndexImport
+      parentRoute: typeof AppImport
+    }
   }
 }
 
@@ -67,11 +81,13 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
   AppAsseteIndexRoute: typeof AppAsseteIndexRoute
+  AppAsseteAddAsseteIndexRoute: typeof AppAsseteAddAsseteIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppIndexRoute: AppIndexRoute,
   AppAsseteIndexRoute: AppAsseteIndexRoute,
+  AppAsseteAddAsseteIndexRoute: AppAsseteAddAsseteIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -80,11 +96,13 @@ export interface FileRoutesByFullPath {
   '': typeof AppRouteWithChildren
   '/': typeof AppIndexRoute
   '/assete': typeof AppAsseteIndexRoute
+  '/assete/addAssete': typeof AppAsseteAddAsseteIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
   '/assete': typeof AppAsseteIndexRoute
+  '/assete/addAssete': typeof AppAsseteAddAsseteIndexRoute
 }
 
 export interface FileRoutesById {
@@ -92,14 +110,20 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/_app/': typeof AppIndexRoute
   '/_app/assete/': typeof AppAsseteIndexRoute
+  '/_app/assete/addAssete/': typeof AppAsseteAddAsseteIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/' | '/assete'
+  fullPaths: '' | '/' | '/assete' | '/assete/addAssete'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/assete'
-  id: '__root__' | '/_app' | '/_app/' | '/_app/assete/'
+  to: '/' | '/assete' | '/assete/addAssete'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/_app/'
+    | '/_app/assete/'
+    | '/_app/assete/addAssete/'
   fileRoutesById: FileRoutesById
 }
 
@@ -128,7 +152,8 @@ export const routeTree = rootRoute
       "filePath": "_app.tsx",
       "children": [
         "/_app/",
-        "/_app/assete/"
+        "/_app/assete/",
+        "/_app/assete/addAssete/"
       ]
     },
     "/_app/": {
@@ -137,6 +162,10 @@ export const routeTree = rootRoute
     },
     "/_app/assete/": {
       "filePath": "_app/assete/index.tsx",
+      "parent": "/_app"
+    },
+    "/_app/assete/addAssete/": {
+      "filePath": "_app/assete/addAssete/index.tsx",
       "parent": "/_app"
     }
   }

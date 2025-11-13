@@ -12,13 +12,13 @@ import { useTranslation } from 'react-i18next'
 export function useRouteGuard() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { code, userData } = useUserStore()
+  const { code } = useUserStore()
   const { t } = useTranslation()
   const token = getToken()
 
   useEffect(() => {
     // 白名单路径列表，支持字符串和正则
-    const currentPath = location.pathname
+    // const currentPath = location.pathname
 
     // 如果用户未登录，则只能访问首页
     // if (
@@ -28,6 +28,7 @@ export function useRouteGuard() {
     //     to: '/'
     //   })
     // }
+    // TODO 权限检测
 
     // 跳转路由后，返回页面顶部
     setTimeout(() => {

@@ -1,0 +1,22 @@
+.ant-table-thead {
+  .ant-table-cell {
+    &::before {
+      content: none !important;
+    }
+  }
+}
+
+.ant-table-tbody {
+  .ant-table-cell {
+    background: #161b22;
+  }
+}
+
+.ant-pagination-total-text {
+  flex: 1 !important;
+  padding: 0 1rem;
+}
+
+.ant-table-cell {
+  min-width: 120px; /* 控制最小宽度 */
+}

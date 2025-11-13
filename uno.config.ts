@@ -28,7 +28,7 @@ export default defineConfig({
         primary: '#00E5FF'
       }),
       {
-        'background': '#191a1f',
+        'background': '#000000',
         'background-secondary': '#242933',
         'text': '#ffffff',
         'text-secondary': '#8d909a',

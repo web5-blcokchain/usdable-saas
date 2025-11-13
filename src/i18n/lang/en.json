@@ -1,6 +1,11 @@
 {
-  "header":{
-    "login":"Login"
+  "common": {
+    "table": {
+      "showTotal": "Showing {{start}}-{{end}} of {{total}} items"
+    }
+  },
+  "header": {
+    "login": "Login"
   },
   "home": {
     "selectIdentity": "Select Your Identity",
@@ -14,6 +19,64 @@
     "lawOffice": "Law Office",
     "lawOfficeDesc": "Professional institutions providing legal services, compliance review, and legal opinions",
     "legalCompliance": "Legal Compliance Support"
+  },
+  "assete": {
+    "assetOnChainStatus": "Asset On-Chain Status",
+    "addAsset": "Add Asset",
+    "assetOnChainDetails": "Asset On-Chain Details",
+    "searchAsset": "Search Asset",
+    "assetOperatingStatusTitle": "Asset Operating Status",
+    "propertyOperatingDetails": "Property Operating Details",
+    "assetStatus": {
+      "totalOnChain": "Total On-Chain Assets",
+      "verifying": "Assets Under Verification",
+      "onChainSuccess": "Successfully On-Chain Assets",
+      "onChainFailed": "On-Chain Failed Assets",
+      "lawyerConfirming": "Lawyer Confirming",
+      "pendingEvaluation": "Pending Evaluation",
+      "rejected": "Rejected"
+    },
+    "assetOperatingStatus": {
+      "monthlyRent": "Monthly Rent Due",
+      "pendingProperties": "Pending Properties",
+      "defaultAssets": "Default Assets"
+    },
+    "assetType": {
+      "residential": "Residential Property",
+      "commercial": "Commercial Property",
+      "complex": "Commercial Complex",
+      "unknown": "Unknown"
+    },
+    "table": {
+      "assetName": "Asset Name",
+      "valuation": "Valuation",
+      "assetType": "Asset Type",
+      "updateTime": "Update Time",
+      "status": "Status",
+      "processor": "Processor",
+      "action": "Action",
+      "view": "View"
+    },
+    "operatingStatus": {
+      "normal": "Normal",
+      "pending": "Pending",
+      "default": "Default",
+      "overdue": "Overdue",
+      "paid": "Paid",
+      "payRent": "Pay Rent"
+    },
+    "operatingTable": {
+      "assetName": "Asset Name",
+      "tenant": "Tenant",
+      "contractPeriod": "Contract Period",
+      "monthlyRent": "Monthly Rent",
+      "paymentStatus": "Payment Status",
+      "nextPaymentDate": "Next Payment Date",
+      "action": "Action",
+      "overdue": "Overdue",
+      "days": "Days",
+      "defaultDetails": "Default Details"
+    }
   },
   "register": {
     "asset": {
