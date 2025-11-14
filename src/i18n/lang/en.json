@@ -1,8 +1,28 @@
 {
   "common": {
+    "fileFormat": "Supports {{format}} format, file size does not exceed {{size}}",
     "table": {
       "showTotal": "Showing {{start}}-{{end}} of {{total}} items"
-    }
+    },
+    "item": "{{num}} items",
+    "cancel": "Cancel",
+    "surePay": "Confirm Payment",
+    "usdcPay": "USDC Payment",
+    "copy": "Copy",
+    "number": {
+      "0": "Zero",
+      "1": "One",
+      "2": "Two",
+      "3": "Three",
+      "4": "Four",
+      "5": "Five",
+      "6": "Six",
+      "7": "Seven",
+      "8": "Eight",
+      "9": "Nine"
+    },
+    "confirm": "Confirm",
+    "submitError": "Submission failed"
   },
   "header": {
     "login": "Login"
@@ -29,7 +49,7 @@
     "propertyOperatingDetails": "Property Operating Details",
     "rejectedReason": "Rejected Reason",
     "assetStatus": {
-      "totalOnChain": "Total On-Chain Assets",
+      "totalOnChain": "My total asset valuation",
       "verifying": "Assets Under Verification",
       "onChainSuccess": "Successfully On-Chain Assets",
       "onChainFailed": "On-Chain Failed Assets",
@@ -194,6 +214,69 @@
         "title": "Submission Failed",
         "viewDetails": "View Details"
       }
+    },
+    "rejectedReasonDialog": {
+      "title": "Rejection Reason",
+      "confirm": "Got it",
+      "assetName": "Asset Name",
+      "rejectedBy": "Rejected By",
+      "rejectedTime": "Rejection Time",
+      "reason": "Reason Description"
+    },
+    "info": {
+      "auditDetail": "Audit Feedback Details",
+      "editInfo": "Edit Information",
+      "assetNumber": "Asset Number",
+      "submitTime": "Submission Time",
+      "auditor": "Auditor",
+      "houseName": "Property Name",
+      "address": "Address",
+      "houseType": "Property Type",
+      "assetCode": "Asset Code",
+      "appraisalPrice": "Appraisal Price",
+      "area": "Area",
+      "ownership": "Ownership",
+      "submitDate": "Submission Date",
+      "qualifiedFiles": "Qualified Files",
+      "unqualifiedFiles": "Unqualified Files",
+      "filePreviewTip": "Click the file name to preview the original file, and click \"View Details\" to see the specific error location.",
+      "viewErrorDetail": "View Error Details",
+      "propertyAddressNote": "Property Address Note",
+      "errorReason": "Error Reason",
+      "dragFilesHere": "Drag files here",
+      "selectFiles": "Select Files",
+      "pendingSupplementFiles": "Pending Supplement Files",
+      "reUpload": "Re-upload",
+      "submitForReaudit": "Submit for Re-audit"
+    },
+    "payRent": {
+      "title": "Pay Rent",
+      "tenant": "Tenant",
+      "payDate": "Due Date",
+      "rentCycle": "Rent Cycle",
+      "rentAmount": "Rent Amount",
+      "paymentMethod": "Payment Method",
+      "selectCrypto": "Select Cryptocurrency",
+      "paymentAddress": "Payment Address",
+      "paymentInstruction": "Please use your cryptocurrency wallet to scan the QR code or copy the address to make the transfer."
+    },
+    "defaultDetails": {
+      "title": "Default Details",
+      "tenant": "Tenant",
+      "contact": "Contact Person",
+      "payDate": "Due Date",
+      "overdueDays": "Overdue Days",
+      "amountPayable": "Amount Payable",
+      "defaultAmount": "Penalty",
+      "totalAmountPayable": "Total Amount Payable",
+      "defaultReason": "Reason for Default",
+      "collectionRecord": "Collection Records",
+      "notice{{num}}": "Collection Notice #{{num}}",
+      "handlingSuggestion": "Handling Suggestions",
+      "contactTenant": "Contact the tenant immediately for a final discussion and request full payment within 48 hours.",
+      "prepareLegalAction": "If payment is not received, prepare to initiate legal action to recover the debt.",
+      "considerTermination": "Based on the contract terms, consider terminating the lease and requesting the tenant to vacate.",
+      "evaluateRental": "Evaluate the possibility of re-renting and the estimated vacancy period."
     }
   },
   "register": {

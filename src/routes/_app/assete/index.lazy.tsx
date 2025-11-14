@@ -2,9 +2,11 @@ import type { ColumnsType } from 'antd/es/table'
 import { CommonTable } from '@/components/common/common-table'
 import { formatNumberNoRound } from '@/utils/number'
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
-import { Button, Input } from 'antd'
+import { Button, Input, Modal } from 'antd'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
+import { DefaultDetailsDialog } from './-components/defaultDetailsDialog'
+import { PayRentDialog } from './-components/payRentDialog'
 
 export const Route = createLazyFileRoute('/_app/assete/')({
   component: RouteComponent
@@ -16,7 +18,7 @@ function RouteComponent() {
   const [assetStatus, _setAssetStatus] = useState([
     {
       title: 'assete.assetStatus.totalOnChain',
-      num: 24,
+      num: `$${formatNumberNoRound(234230.21, 6, 0)}`,
       icon: (
         <div className="size-10 fcc rounded-full bg-#CD647833">
           <div className="i-ic:round-warning text-4 text-#c26c7a"></div>
@@ -82,6 +84,18 @@ function RouteComponent() {
     }
   ])
 
+  const [asseteErrorDialogVisible, setAsseteErrorDialogVisible] = useState(false)
+  const [payRentDialogVisible, setPayRentDialogVisible] = useState(false)
+  const [defaultDetailsDialogVisible, setDefaultDetailsDialogVisible] = useState(false)
+
+  useEffect(() => {
+    return () => {
+      setPayRentDialogVisible(false)
+      setDefaultDetailsDialogVisible(false)
+      setAsseteErrorDialogVisible(false)
+    }
+  }, [])
+
   return (
     <div className="bg-#000000 px-22 pb-15 pt-8 max-md:px-4">
       <div className="fyc justify-between">
@@ -123,7 +137,7 @@ function RouteComponent() {
             }
           />
         </div>
-        <AssetsTable />
+        <AssetsTable openErrorDialog={() => setAsseteErrorDialogVisible(true)} />
       </div>
       <div className="mt-8">
         <div className="text-2xl font-600">{t('assete.assetOperatingStatusTitle')}</div>
@@ -148,14 +162,21 @@ function RouteComponent() {
           <div className="fyc justify-between p-4">
             <div className="text-lg font-bold">{t('assete.propertyOperatingDetails')}</div>
           </div>
-          <AssetOperatingTable />
+          <AssetOperatingTable openPayDialog={() => setPayRentDialogVisible(true)} openDefaultDetailsDialog={() => setDefaultDetailsDialogVisible(true)} />
         </div>
       </div>
+      {/* 驳回原因 */}
+      <AsseteErrorDialog visible={asseteErrorDialogVisible} setVisible={setAsseteErrorDialogVisible} message="驳回原因" />
+      {/* 缴纳租金 */}
+      <PayRentDialog visible={payRentDialogVisible} setVisible={setPayRentDialogVisible} />
+      {/* 违约详情 */}
+      <DefaultDetailsDialog visible={defaultDetailsDialogVisible} setVisible={setDefaultDetailsDialogVisible} />
     </div>
   )
 }
 
-function AssetsTable() {
+// 资产上链明细
+function AssetsTable({ openErrorDialog }: { openErrorDialog: (message: any) => void }) {
   const { t } = useTranslation()
   const data = [
     {
@@ -306,7 +327,7 @@ function AssetsTable() {
           <Link to="/assete/info/$id" params={{ id: record.id.toString() }}>
             <div className="text-sm text-#D1D5DB clickable">{t('assete.table.view')}</div>
           </Link>
-          {record.status === 2 && <div className="text-sm text-#CF6679 clickable">{t('assete.rejectedReason')}</div>}
+          {record.status === 2 && <div onClick={() => openErrorDialog(record)} className="text-sm text-#CF6679 clickable">{t('assete.rejectedReason')}</div>}
         </div>
       )
     }
@@ -317,7 +338,11 @@ function AssetsTable() {
   )
 }
 
-function AssetOperatingTable() {
+// 资产运营状态
+function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
+  openPayDialog: (record: any) => void
+  openDefaultDetailsDialog: (record: any) => void
+}) {
   const { t } = useTranslation()
   const data = [
     {
@@ -499,16 +524,69 @@ function AssetOperatingTable() {
       title: t('assete.operatingTable.action'),
       dataIndex: 'type',
       key: 'type',
-      render: (data, content) => (
+      render: (_, content) => (
         <div className="fyc gap-4">
-          <div className="text-sm text-#D1D5DB clickable">{dataTypeContent(data)}</div>
-          {content.status === 2 && <div className="text-sm text-#CF6679 clickable">{t('assete.operatingTable.defaultDetails')}</div>}
+          <div
+            onClick={() => {
+              if (content.status !== 0)
+                openPayDialog(content)
+            }}
+            className={cn('text-sm text-#D1D5DB', content.status !== 0 && 'clickable')}
+          >
+            {dataTypeContent(content.status)}
+          </div>
+          {content.status === 2 && <div onClick={() => openDefaultDetailsDialog(content)} className="text-sm text-#CF6679 clickable">{t('assete.operatingTable.defaultDetails')}</div>}
         </div>
       )
     }
   ]
   return (
-    // 设置表格背景
     <CommonTable data={data} columns={columns} />
+  )
+}
+
+// 资产错误弹窗
+function AsseteErrorDialog({ visible, setVisible, message }: { visible: boolean, setVisible: (visible: boolean) => void, message: any }) {
+  const { t } = useTranslation()
+
+  return (
+    <Modal
+      open={visible}
+      onCancel={() => setVisible(false)}
+      maskClosable={false}
+      width={420}
+      className={cn('login-dialog [&>div>.ant-modal-content]:!bg-#171b21 b-1 b-solid  b-#1E293B', 'rounded-2')}
+      centered
+      title={<div className="text-lg font-600">{t('assete.rejectedReasonDialog.title')}</div>}
+      footer={() => (
+        <Button onClick={() => setVisible(false)} className="h-10.5 b-#00E5FF bg-#00E2FF1A px-4 text-base text-#00E5FF">
+          {t('assete.rejectedReasonDialog.confirm')}
+        </Button>
+      )}
+    >
+      <div className="flex flex-col gap-4 b-b b-t b-#1E293B b-solid py-5 text-white [&>div>div:last-child]:mt-1.5 [&>div>div:first-child]:text-sm [&>div>div:last-child]:text-base [&>div>div:first-child]:text-#9CA3AF [&>div>div:last-child]:font-500">
+        <div>
+          <div>{t('assete.rejectedReasonDialog.assetName')}</div>
+          <div>商标权 - 品牌标识</div>
+        </div>
+        <div>
+          <div>{t('assete.rejectedReasonDialog.rejectedBy')}</div>
+          <div>
+            李华律师
+            {message}
+          </div>
+        </div>
+        <div>
+          <div>{t('assete.rejectedReasonDialog.rejectedTime')}</div>
+          <div>{dayjs().format('YYYY-MM-DD HH:mm')}</div>
+        </div>
+        <div>
+          <div>{t('assete.rejectedReasonDialog.reason')}</div>
+          <div className="b b-#1D2738 rounded-1.5 b-solid bg-#0D1117 p-4 text-400 text-sm text-#D1D5DB">
+            商标注册证扫描件不清晰，缺少最新的商标续展证明文件，请补充提供高清扫描件和完整的商标续展证明。
+          </div>
+        </div>
+      </div>
+    </Modal>
   )
 }

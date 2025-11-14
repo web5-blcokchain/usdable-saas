@@ -204,7 +204,7 @@ export function AddAsseteSecond({ form, onFinish, backStep, saveDraft }: {
 }
 
 // 文件内容
-function FileContent({ fileName, fileSize, fileType, showImage, removeImg }: { fileName: string, fileSize: number, fileType: string, showImage: (url: string) => void, removeImg: (id: number) => void }) {
+export function FileContent({ fileName, fileSize, fileType, showImage, removeImg }: { fileName: string, fileSize?: number, fileType: string, showImage: (url: string) => void, removeImg?: (id: number) => void }) {
   // const { t } = useTranslation();
   // 文件大小转换,最小为kb
   const fileSizeConvert = (fileSize: number) => {
@@ -229,21 +229,25 @@ function FileContent({ fileName, fileSize, fileType, showImage, removeImg }: { f
             ? (
                 <div className="i-bxs:file-pdf text-7 text-#ed742f"></div>
               )
-            : <div className="i-bxs:file-image text-7 text-#75fb92"></div>
+            : (['png', 'jpg', 'jpeg'].includes(fileType)
+                ? <div className="i-bxs:file-image text-7 text-#75fb92"> </div>
+                : <div className="w-i-mdi:file h-5 text-primary"></div>)
         }
-        <div>
+        <div className="flex flex-col justify-center">
           <div className="text-base">{fileName.split('/').pop()}</div>
-          <div className="text-xs text-#9CA3AF">
-            {' '}
-            {formatNumberNoRound(fileSizeConvert(fileSize), 2, 0)}
-            {' '}
-            {(fileSize / 1024) > 0 ? 'KB' : 'MB'}
-          </div>
+          {fileSize && (
+            <div className="text-xs text-#9CA3AF">
+              {' '}
+              {formatNumberNoRound(fileSizeConvert(fileSize), 2, 0)}
+              {' '}
+              {(fileSize / 1024) > 0 ? 'KB' : 'MB'}
+            </div>
+          )}
         </div>
       </div>
       <div className="fyc gap-2 text-4 text-#9ea3ae [&>div]:clickable">
         <div onClick={() => showFile()} className="i-fa6-solid:eye"></div>
-        <div onClick={() => removeImg(0)} className="i-mdi:delete"></div>
+        {removeImg && <div onClick={() => removeImg(0)} className="i-mdi:delete"></div>}
       </div>
     </div>
   )

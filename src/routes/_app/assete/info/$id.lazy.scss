@@ -1,0 +1,9 @@
+.ant-upload-wrapper {
+  width: 100% !important;
+  .ant-upload {
+    width: 100% !important;
+    > div > div {
+      width: 100%;
+    }
+  }
+}

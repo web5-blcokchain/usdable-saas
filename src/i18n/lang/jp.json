@@ -1,8 +1,28 @@
 {
   "common": {
+    "fileFormat": "{{format}}形式をサポートし、ファイルサイズは{{size}}を超えません。",
     "table": {
       "showTotal": "{{start}}-{{end}}件を表示、合計{{total}}件"
-    }
+    },
+    "item": "{{num}} 項です",
+    "cancel": "キャンセル",
+    "surePay": "支払いを確定",
+    "usdcPay": "USDC 支払い",
+    "copy": "コピー",
+    "number": {
+      "0": "零（れい）",
+      "1": "一（いち）",
+      "2": "二（に）",
+      "3": "三（さん）",
+      "4": "四（よん）",
+      "5": "五（ご）",
+      "6": "六（ろく）",
+      "7": "七（なな）",
+      "8": "八（はち）",
+      "9": "九（きゅう）"
+    },
+    "confirm": "確認",
+    "submitError": "提出に失敗しました"
   },
   "header": {
     "login": "ログイン"
@@ -29,7 +49,7 @@
     "propertyOperatingDetails": "不動産運用状況詳細",
     "rejectedReason": "却下理由",
     "assetStatus": {
-      "totalOnChain": "総ブロックチェーン化資産",
+      "totalOnChain": "私の総資産価値です",
       "verifying": "検証中資産",
       "onChainSuccess": "ブロックチェーン化済資産",
       "onChainFailed": "ブロックチェーン化失敗",
@@ -194,6 +214,69 @@
         "title": "提出失敗",
         "viewDetails": "詳細を表示"
       }
+    },
+    "rejectedReasonDialog": {
+      "title": "却下理由",
+      "confirm": "了解しました",
+      "assetName": "資産名",
+      "rejectedBy": "却下者",
+      "rejectedTime": "却下時間",
+      "reason": "理由説明"
+    },
+    "info": {
+      "auditDetail": "審査フィードバック詳細",
+      "editInfo": "情報を編集",
+      "assetNumber": "資産番号",
+      "submitTime": "提出時間",
+      "auditor": "審査担当者",
+      "houseName": "物件名",
+      "address": "住所",
+      "houseType": "物件タイプ",
+      "assetCode": "資産コード",
+      "appraisalPrice": "評価額",
+      "area": "面積",
+      "ownership": "所有権",
+      "submitDate": "提出日",
+      "qualifiedFiles": "合格ファイル",
+      "unqualifiedFiles": "不合格ファイル",
+      "filePreviewTip": "ファイル名をクリックすると原本をプレビューできます。「詳細を見る」をクリックすると具体的なエラー位置を確認できます。",
+      "viewErrorDetail": "エラー詳細を見る",
+      "propertyAddressNote": "所在地説明",
+      "errorReason": "エラー理由",
+      "dragFilesHere": "ファイルをここにドラッグ",
+      "selectFiles": "ファイルを選択",
+      "pendingSupplementFiles": "追加提出待ちのファイル",
+      "reUpload": "再アップロード",
+      "submitForReaudit": "再審査を提出"
+    },
+    "payRent": {
+      "title": "家賃の支払い",
+      "tenant": "入居者",
+      "payDate": "支払期日",
+      "rentCycle": "賃料サイクル",
+      "rentAmount": "賃料金額",
+      "paymentMethod": "支払い方法",
+      "selectCrypto": "暗号資産を選択",
+      "paymentAddress": "受取アドレス",
+      "paymentInstruction": "暗号資産ウォレットでQRコードをスキャンするか、アドレスをコピーして送金してください。"
+    },
+    "defaultDetails": {
+      "title": "違約詳細",
+      "tenant": "入居者",
+      "contact": "連絡担当者",
+      "payDate": "支払期日",
+      "overdueDays": "延滞日数",
+      "amountPayable": "支払うべき金額",
+      "defaultAmount": "違約金",
+      "totalAmountPayable": "合計支払額",
+      "defaultReason": "違約理由",
+      "collectionRecord": "催促記録",
+      "notice{{num}}": "{{num}} 回目の催促通知",
+      "handlingSuggestion": "対応案",
+      "contactTenant": "直ちに入居者へ連絡し最終確認を行い、48時間以内に全額を支払うよう求めてください。",
+      "prepareLegalAction": "支払いがない場合、未払い金回収のため法的手続きの準備を進めてください。",
+      "considerTermination": "契約条項に基づき、賃貸契約の解除および退去要請を検討してください。",
+      "evaluateRental": "再募集の可能性と予想空室期間を評価してください。"
     }
   },
   "register": {

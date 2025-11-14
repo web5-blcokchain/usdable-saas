@@ -113,3 +113,12 @@ a {
     display: none; /* 隐藏滚动条 */
   }
 }
+
+.ant-modal {
+  scrollbar-width: none; /* 隐藏滚动条 */
+  -ms-overflow-style: none; /* 隐藏滚动条 */
+  &::-webkit-scrollbar {
+    display: none; /* 隐藏滚动条 */
+  }
+  @apply max-h-80% overflow-y-scroll;
+}

@@ -1,8 +1,28 @@
 {
   "common": {
+    "fileFormat": "支持 {{format}} 格式，文件大小不超过 {{size}}",
     "table": {
       "showTotal": "显示 {{start}}-{{end}} 条，共 {{total}} 条"
-    }
+    },
+    "item": "{{num}} 项",
+    "cancel": "取消",
+    "surePay": "确定支付",
+    "usdcPay": "USDC 支付",
+    "copy": "复制",
+    "number": {
+      "0": "零",
+      "1": "一",
+      "2": "二",
+      "3": "三",
+      "4": "四",
+      "5": "五",
+      "6": "六",
+      "7": "七",
+      "8": "八",
+      "9": "九"
+    },
+    "confirm": "确定",
+    "submitError": "提交失败"
   },
   "header": {
     "login": "登录"
@@ -29,7 +49,7 @@
     "propertyOperatingDetails": "房产运营状态明细",
     "rejectedReason": "驳回原因",
     "assetStatus": {
-      "totalOnChain": "总上链资产",
+      "totalOnChain": "我的资产总估值",
       "verifying": "验证中资产",
       "onChainSuccess": "已上链资产",
       "onChainFailed": "上链失败",
@@ -194,6 +214,69 @@
         "title": "提交失败",
         "viewDetails": "查看详情"
       }
+    },
+    "rejectedReasonDialog": {
+      "title": "驳回原因",
+      "confirm": "知道了",
+      "assetName": "资产名称",
+      "rejectedBy": "驳回方",
+      "rejectedTime": "驳回时间",
+      "reason": "原因说明"
+    },
+    "info": {
+      "auditDetail": "审核反馈详情",
+      "editInfo": "编辑信息",
+      "assetNumber": "资产编号",
+      "submitTime": "提交时间",
+      "auditor": "审核人",
+      "houseName": "房产名称",
+      "address": "地址",
+      "houseType": "房产类型",
+      "assetCode": "资产编码",
+      "appraisalPrice": "评估价",
+      "area": "面积",
+      "ownership": "所有权",
+      "submitDate": "提交日期",
+      "qualifiedFiles": "合格文件",
+      "unqualifiedFiles": "不合格文件",
+      "filePreviewTip": "点击文件名可预览原始文件，点击\"查看详情\"了解具体错误位置",
+      "viewErrorDetail": "查看错误详情",
+      "propertyAddressNote": "产权地址说明",
+      "errorReason": "错误原因",
+      "dragFilesHere": "拖拽文件到此处",
+      "selectFiles": "选择文件",
+      "pendingSupplementFiles": "待补充文件",
+      "reUpload": "重新上传",
+      "submitForReaudit": "提交复审"
+    },
+    "payRent": {
+      "title": "缴纳房租",
+      "tenant": "租户",
+      "payDate": "应缴日期",
+      "rentCycle": "租金周期",
+      "rentAmount": "租金金额",
+      "paymentMethod": "支付方式",
+      "selectCrypto": "选择加密货币",
+      "paymentAddress": "收款地址",
+      "paymentInstruction": "请使用您的加密货币钱包扫描二维码或复制地址进行转账"
+    },
+    "defaultDetails": {
+      "title": "违约详情",
+      "tenant": "租户",
+      "contact": "联系人",
+      "payDate": "应缴日期",
+      "overdueDays": "逾期天数",
+      "amountPayable": "应缴金额",
+      "defaultAmount": "违约金",
+      "totalAmountPayable": "合计应缴",
+      "defaultReason": "违约原因",
+      "collectionRecord": "催交记录",
+      "notice{{num}}": "第{{num}}次催缴通知",
+      "handlingSuggestion": "处理建议",
+      "contactTenant": "立即联系租户进行最后沟通，要求48小时内支付全部欠款",
+      "prepareLegalAction": "如未收到付款，准备启动法律程序追讨欠款",
+      "considerTermination": "根据合同条款，考虑终止租赁合同并要求租户搬离",
+      "evaluateRental": "评估重新招租的可能性和预计空置期"
     }
   },
   "register": {
