@@ -41,6 +41,11 @@ export function AsseteRgister({ back }: { back: () => void }) {
     }
     return Promise.resolve()
   }
+  useEffect(() => {
+    return () => {
+      setIsSuccess(false)
+    }
+  }, [])
 
   return (
     <div className="mt-6 fccc px-66 pb-53 max-md:px-4">
@@ -118,7 +123,7 @@ export function AsseteRgister({ back }: { back: () => void }) {
             name="userCard"
             label={t('register.asset.idNumber')}
             rules={[
-            // 内容为数组，且必须为两个
+              // 内容为数组，且必须为两个
               { validator: fileValidator }
             ]}
           >
@@ -218,7 +223,7 @@ export function AsseteRgister({ back }: { back: () => void }) {
         successButton={{
           text: t('register.asset.enterAssetCenter'),
           onClick: () => {
-          // TODO 跳转进入资产上传中心
+            // TODO 跳转进入资产上传中心
           }
         }}
       />

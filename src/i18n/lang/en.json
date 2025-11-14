@@ -27,6 +27,7 @@
     "searchAsset": "Search Asset",
     "assetOperatingStatusTitle": "Asset Operating Status",
     "propertyOperatingDetails": "Property Operating Details",
+    "rejectedReason": "Rejected Reason",
     "assetStatus": {
       "totalOnChain": "Total On-Chain Assets",
       "verifying": "Assets Under Verification",

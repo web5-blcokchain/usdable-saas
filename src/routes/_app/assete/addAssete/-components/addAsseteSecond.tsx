@@ -79,6 +79,12 @@ export function AddAsseteSecond({ form, onFinish, backStep, saveDraft }: {
   const [visible, setVisible] = useState(false)
   const [sumbitDialogVisible, setSumbitDialogVisible] = useState(false)
 
+  useEffect(() => {
+    return () => {
+      setSumbitDialogVisible(false)
+    }
+  }, [])
+
   return (
     <div className="bg-#000000 px-22 pb-15 pt-8 max-md:px-4">
       <div onClick={backStep} className="w-fit fcc gap-1 clickable">
@@ -128,10 +134,10 @@ export function AddAsseteSecond({ form, onFinish, backStep, saveDraft }: {
                     height="auto"
                     // loading={uploadFileLoading}
                     removeFile={(_index) => {
-                    // setFileUrl(fileUrl.filter((_, i) => i !== index))
+                      // setFileUrl(fileUrl.filter((_, i) => i !== index))
                     }}
                     beforeUpload={(_file) => {
-                    // beforeUpload(file)
+                      // beforeUpload(file)
                     }}
                   >
                     <div className="py-3">

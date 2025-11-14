@@ -27,6 +27,7 @@
     "searchAsset": "搜索资产",
     "assetOperatingStatusTitle": "资产运营状态",
     "propertyOperatingDetails": "房产运营状态明细",
+    "rejectedReason": "驳回原因",
     "assetStatus": {
       "totalOnChain": "总上链资产",
       "verifying": "验证中资产",

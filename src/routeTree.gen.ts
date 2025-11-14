@@ -8,13 +8,21 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as AppImport } from './routes/_app'
-import { Route as AppIndexImport } from './routes/_app/index'
-import { Route as AppAsseteIndexImport } from './routes/_app/assete/index'
-import { Route as AppAsseteAddAsseteIndexImport } from './routes/_app/assete/addAssete/index'
+
+// Create Virtual Routes
+
+const AppIndexLazyImport = createFileRoute('/_app/')()
+const AppAsseteIndexLazyImport = createFileRoute('/_app/assete/')()
+const AppAsseteAddAsseteIndexLazyImport = createFileRoute(
+  '/_app/assete/addAssete/',
+)()
+const AppAsseteInfoIdLazyImport = createFileRoute('/_app/assete/info/$id')()
 
 // Create/Update Routes
 
@@ -23,23 +31,36 @@ const AppRoute = AppImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AppIndexRoute = AppIndexImport.update({
+const AppIndexLazyRoute = AppIndexLazyImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRoute,
-} as any)
+} as any).lazy(() => import('./routes/_app/index.lazy').then((d) => d.Route))
 
-const AppAsseteIndexRoute = AppAsseteIndexImport.update({
+const AppAsseteIndexLazyRoute = AppAsseteIndexLazyImport.update({
   id: '/assete/',
   path: '/assete/',
   getParentRoute: () => AppRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/_app/assete/index.lazy').then((d) => d.Route),
+)
 
-const AppAsseteAddAsseteIndexRoute = AppAsseteAddAsseteIndexImport.update({
-  id: '/assete/addAssete/',
-  path: '/assete/addAssete/',
+const AppAsseteAddAsseteIndexLazyRoute =
+  AppAsseteAddAsseteIndexLazyImport.update({
+    id: '/assete/addAssete/',
+    path: '/assete/addAssete/',
+    getParentRoute: () => AppRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/assete/addAssete/index.lazy').then((d) => d.Route),
+  )
+
+const AppAsseteInfoIdLazyRoute = AppAsseteInfoIdLazyImport.update({
+  id: '/assete/info/$id',
+  path: '/assete/info/$id',
   getParentRoute: () => AppRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/_app/assete/info/$id.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -56,21 +77,28 @@ declare module '@tanstack/react-router' {
       id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof AppIndexImport
+      preLoaderRoute: typeof AppIndexLazyImport
       parentRoute: typeof AppImport
     }
     '/_app/assete/': {
       id: '/_app/assete/'
       path: '/assete'
       fullPath: '/assete'
-      preLoaderRoute: typeof AppAsseteIndexImport
+      preLoaderRoute: typeof AppAsseteIndexLazyImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/assete/info/$id': {
+      id: '/_app/assete/info/$id'
+      path: '/assete/info/$id'
+      fullPath: '/assete/info/$id'
+      preLoaderRoute: typeof AppAsseteInfoIdLazyImport
       parentRoute: typeof AppImport
     }
     '/_app/assete/addAssete/': {
       id: '/_app/assete/addAssete/'
       path: '/assete/addAssete'
       fullPath: '/assete/addAssete'
-      preLoaderRoute: typeof AppAsseteAddAsseteIndexImport
+      preLoaderRoute: typeof AppAsseteAddAsseteIndexLazyImport
       parentRoute: typeof AppImport
     }
   }
@@ -79,50 +107,56 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AppRouteChildren {
-  AppIndexRoute: typeof AppIndexRoute
-  AppAsseteIndexRoute: typeof AppAsseteIndexRoute
-  AppAsseteAddAsseteIndexRoute: typeof AppAsseteAddAsseteIndexRoute
+  AppIndexLazyRoute: typeof AppIndexLazyRoute
+  AppAsseteIndexLazyRoute: typeof AppAsseteIndexLazyRoute
+  AppAsseteInfoIdLazyRoute: typeof AppAsseteInfoIdLazyRoute
+  AppAsseteAddAsseteIndexLazyRoute: typeof AppAsseteAddAsseteIndexLazyRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
-  AppIndexRoute: AppIndexRoute,
-  AppAsseteIndexRoute: AppAsseteIndexRoute,
-  AppAsseteAddAsseteIndexRoute: AppAsseteAddAsseteIndexRoute,
+  AppIndexLazyRoute: AppIndexLazyRoute,
+  AppAsseteIndexLazyRoute: AppAsseteIndexLazyRoute,
+  AppAsseteInfoIdLazyRoute: AppAsseteInfoIdLazyRoute,
+  AppAsseteAddAsseteIndexLazyRoute: AppAsseteAddAsseteIndexLazyRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 export interface FileRoutesByFullPath {
   '': typeof AppRouteWithChildren
-  '/': typeof AppIndexRoute
-  '/assete': typeof AppAsseteIndexRoute
-  '/assete/addAssete': typeof AppAsseteAddAsseteIndexRoute
+  '/': typeof AppIndexLazyRoute
+  '/assete': typeof AppAsseteIndexLazyRoute
+  '/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
+  '/assete/addAssete': typeof AppAsseteAddAsseteIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof AppIndexRoute
-  '/assete': typeof AppAsseteIndexRoute
-  '/assete/addAssete': typeof AppAsseteAddAsseteIndexRoute
+  '/': typeof AppIndexLazyRoute
+  '/assete': typeof AppAsseteIndexLazyRoute
+  '/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
+  '/assete/addAssete': typeof AppAsseteAddAsseteIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_app': typeof AppRouteWithChildren
-  '/_app/': typeof AppIndexRoute
-  '/_app/assete/': typeof AppAsseteIndexRoute
-  '/_app/assete/addAssete/': typeof AppAsseteAddAsseteIndexRoute
+  '/_app/': typeof AppIndexLazyRoute
+  '/_app/assete/': typeof AppAsseteIndexLazyRoute
+  '/_app/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
+  '/_app/assete/addAssete/': typeof AppAsseteAddAsseteIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/' | '/assete' | '/assete/addAssete'
+  fullPaths: '' | '/' | '/assete' | '/assete/info/$id' | '/assete/addAssete'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/assete' | '/assete/addAssete'
+  to: '/' | '/assete' | '/assete/info/$id' | '/assete/addAssete'
   id:
     | '__root__'
     | '/_app'
     | '/_app/'
     | '/_app/assete/'
+    | '/_app/assete/info/$id'
     | '/_app/assete/addAssete/'
   fileRoutesById: FileRoutesById
 }
@@ -153,19 +187,24 @@ export const routeTree = rootRoute
       "children": [
         "/_app/",
         "/_app/assete/",
+        "/_app/assete/info/$id",
         "/_app/assete/addAssete/"
       ]
     },
     "/_app/": {
-      "filePath": "_app/index.tsx",
+      "filePath": "_app/index.lazy.tsx",
       "parent": "/_app"
     },
     "/_app/assete/": {
-      "filePath": "_app/assete/index.tsx",
+      "filePath": "_app/assete/index.lazy.tsx",
+      "parent": "/_app"
+    },
+    "/_app/assete/info/$id": {
+      "filePath": "_app/assete/info/$id.lazy.tsx",
       "parent": "/_app"
     },
     "/_app/assete/addAssete/": {
-      "filePath": "_app/assete/addAssete/index.tsx",
+      "filePath": "_app/assete/addAssete/index.lazy.tsx",
       "parent": "/_app"
     }
   }

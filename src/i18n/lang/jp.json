@@ -27,6 +27,7 @@
     "searchAsset": "資産を検索",
     "assetOperatingStatusTitle": "資産運用状況",
     "propertyOperatingDetails": "不動産運用状況詳細",
+    "rejectedReason": "却下理由",
     "assetStatus": {
       "totalOnChain": "総ブロックチェーン化資産",
       "verifying": "検証中資産",

@@ -1,12 +1,12 @@
 import type { ColumnsType } from 'antd/es/table'
 import { CommonTable } from '@/components/common/common-table'
 import { formatNumberNoRound } from '@/utils/number'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { Button, Input } from 'antd'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 
-export const Route = createFileRoute('/_app/assete/')({
+export const Route = createLazyFileRoute('/_app/assete/')({
   component: RouteComponent
 })
 
@@ -301,7 +301,14 @@ function AssetsTable() {
       title: t('assete.table.action'),
       dataIndex: 'processor',
       key: 'processor',
-      render: () => <div className="text-sm text-#D1D5DB clickable">{t('assete.table.view')}</div>
+      render: (_, record) => (
+        <div className="fyc gap-4">
+          <Link to="/assete/info/$id" params={{ id: record.id.toString() }}>
+            <div className="text-sm text-#D1D5DB clickable">{t('assete.table.view')}</div>
+          </Link>
+          {record.status === 2 && <div className="text-sm text-#CF6679 clickable">{t('assete.rejectedReason')}</div>}
+        </div>
+      )
     }
   ]
   return (

@@ -1,12 +1,12 @@
 import { AnimationMove } from '@/components/common/animation/move'
-import { createFileRoute } from '@tanstack/react-router'
+import { createLazyFileRoute } from '@tanstack/react-router'
 import { useForm } from 'antd/es/form/Form'
 import { AnimatePresence } from 'framer-motion'
 import { AddAsseteFrist } from './-components/addAsseteFrist'
 import { AddAsseteSecond } from './-components/addAsseteSecond'
-import './index.scss'
+import './index.lazy.scss'
 
-export const Route = createFileRoute('/_app/assete/addAssete/')({
+export const Route = createLazyFileRoute('/_app/assete/addAssete/')({
   component: RouteComponent
 })
 
