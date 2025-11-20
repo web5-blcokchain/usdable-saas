@@ -12,6 +12,7 @@ export default function MainHeader() {
     <header className="sticky left-0 top-0 z-99 bg-#0c0f13">
       <div className="fyc justify-between px-10 py-3">
         <div className="fyc gap-2">
+          {/* TODO 在登录后跳转到自己管理页的首页 */}
           <Link to="/">
             {' '}
             <img className="h-14" src={logo} alt="" />

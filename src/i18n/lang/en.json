@@ -279,6 +279,99 @@
       "evaluateRental": "Evaluate the possibility of re-renting and the estimated vacancy period."
     }
   },
+  "evaluation": {
+    "title": "Case Evaluation",
+    "description": "Receive and process asset valuation cases preliminarily reviewed and approved by lawyers, view detailed information, and conduct professional evaluation reviews.",
+    "caseStatus": {
+      "pending": "Pending Cases",
+      "processing": "Processing Cases",
+      "completedThisMonth": "Completed This Month",
+      "pendingClaim": "Pending Claim (Evaluation)"
+    },
+    "caseList": "Case List",
+    "searchPlaceholder": "Search Cases",
+    "table": {
+      "caseId": "Case ID",
+      "sourceLawyer": "Source Lawyer",
+      "assetParty": "Asset Party",
+      "amount": "Amount",
+      "createTime": "Submission date",
+      "status": "Status",
+      "action": "Action"
+    },
+    "status": {
+      "pendingEvaluation": "Pending Evaluation",
+      "completed": "Completed"
+    },
+    "action": {
+      "claimEvaluation": "Claim Evaluation",
+      "viewDetails": "View Details"
+    },
+    "info": {
+      "back": "Back",
+      "assetInfo": "Asset Information Verification Area",
+      "required": "Required",
+      "optional": "Optional",
+      "fileNumber": "File Number",
+      "uploadDate": "Upload Date",
+      "qualified": "Qualified",
+      "unqualified": "Unqualified",
+      "missing": "Missing",
+      "needProvide": "Need to provide relevant materials",
+      "addSupplementaryFile": "Add Supplementary File",
+      "addSupplementaryFileDesc": "Add other relevant supporting documents, such as renovation contracts, property certificates, etc.",
+      "rejectAsset": "Reject Asset Party for Additional Documents",
+      "uploadReport": "Upload Report",
+      "rejectDialogTitle": "Reject",
+      "rejectDialogDesc": "Please provide the reason for rejecting this asset on-chain application",
+      "assetNumber": "Asset Number",
+      "detailedExplanation": "Detailed Explanation",
+      "rejectDialogPlaceholder": "Please enter the rejection reason",
+      "reject": "Reject",
+      "fileTypes": {
+        "propertyCertificate": "Property Certificate",
+        "purchaseContract": "Purchase Contract",
+        "landUseRightCertificate": "Land Use Right Certificate",
+        "propertyPhotos": "Property Photos",
+        "mortgageInfo": "Mortgage Information"
+      },
+      "sampleAddress": "No. 88 Keyuan Road, Zhangjiang Hi-Tech Park, Pudong New District, Shanghai",
+      "sampleProperty": "Shanghai Huajiadì",
+      "uploadReportDialog": {
+        "title": "Evaluation Report",
+        "assetNumber": "Asset Number",
+        "propertyName": "Property Name",
+        "appraiserName": "Appraiser Name",
+        "appraiserNamePlaceholder": "Please enter appraiser name",
+        "evaluationAgency": "Evaluation Agency",
+        "evaluationAgencyPlaceholder": "Please enter evaluation agency",
+        "evaluationDate": "Evaluation Date",
+        "evaluationDatePlaceholder": "Please select evaluation date",
+        "evaluationMethod": "Evaluation Method",
+        "evaluationMethodPlaceholder": "Please select evaluation method",
+        "evaluationPrice": "Evaluation Price (10K yuan)",
+        "evaluationPricePlaceholder": "Please enter evaluation price",
+        "evaluationConclusion": "Evaluation Conclusion",
+        "evaluationConclusionPlaceholder": "Please enter evaluation conclusion",
+        "uploadReportFile": "Upload Evaluation Report File",
+        "fileSupport": "Supported formats: PDF / DOCX / JPG (≤20MB)",
+        "dragHere": "Drag files here or",
+        "clickUpload": "Click to select files",
+        "cancel": "Cancel",
+        "saveDraft": "Save Draft",
+        "submitReport": "Submit Report",
+        "confirmSubmitTitle": "Confirm submission of evaluation report?",
+        "confirmSubmitDesc": "After submission, modifications will not be possible. Feedback can only be provided after lawyer review.",
+        "confirmCancel": "Cancel",
+        "confirmSubmit": "Confirm Submission",
+        "methodOptions": {
+          "method1": "Method 1",
+          "method2": "Method 2",
+          "method3": "Method 3"
+        }
+      }
+    }
+  },
   "register": {
     "asset": {
       "title": "Asset Owner Registration",

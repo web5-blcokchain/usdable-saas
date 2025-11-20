@@ -1,0 +1,27 @@
+.common-dialog .ant-modal .ant-modal-content {
+  padding: 0 !important;
+  --common-dialog-padding-x: 24px;
+  --common-dialog-padding-y: 20px;
+
+  .ant-modal-body {
+    padding: 0 var(--common-dialog-padding-x);
+  }
+  .ant-modal-footer {
+    position: sticky;
+    z-index: 99;
+    bottom: 0;
+    left: 0;
+    background: var(--common-dialog-footer-background, #181b21);
+    padding: var(--common-dialog-padding-y) var(--common-dialog-padding-x);
+    border-top: 1px solid var(--common-dialog-footer-border-color, #1e293b);
+  }
+  .ant-modal-header {
+    position: sticky;
+    z-index: 99;
+    top: 0;
+    left: 0;
+    background: var(--common-dialog-header-background, #181b21);
+    padding: var(--common-dialog-padding-y) var(--common-dialog-padding-x);
+    border-bottom: 1px solid var(--common-dialog-header-border-color, #1e293b);
+  }
+}

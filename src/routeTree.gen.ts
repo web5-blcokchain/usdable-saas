@@ -14,6 +14,8 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as AppImport } from './routes/_app'
+import { Route as AppEvaluationIndexImport } from './routes/_app/evaluation/index'
+import { Route as AppEvaluationReportManagementIndexImport } from './routes/_app/evaluation/reportManagement/index'
 
 // Create Virtual Routes
 
@@ -21,6 +23,9 @@ const AppIndexLazyImport = createFileRoute('/_app/')()
 const AppAsseteIndexLazyImport = createFileRoute('/_app/assete/')()
 const AppAsseteAddAsseteIndexLazyImport = createFileRoute(
   '/_app/assete/addAssete/',
+)()
+const AppEvaluationInfoIdLazyImport = createFileRoute(
+  '/_app/evaluation/info/$id',
 )()
 const AppAsseteInfoIdLazyImport = createFileRoute('/_app/assete/info/$id')()
 
@@ -45,6 +50,12 @@ const AppAsseteIndexLazyRoute = AppAsseteIndexLazyImport.update({
   import('./routes/_app/assete/index.lazy').then((d) => d.Route),
 )
 
+const AppEvaluationIndexRoute = AppEvaluationIndexImport.update({
+  id: '/evaluation/',
+  path: '/evaluation/',
+  getParentRoute: () => AppRoute,
+} as any)
+
 const AppAsseteAddAsseteIndexLazyRoute =
   AppAsseteAddAsseteIndexLazyImport.update({
     id: '/assete/addAssete/',
@@ -53,6 +64,21 @@ const AppAsseteAddAsseteIndexLazyRoute =
   } as any).lazy(() =>
     import('./routes/_app/assete/addAssete/index.lazy').then((d) => d.Route),
   )
+
+const AppEvaluationReportManagementIndexRoute =
+  AppEvaluationReportManagementIndexImport.update({
+    id: '/evaluation/reportManagement/',
+    path: '/evaluation/reportManagement/',
+    getParentRoute: () => AppRoute,
+  } as any)
+
+const AppEvaluationInfoIdLazyRoute = AppEvaluationInfoIdLazyImport.update({
+  id: '/evaluation/info/$id',
+  path: '/evaluation/info/$id',
+  getParentRoute: () => AppRoute,
+} as any).lazy(() =>
+  import('./routes/_app/evaluation/info/$id.lazy').then((d) => d.Route),
+)
 
 const AppAsseteInfoIdLazyRoute = AppAsseteInfoIdLazyImport.update({
   id: '/assete/info/$id',
@@ -80,6 +106,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexLazyImport
       parentRoute: typeof AppImport
     }
+    '/_app/evaluation/': {
+      id: '/_app/evaluation/'
+      path: '/evaluation'
+      fullPath: '/evaluation'
+      preLoaderRoute: typeof AppEvaluationIndexImport
+      parentRoute: typeof AppImport
+    }
     '/_app/assete/': {
       id: '/_app/assete/'
       path: '/assete'
@@ -92,6 +125,20 @@ declare module '@tanstack/react-router' {
       path: '/assete/info/$id'
       fullPath: '/assete/info/$id'
       preLoaderRoute: typeof AppAsseteInfoIdLazyImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/evaluation/info/$id': {
+      id: '/_app/evaluation/info/$id'
+      path: '/evaluation/info/$id'
+      fullPath: '/evaluation/info/$id'
+      preLoaderRoute: typeof AppEvaluationInfoIdLazyImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/evaluation/reportManagement/': {
+      id: '/_app/evaluation/reportManagement/'
+      path: '/evaluation/reportManagement'
+      fullPath: '/evaluation/reportManagement'
+      preLoaderRoute: typeof AppEvaluationReportManagementIndexImport
       parentRoute: typeof AppImport
     }
     '/_app/assete/addAssete/': {
@@ -108,15 +155,22 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppIndexLazyRoute: typeof AppIndexLazyRoute
+  AppEvaluationIndexRoute: typeof AppEvaluationIndexRoute
   AppAsseteIndexLazyRoute: typeof AppAsseteIndexLazyRoute
   AppAsseteInfoIdLazyRoute: typeof AppAsseteInfoIdLazyRoute
+  AppEvaluationInfoIdLazyRoute: typeof AppEvaluationInfoIdLazyRoute
+  AppEvaluationReportManagementIndexRoute: typeof AppEvaluationReportManagementIndexRoute
   AppAsseteAddAsseteIndexLazyRoute: typeof AppAsseteAddAsseteIndexLazyRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppIndexLazyRoute: AppIndexLazyRoute,
+  AppEvaluationIndexRoute: AppEvaluationIndexRoute,
   AppAsseteIndexLazyRoute: AppAsseteIndexLazyRoute,
   AppAsseteInfoIdLazyRoute: AppAsseteInfoIdLazyRoute,
+  AppEvaluationInfoIdLazyRoute: AppEvaluationInfoIdLazyRoute,
+  AppEvaluationReportManagementIndexRoute:
+    AppEvaluationReportManagementIndexRoute,
   AppAsseteAddAsseteIndexLazyRoute: AppAsseteAddAsseteIndexLazyRoute,
 }
 
@@ -125,15 +179,21 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 export interface FileRoutesByFullPath {
   '': typeof AppRouteWithChildren
   '/': typeof AppIndexLazyRoute
+  '/evaluation': typeof AppEvaluationIndexRoute
   '/assete': typeof AppAsseteIndexLazyRoute
   '/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
+  '/evaluation/info/$id': typeof AppEvaluationInfoIdLazyRoute
+  '/evaluation/reportManagement': typeof AppEvaluationReportManagementIndexRoute
   '/assete/addAssete': typeof AppAsseteAddAsseteIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof AppIndexLazyRoute
+  '/evaluation': typeof AppEvaluationIndexRoute
   '/assete': typeof AppAsseteIndexLazyRoute
   '/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
+  '/evaluation/info/$id': typeof AppEvaluationInfoIdLazyRoute
+  '/evaluation/reportManagement': typeof AppEvaluationReportManagementIndexRoute
   '/assete/addAssete': typeof AppAsseteAddAsseteIndexLazyRoute
 }
 
@@ -141,22 +201,43 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_app': typeof AppRouteWithChildren
   '/_app/': typeof AppIndexLazyRoute
+  '/_app/evaluation/': typeof AppEvaluationIndexRoute
   '/_app/assete/': typeof AppAsseteIndexLazyRoute
   '/_app/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
+  '/_app/evaluation/info/$id': typeof AppEvaluationInfoIdLazyRoute
+  '/_app/evaluation/reportManagement/': typeof AppEvaluationReportManagementIndexRoute
   '/_app/assete/addAssete/': typeof AppAsseteAddAsseteIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/' | '/assete' | '/assete/info/$id' | '/assete/addAssete'
+  fullPaths:
+    | ''
+    | '/'
+    | '/evaluation'
+    | '/assete'
+    | '/assete/info/$id'
+    | '/evaluation/info/$id'
+    | '/evaluation/reportManagement'
+    | '/assete/addAssete'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/assete' | '/assete/info/$id' | '/assete/addAssete'
+  to:
+    | '/'
+    | '/evaluation'
+    | '/assete'
+    | '/assete/info/$id'
+    | '/evaluation/info/$id'
+    | '/evaluation/reportManagement'
+    | '/assete/addAssete'
   id:
     | '__root__'
     | '/_app'
     | '/_app/'
+    | '/_app/evaluation/'
     | '/_app/assete/'
     | '/_app/assete/info/$id'
+    | '/_app/evaluation/info/$id'
+    | '/_app/evaluation/reportManagement/'
     | '/_app/assete/addAssete/'
   fileRoutesById: FileRoutesById
 }
@@ -186,13 +267,20 @@ export const routeTree = rootRoute
       "filePath": "_app.tsx",
       "children": [
         "/_app/",
+        "/_app/evaluation/",
         "/_app/assete/",
         "/_app/assete/info/$id",
+        "/_app/evaluation/info/$id",
+        "/_app/evaluation/reportManagement/",
         "/_app/assete/addAssete/"
       ]
     },
     "/_app/": {
       "filePath": "_app/index.lazy.tsx",
+      "parent": "/_app"
+    },
+    "/_app/evaluation/": {
+      "filePath": "_app/evaluation/index.tsx",
       "parent": "/_app"
     },
     "/_app/assete/": {
@@ -201,6 +289,14 @@ export const routeTree = rootRoute
     },
     "/_app/assete/info/$id": {
       "filePath": "_app/assete/info/$id.lazy.tsx",
+      "parent": "/_app"
+    },
+    "/_app/evaluation/info/$id": {
+      "filePath": "_app/evaluation/info/$id.lazy.tsx",
+      "parent": "/_app"
+    },
+    "/_app/evaluation/reportManagement/": {
+      "filePath": "_app/evaluation/reportManagement/index.tsx",
       "parent": "/_app"
     },
     "/_app/assete/addAssete/": {

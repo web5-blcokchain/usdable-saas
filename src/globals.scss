@@ -122,3 +122,20 @@ a {
   }
   @apply max-h-80% overflow-y-scroll;
 }
+
+.fm-orbitron {
+  font-family: 'Orbitron';
+}
+
+.file-card-full {
+  .ant-upload-wrapper.UploadCard {
+    width: 100%;
+    .ant-upload {
+      width: 100%;
+      display: block;
+      .ant-upload > div > div {
+        width: 100%;
+      }
+    }
+  }
+}

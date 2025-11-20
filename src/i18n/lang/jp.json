@@ -279,6 +279,99 @@
       "evaluateRental": "再募集の可能性と予想空室期間を評価してください。"
     }
   },
+  "evaluation": {
+    "title": "案件評価",
+    "description": "弁護士の予備審査通過済資産評価案件を受け取り処理し、詳細情報を確認して専門的な評価審査を行います",
+    "caseStatus": {
+      "pending": "未処理案件",
+      "processing": "処理中案件",
+      "completedThisMonth": "今月完了案件",
+      "pendingClaim": "未認領案件（評価）"
+    },
+    "caseList": "案件リスト",
+    "searchPlaceholder": "案件を検索",
+    "table": {
+      "caseId": "案件番号",
+      "sourceLawyer": "出所弁護士",
+      "assetParty": "資産家",
+      "amount": "金額",
+      "createTime": "提出期日です",
+      "status": "状態",
+      "action": "操作"
+    },
+    "status": {
+      "pendingEvaluation": "評価待ち",
+      "completed": "完了済"
+    },
+    "action": {
+      "claimEvaluation": "評価を認領",
+      "viewDetails": "詳細を表示"
+    },
+    "info": {
+      "back": "戻る",
+      "assetInfo": "資産資料検証エリア",
+      "required": "必須",
+      "optional": "任意",
+      "fileNumber": "番号",
+      "uploadDate": "アップロード日",
+      "qualified": "合格",
+      "unqualified": "不合格",
+      "missing": "不足",
+      "needProvide": "関連資料を提供する必要があります",
+      "addSupplementaryFile": "補足ファイルを追加",
+      "addSupplementaryFileDesc": "リノベーション契約書、物件証明書等の関連する補足証明書類を追加",
+      "rejectAsset": "資産家に補足資料を却下",
+      "uploadReport": "レポートをアップロード",
+      "rejectDialogTitle": "却下",
+      "rejectDialogDesc": "この資産のチェーン申請を却下する理由を入力してください",
+      "assetNumber": "資産番号",
+      "detailedExplanation": "詳細説明",
+      "rejectDialogPlaceholder": "却下理由を入力してください",
+      "reject": "却下",
+      "sampleAddress": "上海市浦東新区張江ハイテク園区科苑路88番地",
+      "sampleProperty": "上海花家地",
+      "fileTypes": {
+        "propertyCertificate": "不動産登記簿謄本",
+        "purchaseContract": "購入契約書",
+        "landUseRightCertificate": "土地利用権証明書",
+        "propertyPhotos": "不動産写真",
+        "mortgageInfo": "抵当情報"
+      },
+      "uploadReportDialog": {
+        "title": "評価レポート",
+        "assetNumber": "資産番号",
+        "propertyName": "物件名",
+        "appraiserName": "評価師氏名",
+        "appraiserNamePlaceholder": "評価師氏名を入力してください",
+        "evaluationAgency": "評価機関",
+        "evaluationAgencyPlaceholder": "評価機関を入力してください",
+        "evaluationDate": "評価日",
+        "evaluationDatePlaceholder": "評価日を選択してください",
+        "evaluationMethod": "評価方法",
+        "evaluationMethodPlaceholder": "評価方法を選択してください",
+        "evaluationPrice": "評価価格（万元）",
+        "evaluationPricePlaceholder": "評価価格を入力してください",
+        "evaluationConclusion": "評価結論",
+        "evaluationConclusionPlaceholder": "評価結論を入力してください",
+        "uploadReportFile": "評価レポートファイルをアップロード",
+        "fileSupport": "対応フォーマット：PDF / DOCX / JPG（≤20MB）",
+        "dragHere": "ファイルをここにドラッグするか",
+        "clickUpload": "ファイルを選択",
+        "cancel": "キャンセル",
+        "saveDraft": "下書き保存",
+        "submitReport": "レポート提出",
+        "confirmSubmitTitle": "評価レポートの提出を確認しますか？",
+        "confirmSubmitDesc": "提出後は変更できません。弁護士のレビュー後にフィードバックのみ可能です。",
+        "confirmCancel": "キャンセル",
+        "confirmSubmit": "提出を確認",
+        "methodOptions": {
+          "method1": "方法1",
+          "method2": "方法2",
+          "method3": "方法3"
+        }
+      }
+    }
+  },
   "register": {
     "asset": {
       "title": "資産所有者登録",

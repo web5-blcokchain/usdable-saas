@@ -1,0 +1,20 @@
+.ant-form .ant-form-item {
+  .ant-input-number {
+    width: 100%;
+  }
+
+  .ant-input-number-input,
+  .ant-input,
+  .ant-select,
+  .ant-picker {
+    @apply h-10.5 bg-transparent b-#30363D w-full;
+  }
+
+  .ant-input-number,
+  .ant-select-selector,
+  textarea {
+    background: transparent;
+    @apply b-#30363D;
+  }
+}
+

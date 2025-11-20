@@ -247,7 +247,9 @@
       "selectFiles": "选择文件",
       "pendingSupplementFiles": "待补充文件",
       "reUpload": "重新上传",
-      "submitForReaudit": "提交复审"
+      "submitForReaudit": "提交复审",
+      "sampleAddress": "上海市浦东新区张江高科技园区科苑路88号",
+      "sampleProperty": "上海花家地"
     },
     "payRent": {
       "title": "缴纳房租",
@@ -277,6 +279,112 @@
       "prepareLegalAction": "如未收到付款，准备启动法律程序追讨欠款",
       "considerTermination": "根据合同条款，考虑终止租赁合同并要求租户搬离",
       "evaluateRental": "评估重新招租的可能性和预计空置期"
+    }
+  },
+  "evaluation": {
+    "title": "案件评估",
+    "description": "接收并处理由律师初审通过的资产估值案件，查看详细信息并进行专业评估审核",
+    "caseStatus": {
+      "pending": "待处理案件",
+      "processing": "处理中案件",
+      "completedThisMonth": "本月已完成案件",
+      "pendingClaim": "待认领案件（评估）"
+    },
+    "caseList": "案件列表",
+    "searchPlaceholder": "搜索案件",
+    "table": {
+      "caseId": "案件编号",
+      "sourceLawyer": "来源律师",
+      "assetParty": "资产方",
+      "amount": "金额",
+      "createTime": "提交日期",
+      "status": "状态",
+      "action": "操作"
+    },
+    "status": {
+      "pendingEvaluation": "待评估",
+      "completed": "已完成"
+    },
+    "action": {
+      "claimEvaluation": "认领评估",
+      "viewDetails": "查看详情"
+    },
+    "infoDialog": {
+      "title": "案件详情",
+      "caseDescription": "案件描述",
+      "assetList": "资产清单",
+      "type": "类型",
+      "caseInfo": "案件信息",
+      "assetType": "资产类型",
+      "currentStatus": "当前状态",
+      "totalValuationAmount": "总估值金额",
+      "submittedLawyer": "提交律师",
+      "assetOwnerInfo": "资产方信息",
+      "assetValuationRequest": "资产估值申请",
+      "lawyerReviewOpinion": "律师初审意见",
+      "startEvaluation": "开始评估"
+    },
+    "info": {
+      "back": "返回",
+      "assetInfo": "资产资料校验区",
+      "required": "必需",
+      "optional": "可选",
+      "fileNumber": "编号",
+      "uploadDate": "上传日期",
+      "qualified": "合格",
+      "unqualified": "不合格",
+      "missing": "缺失",
+      "needProvide": "需提供相关资料",
+      "addSupplementaryFile": "添加补充文件",
+      "addSupplementaryFileDesc": "添加其他相关证明文件，如装修合同、物业证明等",
+      "rejectAsset": "驳回资产方补件",
+      "uploadReport": "上传报告",
+      "rejectDialogTitle": "驳回",
+      "rejectDialogDesc": "请提供驳回此资产上链申请的原因",
+      "assetNumber": "资产编号",
+      "detailedExplanation": "详细说明",
+      "rejectDialogPlaceholder": "请输入驳回原因",
+      "reject": "驳回",
+      "fileTypes": {
+        "propertyCertificate": "房产证",
+        "purchaseContract": "购房合同",
+        "landUseRightCertificate": "土地使用权证明",
+        "propertyPhotos": "房产照片",
+        "mortgageInfo": "抵押信息"
+      },
+      "uploadReportDialog": {
+        "title": "评估报告",
+        "assetNumber": "资产编号",
+        "propertyName": "房产名称",
+        "appraiserName": "评估师姓名",
+        "appraiserNamePlaceholder": "请输入评估师姓名",
+        "evaluationAgency": "评估机构",
+        "evaluationAgencyPlaceholder": "请输入评估机构",
+        "evaluationDate": "评估日期",
+        "evaluationDatePlaceholder": "请选择评估日期",
+        "evaluationMethod": "评估方法",
+        "evaluationMethodPlaceholder": "请选择评估方法",
+        "evaluationPrice": "评估价（万元）",
+        "evaluationPricePlaceholder": "请输入评估价",
+        "evaluationConclusion": "评估结论",
+        "evaluationConclusionPlaceholder": "请输入评估结论",
+        "uploadReportFile": "上传评估报告文件",
+        "fileSupport": "支持格式：PDF / DOCX / JPG（≤20MB）",
+        "dragHere": "拖拽文件到此处或",
+        "clickUpload": "点击选择文件",
+        "cancel": "取消",
+        "saveDraft": "保存草稿",
+        "submitReport": "提交报告",
+        "confirmSubmitTitle": "是否确认提交评估报告？",
+        "confirmSubmitDesc": "提交后将无法修改，仅能由律师复核后反馈。",
+        "confirmCancel": "取消",
+        "confirmSubmit": "确认提交",
+        "methodOptions": {
+          "method1": "方法一",
+          "method2": "方法二",
+          "method3": "方法三"
+        }
+      }
     }
   },
   "register": {
