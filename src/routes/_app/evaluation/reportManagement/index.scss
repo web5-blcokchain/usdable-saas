@@ -1,0 +1,18 @@
+.reportManagement .ant-table-wrapper {
+  border-radius: 8px;
+  border: 1px solid #1f2937;
+  .ant-table {
+    @apply text-base;
+  }
+
+  .ant-table-tbody .ant-table-row .ant-table-cell {
+    border-bottom-color: black;
+  }
+  .ant-spin-container .ant-pagination {
+    background-color: #171b21;
+    margin: 0;
+    padding: 1rem;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+}

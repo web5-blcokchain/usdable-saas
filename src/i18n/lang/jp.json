@@ -25,7 +25,11 @@
     "submitError": "提出に失敗しました"
   },
   "header": {
-    "login": "ログイン"
+    "login": "ログイン",
+    "profile": "プロフィール",
+    "accountSettings": "アカウント設定",
+    "reportManagement": "レポート管理",
+    "logout": "ログアウト"
   },
   "home": {
     "selectIdentity": "あなたの身分を選択してください",
@@ -279,6 +283,12 @@
       "evaluateRental": "再募集の可能性と予想空室期間を評価してください。"
     }
   },
+  "footer": {
+    "copyright": "© 2025 レポート管理システム. すべての権利を保留します.",
+    "privacyPolicy": "プライバシーポリシー",
+    "termsOfUse": "利用規約",
+    "contactUs": "お問い合わせ"
+  },
   "evaluation": {
     "title": "案件評価",
     "description": "弁護士の予備審査通過済資産評価案件を受け取り処理し、詳細情報を確認して専門的な評価審査を行います",
@@ -369,6 +379,22 @@
           "method2": "方法2",
           "method3": "方法3"
         }
+      }
+    },
+    "reportManagement": {
+      "title": "レポート管理",
+      "description": "追跡可能なレポート管理と履歴記録",
+      "searchPlaceholder": "レポートID、資産名を検索",
+      "table": {
+        "reportId": "レポートID",
+        "assetName": "資産名",
+        "status": "状態",
+        "submitTime": "提出時間",
+        "action": "操作",
+        "download": "ダウンロード",
+        "delete": "削除",
+        "passed": "通過",
+        "failed": "未通過"
       }
     }
   },

@@ -219,7 +219,7 @@ function RouteComponent() {
         }
       </div>
       <div className="mt-8 rounded-2 bg-#161B22 backdrop-blur-4">
-        <div className="fyc justify-between p-4">
+        <div className="fyc justify-between b-1 b-b-0 b-#30363D rounded-t-2 b-solid p-4">
           <div className="text-lg font-bold">{t('evaluation.caseList')}</div>
           <div className="fyc gap-3">
             <Input
@@ -232,7 +232,15 @@ function RouteComponent() {
             <Select options={dataStatus} />
           </div>
         </div>
-        <CommonTable data={data} columns={columns} />
+        <CommonTable
+          className="b-1 rounded-0"
+          data={data}
+          columns={columns}
+          tableConfig={{
+            borderColor: '#30363D',
+            headerBorderRadius: 0
+          } as any}
+        />
       </div>
       <EvaluationInfoDialog visible={evaluationInfoDialogVisible} setVisible={setEvaluationInfoDialogVisible} _evaluationInfo={data[0]} />
     </div>

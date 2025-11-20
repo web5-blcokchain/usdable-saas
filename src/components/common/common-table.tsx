@@ -1,4 +1,5 @@
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
+import type { ComponentToken } from 'antd/es/table/style'
 import { ConfigProvider, Table } from 'antd'
 import { useTranslation } from 'react-i18next'
 import './common-table.scss'
@@ -6,12 +7,15 @@ import './common-table.scss'
 export function CommonTable({
   columns,
   data,
-  pagination
-
+  pagination,
+  tableConfig,
+  className
 }: {
   data: any
   columns: ColumnsType<any>
   pagination?: false | TablePaginationConfig
+  tableConfig?: ComponentToken
+  className?: string
 }) {
   const { t } = useTranslation()
   return (
@@ -19,8 +23,9 @@ export function CommonTable({
       theme={{
         components: {
           Table: {
-            headerBg: '#161B22', // 表头背景色
-            borderColor: '#394150'
+            ...tableConfig,
+            headerBg: tableConfig?.headerBg || '#161B22', // 表头背景色
+            borderColor: tableConfig?.borderColor || '#394150'
           }
         }
       }}
@@ -28,11 +33,11 @@ export function CommonTable({
 
       <Table
         tableLayout="fixed"
-        key={JSON.stringify(data)}
+        key={(`${Date.now() + Math.random()}`)}
         scroll={{ x: 'max-content' }}
         columns={columns}
         dataSource={data}
-        className="b-t b-#394150 b-t-solid bg-transparent"
+        className={cn('b-t b-#394150 b-t-solid bg-transparent', className)}
         pagination={typeof pagination === 'boolean'
           ? pagination
           : {

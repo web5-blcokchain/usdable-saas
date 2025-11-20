@@ -25,7 +25,11 @@
     "submitError": "提交失败"
   },
   "header": {
-    "login": "登录"
+    "login": "登录",
+    "profile": "个人资料",
+    "accountSettings": "账户设置",
+    "reportManagement": "报告管理",
+    "logout": "退出登录"
   },
   "home": {
     "selectIdentity": "选择您的身份",
@@ -281,6 +285,12 @@
       "evaluateRental": "评估重新招租的可能性和预计空置期"
     }
   },
+  "footer": {
+    "copyright": "© 2025 报告管理系统. 保留所有权利.",
+    "privacyPolicy": "隐私政策",
+    "termsOfUse": "使用条款",
+    "contactUs": "联系我们"
+  },
   "evaluation": {
     "title": "案件评估",
     "description": "接收并处理由律师初审通过的资产估值案件，查看详细信息并进行专业评估审核",
@@ -384,6 +394,22 @@
           "method2": "方法二",
           "method3": "方法三"
         }
+      }
+    },
+    "reportManagement": {
+      "title": "报告管理",
+      "description": "可追溯的报告管理与历史记录",
+      "searchPlaceholder": "搜索报告编号、资产名称",
+      "table": {
+        "reportId": "报告编号",
+        "assetName": "资产名称",
+        "status": "状态",
+        "submitTime": "提交时间",
+        "action": "操作",
+        "download": "下载",
+        "delete": "删除",
+        "passed": "已通过",
+        "failed": "未通过"
       }
     }
   },

@@ -67,7 +67,7 @@ export function UploadReportDialog({
         )}
         footer={false}
       >
-        <div className="mt-7">
+        <div className="upload-report-form mt-7">
           <Form onFinish={handleConfirm} form={formData} className="space-y-4" layout="vertical">
             <div className="grid cols-2 gap-x-4">
               <Form.Item label={t('evaluation.info.uploadReportDialog.appraiserName')} name="appraiserName">

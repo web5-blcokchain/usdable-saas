@@ -25,7 +25,11 @@
     "submitError": "Submission failed"
   },
   "header": {
-    "login": "Login"
+    "login": "Login",
+    "profile": "Profile",
+    "accountSettings": "Account Settings",
+    "reportManagement": "Report Management",
+    "logout": "Logout"
   },
   "home": {
     "selectIdentity": "Select Your Identity",
@@ -279,6 +283,12 @@
       "evaluateRental": "Evaluate the possibility of re-renting and the estimated vacancy period."
     }
   },
+  "footer": {
+    "copyright": "© 2025 Report Management System. All rights reserved.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfUse": "Terms of Use",
+    "contactUs": "Contact Us"
+  },
   "evaluation": {
     "title": "Case Evaluation",
     "description": "Receive and process asset valuation cases preliminarily reviewed and approved by lawyers, view detailed information, and conduct professional evaluation reviews.",
@@ -369,6 +379,22 @@
           "method2": "Method 2",
           "method3": "Method 3"
         }
+      }
+    },
+    "reportManagement": {
+      "title": "Report Management",
+      "description": "Traceable report management and historical records",
+      "searchPlaceholder": "Search report ID, asset name",
+      "table": {
+        "reportId": "Report ID",
+        "assetName": "Asset Name",
+        "status": "Status",
+        "submitTime": "Submit Time",
+        "action": "Action",
+        "download": "Download",
+        "delete": "Delete",
+        "passed": "Passed",
+        "failed": "Failed"
       }
     }
   },

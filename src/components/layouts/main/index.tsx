@@ -12,7 +12,7 @@ const MainLayout: FC = ({
   return (
     <>
       <MainHeader />
-      <div className="mx-a min-h-screen">
+      <div className="mx-a min-h-screen min-w-1024px">
         {/* <AnimatePresence mode="wait">
           <motion.div
             key={pathKey}
