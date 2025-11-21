@@ -15,6 +15,8 @@
     background: var(--common-dialog-footer-background, #181b21);
     padding: var(--common-dialog-padding-y) var(--common-dialog-padding-x);
     border-top: 1px solid var(--common-dialog-footer-border-color, #1e293b);
+    margin-top: 0;
+    border-radius: var(--common-dialog-header-border-radius, 0 0 8px 08px);
   }
   .ant-modal-header {
     position: sticky;

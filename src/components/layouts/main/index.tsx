@@ -1,4 +1,4 @@
-import { ConfigProvider } from 'antd'
+import { App, BackTop, ConfigProvider } from 'antd'
 import enUS from 'antd/locale/en_US'
 import jaJP from 'antd/locale/ja_JP'
 import zhCN from 'antd/locale/zh_CN'
@@ -17,8 +17,10 @@ const MainLayout: FC = ({
   return (
     <>
       <MainHeader />
-      <div className="mx-a min-h-screen min-w-1024px">
-        {/* <AnimatePresence mode="wait">
+      <App>
+        <div className="mx-a min-h-screen min-w-1024px">
+
+          {/* <AnimatePresence mode="wait">
           <motion.div
             key={pathKey}
             initial={{ x: 100, opacity: 0 }}
@@ -26,16 +28,21 @@ const MainLayout: FC = ({
             exit={{ x: -100, opacity: 0 }}
             transition={{ duration: 0.4, ease: 'easeInOut' }}
           > */}
-        <ConfigProvider locale={
-          i18n.language === 'zh' ? zhCN : i18n.language === 'en' ? enUS : jaJP
-        }
-        >
-          {children}
-        </ConfigProvider>
-        {/* </motion.div>
+          <ConfigProvider locale={
+            i18n.language === 'zh' ? zhCN : i18n.language === 'en' ? enUS : jaJP
+          }
+          >
+            {children}
+          </ConfigProvider>
+          {/* </motion.div>
         </AnimatePresence> */}
-
-      </div>
+          <BackTop className="my-backtop" target={() => (document.querySelector('.app-content')) as HTMLElement}>
+            <div className="backtop-btn size-12 fcc rounded-full bg-#737373">
+              <div className="text-balck i-carbon:back-to-top text-xl"></div>
+            </div>
+          </BackTop>
+        </div>
+      </App>
       <MainFooter />
     </>
   )

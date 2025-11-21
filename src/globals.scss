@@ -166,3 +166,34 @@ a {
     border-color: var(--input-border-color, #30363d);
   }
 }
+
+.ant-upload-wrapper {
+  width: 100% !important;
+  .ant-upload {
+    width: 100% !important;
+    > div > div {
+      width: 100%;
+    }
+  }
+}
+
+.backtop-btn {
+  transition: opacity 0.3s ease-in-out;
+}
+.backtop-btn.ant-fade-enter-active {
+  animation: fade-in 0.3s ease-in-out;
+  animation-fill-mode: forwards;
+  animation-delay: 1s; // 延迟
+
+  @keyframes identifier {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+}
+.backtop-btn.ant-fade-leave {
+  opacity: 0;
+}

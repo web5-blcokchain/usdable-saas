@@ -6,6 +6,8 @@ import { formatNumberNoRound } from '@/utils/number'
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { Select } from 'antd'
 import dayjs from 'dayjs'
+import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import './index.lazy.scss'
 
 export const Route = createLazyFileRoute('/_app/lawyerWorkbench/')({
@@ -14,11 +16,12 @@ export const Route = createLazyFileRoute('/_app/lawyerWorkbench/')({
 
 // 律师工作台
 function RouteComponent() {
+  const { t } = useTranslation()
   const caseTypeList = [
-    { title: '待初审案件', num: 12, icon: <img src={icAuction} className="w-5" /> },
-    { title: '待线下确认案件', num: 8, icon: <div className="i-ep:success-filled"></div> },
-    { title: '已完成案件', num: 24, icon: <div className="i-fa-solid:flag-checkered"></div> },
-    { title: '拍卖任务', num: 6, icon: <img src={icAuction} className="w-5" /> }
+    { title: t('lawyerWorkbench.pendingInitialReview'), num: 12, icon: <img src={icAuction} className="w-5" /> },
+    { title: t('lawyerWorkbench.pendingOfflineConfirmation'), num: 8, icon: <div className="i-ep:success-filled"></div> },
+    { title: t('lawyerWorkbench.completedCases'), num: 24, icon: <div className="i-fa-solid:flag-checkered"></div> },
+    { title: t('lawyerWorkbench.auctionTasks'), num: 6, icon: <img src={icAuction} className="w-5" /> }
   ]
   const [allDialogVisible, setAllDialogVisible] = useState(false)
   const [tableType, setTableType] = useState(0)
@@ -49,7 +52,7 @@ function RouteComponent() {
   return (
     <div className="lawyer-workbench px-22 py-13 pb-24">
       <div className="rounded-3 bg-#161B22 p-4">
-        <div className="text-lg font-600">快捷筛选</div>
+        <div className="text-lg font-600">{t('lawyerWorkbench.quickFilter')}</div>
         <div
           className="grid cols-3 mt-4 gap-3 pb-4 [&>div>div:first-child]:mb-1"
           style={{
@@ -58,19 +61,19 @@ function RouteComponent() {
           } as any}
         >
           <div>
-            <div>国家</div>
+            <div>{t('lawyerWorkbench.country')}</div>
             {/* 全部 */}
-            <Select placeholder="请选择国家" />
+            <Select placeholder={t('lawyerWorkbench.selectCountry')} />
           </div>
           <div>
-            <div>时间范围</div>
+            <div>{t('lawyerWorkbench.timeRange')}</div>
             {/* 全部时间 */}
-            <Select placeholder="请选择时间范围" />
+            <Select placeholder={t('lawyerWorkbench.selectTimeRange')} />
           </div>
           <div>
-            <div>案件状态</div>
+            <div>{t('lawyerWorkbench.caseStatus')}</div>
             {/* 全部状态 */}
-            <Select placeholder="请选择案件状态" />
+            <Select placeholder={t('lawyerWorkbench.selectCaseStatus')} />
           </div>
         </div>
       </div>
@@ -94,9 +97,9 @@ function RouteComponent() {
       <div className="grid cols-2 mt-8 gap-6">
         <div className="flex justify-between gap-3 rounded-3 bg-#161B22 p-6">
           <div>
-            <div className="text-xs text-#9CA3AF">待认领案件（初审）</div>
+            <div className="text-xs text-#9CA3AF">{t('lawyerWorkbench.pendingClaimInitialReview')}</div>
             <div className="mt-1 text-7.5 font-bold">2</div>
-            <div className="mt-4 text-xs text-#00E5FF clickable">查看详情</div>
+            <div className="mt-4 text-xs text-#00E5FF clickable">{t('lawyerWorkbench.viewDetails')}</div>
           </div>
           <div className="h-13.5 w-12 fcc b-1 b-#00E5FF rounded-2 b-solid bg-#0A192F text-xl text-#00E5FF">
             <div className="i-fa-solid:hand-holding translate-y--20%"></div>
@@ -104,9 +107,9 @@ function RouteComponent() {
         </div>
         <div className="flex justify-between gap-3 rounded-3 bg-#161B22 p-6">
           <div>
-            <div className="text-xs text-#9CA3AF">待确权案件（线下确认）</div>
+            <div className="text-xs text-#9CA3AF">{t('lawyerWorkbench.pendingRightConfirmation')}</div>
             <div className="mt-1 text-7.5 font-bold">2</div>
-            <div className="mt-4 text-xs text-#00E5FF clickable">查看详情</div>
+            <div className="mt-4 text-xs text-#00E5FF clickable">{t('lawyerWorkbench.viewDetails')}</div>
           </div>
           <div className="h-13.5 w-12 fcc b-1 b-#00E5FF rounded-2 b-solid bg-#0A192F text-xl text-#00E5FF">
             <img className="w-5 transform-translate-x-10%" src={(new URL('@/assets/images/register/userSign-main.png', import.meta.url).href)} alt="" />
@@ -130,7 +133,7 @@ function RouteComponent() {
         <CompletedAuctionTable openDialog={() => showTableAllDialog(6)} />
       </div>
       {/* 展示所有的案件分类全部列表弹窗 */}
-      <TableAllDialog visible={allDialogVisible} setVisible={setAllDialogVisible} component={DialogContent} title="案件列表" />
+      <TableAllDialog visible={allDialogVisible} setVisible={setAllDialogVisible} component={DialogContent} title={t('lawyerWorkbench.caseList')} />
     </div>
   )
 }
@@ -143,6 +146,7 @@ function PendingInitialReviewTable({
   pagination?: boolean
   openDialog?: () => void
 }) {
+  const { t } = useTranslation()
   const pageInfo = {
     pageSize: 10,
     total: 100,
@@ -174,37 +178,37 @@ function PendingInitialReviewTable({
 
   const columns: ColumnsType<typeof data[0]> = [
     {
-      title: '案件编号',
+      title: t('lawyerWorkbench.caseId'),
       dataIndex: 'id',
       key: 'id'
     },
     {
-      title: '房产名称',
+      title: t('lawyerWorkbench.propertyName'),
       dataIndex: 'address',
       key: 'address'
     },
     {
-      title: '申请人',
+      title: t('lawyerWorkbench.applicant'),
       dataIndex: 'user',
       key: 'user'
     },
     {
-      title: '提交日期',
+      title: t('lawyerWorkbench.submitDate'),
       dataIndex: 'createTime',
       key: 'createTime',
       render: text => <div>{dayjs(text).format('YYYY-MM-DD')}</div>
     },
     {
-      title: '地区',
+      title: t('lawyerWorkbench.region'),
       dataIndex: 'province',
       key: 'province'
     },
     {
-      title: '操作',
+      title: t('lawyerWorkbench.action'),
       key: 'status',
       render: (_, record) => (
         <Link to="/lawyerWorkbench/initialReview/$id" params={{ id: record.id }}>
-          <div className="clickable">审核</div>
+          <div className="clickable">{t('lawyerWorkbench.review')}</div>
         </Link>
       )
     }
@@ -212,8 +216,8 @@ function PendingInitialReviewTable({
   return (
     <div>
       <div className="fyc justify-between gap-3">
-        <div className="text-xl">待初审案件</div>
-        {!pagination && <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">查看全部</div>}
+        <div className="text-xl">{t('lawyerWorkbench.pendingInitialReview')}</div>
+        {!pagination && <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">{t('lawyerWorkbench.viewAll')}</div>}
       </div>
       <CommonTable
         data={data}
@@ -236,6 +240,7 @@ function PendingOfflineExecutionTable({
   pagination?: boolean
   openDialog?: () => void
 }) {
+  const { t } = useTranslation()
   const data = [
     {
       id: '#CAS20230567',
@@ -267,42 +272,42 @@ function PendingOfflineExecutionTable({
 
   const columns: ColumnsType<typeof data[0]> = [
     {
-      title: '案件编号',
+      title: t('lawyerWorkbench.caseId'),
       dataIndex: 'id',
       key: 'id'
     },
     {
-      title: '房产名称',
+      title: t('lawyerWorkbench.propertyName'),
       dataIndex: 'address',
       key: 'address'
     },
     {
-      title: '申请人',
+      title: t('lawyerWorkbench.applicant'),
       dataIndex: 'user',
       key: 'user'
     },
     {
-      title: '预约日期',
+      title: t('lawyerWorkbench.reservationDate'),
       dataIndex: 'createTime',
       key: 'createTime',
       render: text => <div>{dayjs(text).format('YYYY-MM-DD')}</div>
     },
     {
-      title: '地区',
+      title: t('lawyerWorkbench.region'),
       dataIndex: 'province',
       key: 'province'
     },
     {
-      title: '操作',
+      title: t('lawyerWorkbench.action'),
       key: 'status',
-      render: () => <div className="clickable">执行</div>
+      render: () => <div className="clickable">{t('lawyerWorkbench.execute')}</div>
     }
   ]
   return (
     <div>
       <div className="fyc justify-between gap-3">
-        <div className="text-xl">待线下执行案件</div>
-        {!pagination && <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">查看全部</div>}
+        <div className="text-xl">{t('lawyerWorkbench.pendingOfflineConfirmation')}</div>
+        {!pagination && <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">{t('lawyerWorkbench.viewAll')}</div>}
       </div>
       <CommonTable
         data={data}
@@ -325,6 +330,7 @@ function CompletedCasesTable({
   pagination?: boolean
   openDialog?: () => void
 }) {
+  const { t } = useTranslation()
   const data = [
     {
       id: '#CAS20230567',
@@ -355,42 +361,42 @@ function CompletedCasesTable({
   }
   const columns: ColumnsType<typeof data[0]> = [
     {
-      title: '案件编号',
+      title: t('lawyerWorkbench.caseId'),
       dataIndex: 'id',
       key: 'id'
     },
     {
-      title: '房产名称',
+      title: t('lawyerWorkbench.propertyName'),
       dataIndex: 'address',
       key: 'address'
     },
     {
-      title: '申请人',
+      title: t('lawyerWorkbench.applicant'),
       dataIndex: 'user',
       key: 'user'
     },
     {
-      title: '完成日期',
+      title: t('lawyerWorkbench.completionDate'),
       dataIndex: 'createTime',
       key: 'createTime',
       render: text => <div>{dayjs(text).format('YYYY-MM-DD')}</div>
     },
     {
-      title: '地区',
+      title: t('lawyerWorkbench.region'),
       dataIndex: 'province',
       key: 'province'
     },
     {
-      title: '操作',
+      title: t('lawyerWorkbench.action'),
       key: 'status',
-      render: () => <div className="clickable">查看</div>
+      render: () => <div className="clickable">{t('lawyerWorkbench.view')}</div>
     }
   ]
   return (
     <div>
       <div className="fyc justify-between gap-3">
-        <div className="text-xl">已完成案件</div>
-        {!pagination && <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">查看全部</div>}
+        <div className="text-xl">{t('lawyerWorkbench.completedCases')}</div>
+        {!pagination && <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">{t('lawyerWorkbench.viewAll')}</div>}
       </div>
       <CommonTable
         data={data}
@@ -413,6 +419,7 @@ function PendingClaimCasesTable({
   pagination?: boolean
   openDialog?: () => void
 }) {
+  const { t } = useTranslation()
   const data = [
     {
       id: '#CAS20230567',
@@ -446,47 +453,47 @@ function PendingClaimCasesTable({
   }
   const columns: ColumnsType<typeof data[0]> = [
     {
-      title: '案件编号',
+      title: t('lawyerWorkbench.caseId'),
       dataIndex: 'id',
       key: 'id'
     },
     {
-      title: '房产名称',
+      title: t('lawyerWorkbench.propertyName'),
       dataIndex: 'address',
       key: 'address'
     },
     {
-      title: '申请人',
+      title: t('lawyerWorkbench.applicant'),
       dataIndex: 'user',
       key: 'user'
     },
     {
-      title: '上传日期',
+      title: t('lawyerWorkbench.uploadDate'),
       dataIndex: 'createTime',
       key: 'createTime',
       render: text => <div>{dayjs(text).format('YYYY-MM-DD')}</div>
     },
     {
-      title: '状态',
+      title: t('lawyerWorkbench.status'),
       dataIndex: 'status',
       key: 'status',
       render: () => (
         <div className="h-fit w-fit rounded-2 bg-#EB45451A px-2 py-1 text-xs text-#F87171">
-          待认领
+          {t('lawyerWorkbench.pendingClaim')}
         </div>
       )
     },
     {
-      title: '操作',
+      title: t('lawyerWorkbench.action'),
       key: 'status',
-      render: () => <div className="clickable">认领初审</div>
+      render: () => <div className="clickable">{t('lawyerWorkbench.claimForReview')}</div>
     }
   ]
   return (
     <div>
       <div className="fyc justify-between gap-3">
-        <div className="text-xl">待认领案件（初审阶段）</div>
-        {!pagination && <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">查看全部</div>}
+        <div className="text-xl">{t('lawyerWorkbench.pendingClaimInitialReview')}</div>
+        {!pagination && <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">{t('lawyerWorkbench.viewAll')}</div>}
       </div>
       <CommonTable
         data={data}
@@ -509,6 +516,7 @@ function PendingRightConfirmationTable({
   pagination?: boolean
   openDialog?: () => void
 }) {
+  const { t } = useTranslation()
   const data = [
     {
       id: '#CAS20230567',
@@ -542,47 +550,47 @@ function PendingRightConfirmationTable({
   }
   const columns: ColumnsType<typeof data[0]> = [
     {
-      title: '案件编号',
+      title: t('lawyerWorkbench.caseId'),
       dataIndex: 'id',
       key: 'id'
     },
     {
-      title: '房产名称',
+      title: t('lawyerWorkbench.propertyName'),
       dataIndex: 'address',
       key: 'address'
     },
     {
-      title: '评估方',
+      title: t('lawyerWorkbench.applicant'),
       dataIndex: 'user',
       key: 'user'
     },
     {
-      title: '提交日期',
+      title: t('lawyerWorkbench.submitDate'),
       dataIndex: 'createTime',
       key: 'createTime',
       render: text => <div>{dayjs(text).format('YYYY-MM-DD')}</div>
     },
     {
-      title: '状态',
+      title: t('lawyerWorkbench.status'),
       dataIndex: 'status',
       key: 'status',
       render: () => (
         <div className="h-fit w-fit rounded-2 bg-#EB45451A px-2 py-1 text-xs text-#F87171">
-          待确权
+          {t('lawyerWorkbench.pendingConfirmation')}
         </div>
       )
     },
     {
-      title: '操作',
+      title: t('lawyerWorkbench.action'),
       key: 'status',
-      render: () => <div className="clickable">签章确权</div>
+      render: () => <div className="clickable">{t('lawyerWorkbench.signAndConfirm')}</div>
     }
   ]
   return (
     <div>
       <div className="fyc justify-between gap-3">
-        <div className="text-xl">待确权案件（线下确认阶段）</div>
-        {!pagination && <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">查看全部</div>}
+        <div className="text-xl">{t('lawyerWorkbench.pendingRightConfirmation')}</div>
+        {!pagination && <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">{t('lawyerWorkbench.viewAll')}</div>}
       </div>
       <CommonTable
         data={data}
@@ -605,6 +613,7 @@ function PendingAuctionExecutionTable({
   pagination?: boolean
   openDialog?: () => void
 }) {
+  const { t } = useTranslation()
   const data = [
     {
       id: '#CAS20230567',
@@ -638,47 +647,47 @@ function PendingAuctionExecutionTable({
   }
   const columns: ColumnsType<typeof data[0]> = [
     {
-      title: '案件编号',
+      title: t('lawyerWorkbench.caseId'),
       dataIndex: 'id',
       key: 'id'
     },
     {
-      title: '房产名称',
+      title: t('lawyerWorkbench.propertyName'),
       dataIndex: 'address',
       key: 'address'
     },
     {
-      title: '提交人',
+      title: t('lawyerWorkbench.submitter'),
       dataIndex: 'user',
       key: 'user'
     },
     {
-      title: '提交日期',
+      title: t('lawyerWorkbench.submitDate'),
       dataIndex: 'createTime',
       key: 'createTime',
       render: text => <div>{dayjs(text).format('YYYY-MM-DD')}</div>
     },
     {
-      title: '状态',
+      title: t('lawyerWorkbench.status'),
       dataIndex: 'status',
       key: 'status',
       render: status => (
         <div className={cn('w-fit h-fit px-2 py-1 rounded-2 text-xs ', status === 2 ? 'bg-#EB45451A text-#F87171' : 'bg-#3B7FF51A text-#60A5FA')}>
-          {status === 2 ? '待执行' : '执行中'}
+          {status === 2 ? t('lawyerWorkbench.pendingExecution') : t('lawyerWorkbench.executing')}
         </div>
       )
     },
     {
-      title: '操作',
+      title: t('lawyerWorkbench.action'),
       key: 'status',
       render: status => (
         <div className="fyc gap-3">
           <div className="clickable">
             {
-              status === 2 ? '领取任务' : '上传合同'
+              status === 2 ? t('lawyerWorkbench.claimTask') : t('lawyerWorkbench.uploadContract')
             }
           </div>
-          <div>查看详情</div>
+          <div>{t('lawyerWorkbench.viewDetails')}</div>
         </div>
       )
     }
@@ -686,8 +695,8 @@ function PendingAuctionExecutionTable({
   return (
     <div>
       <div className="fyc justify-between gap-3">
-        <div className="text-xl">待执行拍卖案件</div>
-        {!pagination && <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">查看全部</div>}
+        <div className="text-xl">{t('lawyerWorkbench.auctionTasks')}</div>
+        {!pagination && <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">{t('lawyerWorkbench.viewAll')}</div>}
       </div>
       <CommonTable
         data={data}
@@ -710,6 +719,7 @@ function CompletedAuctionTable({
   pagination?: boolean
   openDialog?: () => void
 }) {
+  const { t } = useTranslation()
   const data = [
     {
       id: '#CAS20230567',
@@ -746,17 +756,17 @@ function CompletedAuctionTable({
   }
   const columns: ColumnsType<typeof data[0]> = [
     {
-      title: '案件编号',
+      title: t('lawyerWorkbench.caseId'),
       dataIndex: 'id',
       key: 'id'
     },
     {
-      title: '房产名称',
+      title: t('lawyerWorkbench.propertyName'),
       dataIndex: 'address',
       key: 'address'
     },
     {
-      title: '拍卖成交价',
+      title: t('lawyerWorkbench.auctionPrice'),
       dataIndex: 'price',
       key: 'price',
       render: text => (
@@ -767,32 +777,32 @@ function CompletedAuctionTable({
       )
     },
     {
-      title: '拍卖日期',
+      title: t('lawyerWorkbench.auctionDate'),
       dataIndex: 'createTime',
       key: 'createTime',
       render: text => <div>{dayjs(text).format('YYYY-MM-DD')}</div>
     },
     {
-      title: '状态',
+      title: t('lawyerWorkbench.status'),
       dataIndex: 'status',
       key: 'status',
       render: status => (
         <div className={cn('w-fit h-fit px-2 py-1 rounded-2 text-xs ', status === 4 ? 'bg-#EB45451A text-#F87171' : 'bg-#3B7FF51A text-#60A5FA')}>
-          {status === 4 ? '分配中' : '已完成分配'}
+          {status === 4 ? t('lawyerWorkbench.allocating') : t('lawyerWorkbench.allocationCompleted')}
         </div>
       )
     },
     {
-      title: '操作',
+      title: t('lawyerWorkbench.action'),
       key: 'status',
-      render: () => <div className="clickable">查看详情</div>
+      render: () => <div className="clickable">{t('lawyerWorkbench.viewDetails')}</div>
     }
   ]
   return (
     <div>
       <div className="fyc justify-between gap-3">
-        <div className="text-xl">已完成拍卖案件</div>
-        {!pagination && <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">查看全部</div>}
+        <div className="text-xl">{t('lawyerWorkbench.completedCases')}</div>
+        {!pagination && <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">{t('lawyerWorkbench.viewAll')}</div>}
       </div>
       <CommonTable
         data={data}
@@ -819,6 +829,7 @@ function TableAllDialog({
   component: React.ComponentType<any>
   title: string
 }) {
+  // const { t } = useTranslation()
   return (
     <CommonDialog
       style={{

@@ -19,7 +19,7 @@ export function CommonDialog({
       {...props}
       rootClassName={cn(props.rootClassName, 'common-dialog')}
       className={cn(props.className, !props.footer && `
-      [&>div>div>.ant-modal-footer]:!p-0 [&>div>div>.ant-modal-footer]:!b-0  common-dialog
+      common-dialog
       `)}
       closable={false}
       title={(
