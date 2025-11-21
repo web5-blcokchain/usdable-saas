@@ -66,7 +66,8 @@ export default defineConfig({
     ['fa', 'flex justify-around'],
     ['fac', 'flex justify-around items-center'],
     ['fw', 'flex justify-wrap'],
-    ['fwr', 'flex justify-wrap-reverse']
+    ['fwr', 'flex justify-wrap-reverse'],
+    ['fol', 'flex flex-col']
   ],
   presets: [
     presetWind3(),

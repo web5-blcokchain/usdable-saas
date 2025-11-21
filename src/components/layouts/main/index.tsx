@@ -18,7 +18,7 @@ const MainLayout: FC = ({
     <>
       <MainHeader />
       <App>
-        <div className="mx-a min-h-screen min-w-1024px">
+        <div className="mx-a min-h-screen min-w-1024px text-white">
 
           {/* <AnimatePresence mode="wait">
           <motion.div

@@ -1,7 +1,7 @@
 import { FilePreview } from '@/components/common/file-preview'
 import { UploadFileType } from '@/enums/file'
-import { UploadIcon } from './upload-card'
 import { Image, Spin, Upload } from 'antd'
+import { UploadIcon } from './upload-card'
 
 function urlTofileType(fileUrl: string) {
   // 判断url是图片还是文件
@@ -26,8 +26,8 @@ function UploadMultifileCard({
   className = '',
   removeFile,
   loading = false,
-  children
-
+  children,
+  multiple = true
 }: {
   fileType: string
   fileUrl: string[]
@@ -43,6 +43,7 @@ function UploadMultifileCard({
   removeFile?: (index: number) => void
   loading?: boolean
   children?: React.ReactNode
+  multiple?: boolean
 }) {
   const toFileUrl = (file: string) => {
     window.open(file, '_blank')
@@ -65,6 +66,7 @@ function UploadMultifileCard({
         }}
         disabled={!beforeUpload}
         accept={fileType}
+        multiple={multiple}
       >
         <div className={cn('flex gap-3 max-lg:flex-col', className)}>
           {fileUrl.map((item, index) => {
@@ -130,7 +132,7 @@ function UploadMultifileCard({
             {fileUrl.length < maxLength
               && (
                 <Spin spinning={loading}>
-                  <UploadIcon className="max-md:!w-full" style={{ width, height }} icon={icon} iconClass={iconClass} title={title} subTitle={label} beforeUpload={beforeUpload} >
+                  <UploadIcon className="max-md:!w-full" style={{ width, height }} icon={icon} iconClass={iconClass} title={title} subTitle={label} beforeUpload={beforeUpload}>
                     {children}
                   </UploadIcon>
                 </Spin>

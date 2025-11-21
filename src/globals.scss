@@ -197,3 +197,12 @@ a {
 .backtop-btn.ant-fade-leave {
   opacity: 0;
 }
+
+
+.multiline-placeholder::placeholder {
+  white-space: pre-line !important;
+}
+
+img{
+  object-fit: cover;
+}

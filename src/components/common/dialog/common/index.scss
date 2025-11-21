@@ -2,6 +2,7 @@
   padding: 0 !important;
   --common-dialog-padding-x: 24px;
   --common-dialog-padding-y: 20px;
+  background: transparent;
 
   .ant-modal-body {
     padding: 0 var(--common-dialog-padding-x);
@@ -28,4 +29,8 @@
     border-bottom: 1px solid var(--common-dialog-header-border-color, #1e293b);
     margin-bottom: 0;
   }
+}
+
+.ant-modal {
+  padding-bottom: 0;
 }
