@@ -1,3 +1,7 @@
+import { ConfigProvider } from 'antd'
+import enUS from 'antd/locale/en_US'
+import jaJP from 'antd/locale/ja_JP'
+import zhCN from 'antd/locale/zh_CN'
 import MainFooter from './footer'
 import MainHeader from './header'
 
@@ -8,6 +12,7 @@ const MainLayout: FC = ({
   // const isIndex = pathname === '/'
   // const router = useRouterState()
   // const pathKey = router.location.pathname // 每次路由变化时更新
+  const { i18n } = useTranslation()
 
   return (
     <>
@@ -21,7 +26,12 @@ const MainLayout: FC = ({
             exit={{ x: -100, opacity: 0 }}
             transition={{ duration: 0.4, ease: 'easeInOut' }}
           > */}
-        {children}
+        <ConfigProvider locale={
+          i18n.language === 'zh' ? zhCN : i18n.language === 'en' ? enUS : jaJP
+        }
+        >
+          {children}
+        </ConfigProvider>
         {/* </motion.div>
         </AnimatePresence> */}
 

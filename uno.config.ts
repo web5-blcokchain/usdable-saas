@@ -25,7 +25,8 @@ export default defineConfig({
   theme: {
     colors: defu(
       unoColors({
-        primary: '#00E5FF'
+        'primary': '#00E5FF',
+        'primary-blue': '#69e2fc'
       }),
       {
         'background': '#000000',

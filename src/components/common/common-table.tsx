@@ -1,4 +1,4 @@
-import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
+import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/table'
 import type { ComponentToken } from 'antd/es/table/style'
 import { ConfigProvider, Table } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -9,13 +9,15 @@ export function CommonTable({
   data,
   pagination,
   tableConfig,
-  className
+  className,
+  tableProps
 }: {
   data: any
   columns: ColumnsType<any>
   pagination?: false | TablePaginationConfig
   tableConfig?: ComponentToken
   className?: string
+  tableProps?: TableProps
 }) {
   const { t } = useTranslation()
   return (
@@ -32,6 +34,7 @@ export function CommonTable({
     >
 
       <Table
+        {...tableProps}
         tableLayout="fixed"
         key={(`${Date.now() + Math.random()}`)}
         scroll={{ x: 'max-content' }}

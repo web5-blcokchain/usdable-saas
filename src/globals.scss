@@ -139,3 +139,30 @@ a {
     }
   }
 }
+
+:root {
+  .ant-input-number {
+    width: 100%;
+  }
+
+  .ant-input-number-input,
+  .ant-input,
+  .ant-select,
+  .ant-picker {
+    border-color: var(--input-border-color, #30363d);
+    @apply h-10.5 bg-transparent w-full;
+    input {
+      background-color: var(--input-bg-color, #24292f);
+    }
+    .ant-select-selector {
+      background-color: var(--input-bg-color, #24292f);
+    }
+  }
+
+  .ant-input-number,
+  .ant-select-selector,
+  textarea {
+    background: transparent;
+    border-color: var(--input-border-color, #30363d);
+  }
+}

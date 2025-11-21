@@ -300,6 +300,7 @@
     },
     "caseList": "Case List",
     "searchPlaceholder": "Search Cases",
+    "selectPlaceholder": "Select Case Status",
     "table": {
       "caseId": "Case ID",
       "sourceLawyer": "Source Lawyer",

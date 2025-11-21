@@ -302,6 +302,7 @@
     },
     "caseList": "案件列表",
     "searchPlaceholder": "搜索案件",
+    "selectPlaceholder": "请选择案件状态",
     "table": {
       "caseId": "案件编号",
       "sourceLawyer": "来源律师",

@@ -300,6 +300,7 @@
     },
     "caseList": "案件リスト",
     "searchPlaceholder": "案件を検索",
+    "selectPlaceholder": "案件状態を選択",
     "table": {
       "caseId": "案件番号",
       "sourceLawyer": "出所弁護士",

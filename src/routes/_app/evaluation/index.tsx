@@ -223,13 +223,13 @@ function RouteComponent() {
           <div className="text-lg font-bold">{t('evaluation.caseList')}</div>
           <div className="fyc gap-3">
             <Input
-              className="h-9.5 w-64 [&>input]:h-full max-md:w-50%"
+              className="h-9.5 w-64 bg-#24292f [&>input]:h-full max-md:w-50%"
               placeholder={t('evaluation.searchPlaceholder')}
               prefix={
                 <div className="i-gg:search text-4 text-#E5E7EB"></div>
               }
             />
-            <Select options={dataStatus} />
+            <Select className="h-9.5 w-64 [&>input]:h-full max-md:w-50% [&>.ant-select-selector]:bg-#24292f" options={dataStatus} placeholder={t('evaluation.selectPlaceholder')} />
           </div>
         </div>
         <CommonTable

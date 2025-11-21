@@ -27,6 +27,9 @@ const AppAsseteIndexLazyImport = createFileRoute('/_app/assete/')()
 const AppAsseteAddAsseteIndexLazyImport = createFileRoute(
   '/_app/assete/addAssete/',
 )()
+const AppLawyerWorkbenchInitialReviewIdLazyImport = createFileRoute(
+  '/_app/lawyerWorkbench/initialReview/$id',
+)()
 const AppEvaluationInfoIdLazyImport = createFileRoute(
   '/_app/evaluation/info/$id',
 )()
@@ -83,6 +86,17 @@ const AppEvaluationReportManagementIndexRoute =
     path: '/evaluation/reportManagement/',
     getParentRoute: () => AppRoute,
   } as any)
+
+const AppLawyerWorkbenchInitialReviewIdLazyRoute =
+  AppLawyerWorkbenchInitialReviewIdLazyImport.update({
+    id: '/lawyerWorkbench/initialReview/$id',
+    path: '/lawyerWorkbench/initialReview/$id',
+    getParentRoute: () => AppRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/lawyerWorkbench/initialReview/$id.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 const AppEvaluationInfoIdLazyRoute = AppEvaluationInfoIdLazyImport.update({
   id: '/evaluation/info/$id',
@@ -153,6 +167,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppEvaluationInfoIdLazyImport
       parentRoute: typeof AppImport
     }
+    '/_app/lawyerWorkbench/initialReview/$id': {
+      id: '/_app/lawyerWorkbench/initialReview/$id'
+      path: '/lawyerWorkbench/initialReview/$id'
+      fullPath: '/lawyerWorkbench/initialReview/$id'
+      preLoaderRoute: typeof AppLawyerWorkbenchInitialReviewIdLazyImport
+      parentRoute: typeof AppImport
+    }
     '/_app/evaluation/reportManagement/': {
       id: '/_app/evaluation/reportManagement/'
       path: '/evaluation/reportManagement'
@@ -179,6 +200,7 @@ interface AppRouteChildren {
   AppLawyerWorkbenchIndexLazyRoute: typeof AppLawyerWorkbenchIndexLazyRoute
   AppAsseteInfoIdLazyRoute: typeof AppAsseteInfoIdLazyRoute
   AppEvaluationInfoIdLazyRoute: typeof AppEvaluationInfoIdLazyRoute
+  AppLawyerWorkbenchInitialReviewIdLazyRoute: typeof AppLawyerWorkbenchInitialReviewIdLazyRoute
   AppEvaluationReportManagementIndexRoute: typeof AppEvaluationReportManagementIndexRoute
   AppAsseteAddAsseteIndexLazyRoute: typeof AppAsseteAddAsseteIndexLazyRoute
 }
@@ -190,6 +212,8 @@ const AppRouteChildren: AppRouteChildren = {
   AppLawyerWorkbenchIndexLazyRoute: AppLawyerWorkbenchIndexLazyRoute,
   AppAsseteInfoIdLazyRoute: AppAsseteInfoIdLazyRoute,
   AppEvaluationInfoIdLazyRoute: AppEvaluationInfoIdLazyRoute,
+  AppLawyerWorkbenchInitialReviewIdLazyRoute:
+    AppLawyerWorkbenchInitialReviewIdLazyRoute,
   AppEvaluationReportManagementIndexRoute:
     AppEvaluationReportManagementIndexRoute,
   AppAsseteAddAsseteIndexLazyRoute: AppAsseteAddAsseteIndexLazyRoute,
@@ -205,6 +229,7 @@ export interface FileRoutesByFullPath {
   '/lawyerWorkbench': typeof AppLawyerWorkbenchIndexLazyRoute
   '/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
   '/evaluation/info/$id': typeof AppEvaluationInfoIdLazyRoute
+  '/lawyerWorkbench/initialReview/$id': typeof AppLawyerWorkbenchInitialReviewIdLazyRoute
   '/evaluation/reportManagement': typeof AppEvaluationReportManagementIndexRoute
   '/assete/addAssete': typeof AppAsseteAddAsseteIndexLazyRoute
 }
@@ -216,6 +241,7 @@ export interface FileRoutesByTo {
   '/lawyerWorkbench': typeof AppLawyerWorkbenchIndexLazyRoute
   '/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
   '/evaluation/info/$id': typeof AppEvaluationInfoIdLazyRoute
+  '/lawyerWorkbench/initialReview/$id': typeof AppLawyerWorkbenchInitialReviewIdLazyRoute
   '/evaluation/reportManagement': typeof AppEvaluationReportManagementIndexRoute
   '/assete/addAssete': typeof AppAsseteAddAsseteIndexLazyRoute
 }
@@ -229,6 +255,7 @@ export interface FileRoutesById {
   '/_app/lawyerWorkbench/': typeof AppLawyerWorkbenchIndexLazyRoute
   '/_app/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
   '/_app/evaluation/info/$id': typeof AppEvaluationInfoIdLazyRoute
+  '/_app/lawyerWorkbench/initialReview/$id': typeof AppLawyerWorkbenchInitialReviewIdLazyRoute
   '/_app/evaluation/reportManagement/': typeof AppEvaluationReportManagementIndexRoute
   '/_app/assete/addAssete/': typeof AppAsseteAddAsseteIndexLazyRoute
 }
@@ -243,6 +270,7 @@ export interface FileRouteTypes {
     | '/lawyerWorkbench'
     | '/assete/info/$id'
     | '/evaluation/info/$id'
+    | '/lawyerWorkbench/initialReview/$id'
     | '/evaluation/reportManagement'
     | '/assete/addAssete'
   fileRoutesByTo: FileRoutesByTo
@@ -253,6 +281,7 @@ export interface FileRouteTypes {
     | '/lawyerWorkbench'
     | '/assete/info/$id'
     | '/evaluation/info/$id'
+    | '/lawyerWorkbench/initialReview/$id'
     | '/evaluation/reportManagement'
     | '/assete/addAssete'
   id:
@@ -264,6 +293,7 @@ export interface FileRouteTypes {
     | '/_app/lawyerWorkbench/'
     | '/_app/assete/info/$id'
     | '/_app/evaluation/info/$id'
+    | '/_app/lawyerWorkbench/initialReview/$id'
     | '/_app/evaluation/reportManagement/'
     | '/_app/assete/addAssete/'
   fileRoutesById: FileRoutesById
@@ -299,6 +329,7 @@ export const routeTree = rootRoute
         "/_app/lawyerWorkbench/",
         "/_app/assete/info/$id",
         "/_app/evaluation/info/$id",
+        "/_app/lawyerWorkbench/initialReview/$id",
         "/_app/evaluation/reportManagement/",
         "/_app/assete/addAssete/"
       ]
@@ -325,6 +356,10 @@ export const routeTree = rootRoute
     },
     "/_app/evaluation/info/$id": {
       "filePath": "_app/evaluation/info/$id.lazy.tsx",
+      "parent": "/_app"
+    },
+    "/_app/lawyerWorkbench/initialReview/$id": {
+      "filePath": "_app/lawyerWorkbench/initialReview/$id.lazy.tsx",
       "parent": "/_app"
     },
     "/_app/evaluation/reportManagement/": {

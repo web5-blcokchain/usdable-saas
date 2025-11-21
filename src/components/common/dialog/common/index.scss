@@ -5,6 +5,7 @@
 
   .ant-modal-body {
     padding: 0 var(--common-dialog-padding-x);
+    background: var(--common-dialog-body-background);
   }
   .ant-modal-footer {
     position: sticky;
@@ -23,5 +24,6 @@
     background: var(--common-dialog-header-background, #181b21);
     padding: var(--common-dialog-padding-y) var(--common-dialog-padding-x);
     border-bottom: 1px solid var(--common-dialog-header-border-color, #1e293b);
+    margin-bottom: 0;
   }
 }
