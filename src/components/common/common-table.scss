@@ -12,9 +12,11 @@
   }
 }
 
-.ant-pagination-total-text {
-  flex: 1 !important;
+.ant-pagination {
   padding: 0 1rem;
+  .ant-pagination-total-text {
+    flex: 1 !important;
+  }
 }
 
 .ant-table-cell {

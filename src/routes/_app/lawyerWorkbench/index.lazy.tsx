@@ -4,7 +4,7 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { Select } from 'antd'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AuctionDetailDialog, CaseDetailDialog, CompletedCaseDetailDialog, ConfirmClaimDialog, ConfirmSignDialog, ExecuteCaseDialog } from './-components/homeDialogs'
+import { AuctionDetailDialog, CaseDetailDialog, CompletedCaseDetailDialog, ConfirmClaimDialog, ExecuteCaseDialog } from './-components/homeDialogs'
 import { CompletedAuctionTable, CompletedCasesTable, PendingAuctionExecutionTable, PendingClaimCasesTable, PendingInitialReviewTable, PendingOfflineExecutionTable, PendingRightConfirmationTable } from './-components/homeTables'
 import './index.lazy.scss'
 
@@ -61,10 +61,10 @@ function RouteComponent() {
   })
 
   // 确认签章弹窗
-  const [signDialogData, setSignDialogData] = useState({
-    visible: false,
-    data: {}
-  })
+  // const [signDialogData, setSignDialogData] = useState({
+  //   visible: false,
+  //   data: {}
+  // })
 
   // 已完成拍卖案件 => 查看详情弹窗
   const [completedCaseData, setCompletedCaseData] = useState({
@@ -162,7 +162,7 @@ function RouteComponent() {
         {/* 待认领案件（初审阶段） */}
         <PendingClaimCasesTable openConfirmClaimDialog={data => setConfirmClaimDialogData({ visible: true, data })} openDialog={() => showTableAllDialog(3)} />
         {/* 待确权案件（线下确认阶段） */}
-        <PendingRightConfirmationTable openSignDialog={data => setSignDialogData({ visible: true, data })} openDialog={() => showTableAllDialog(4)} />
+        <PendingRightConfirmationTable openDialog={() => showTableAllDialog(4)} />
         {/* 待执行拍卖案件 */}
         <PendingAuctionExecutionTable openAuctionDetailDialog={data => setAuctionCaseData({ visible: true, data })} openDialog={() => showTableAllDialog(5)} />
         {/* 已完成拍卖案件 */}
@@ -175,7 +175,7 @@ function RouteComponent() {
       {/* 确认认领弹窗 */}
       <ConfirmClaimDialog visible={confirmClaimDialogData.visible} setvisible={() => setConfirmClaimDialogData(res => ({ visible: false, data: res.data }))} />
       {/* 确认签章弹窗 */}
-      <ConfirmSignDialog visible={signDialogData.visible} setvisible={() => setSignDialogData(res => ({ visible: false, data: res.data }))} />
+      {/* <ConfirmSignDialog visible={signDialogData.visible} setvisible={() => setSignDialogData(res => ({ visible: false, data: res.data }))} /> */}
       {/* 已完成拍卖案件 => 查看详情弹窗 */}
       <CaseDetailDialog visible={completedCaseData.visible} setvisible={() => setCompletedCaseData(res => ({ visible: false, data: res.data }))} />
       {/* 待执行拍卖案件 => 查看详情弹窗 */}

@@ -120,6 +120,7 @@ a {
   &::-webkit-scrollbar {
     display: none; /* 隐藏滚动条 */
   }
+
   @apply max-h-80% overflow-y-scroll;
 }
 
@@ -198,11 +199,10 @@ a {
   opacity: 0;
 }
 
-
 .multiline-placeholder::placeholder {
   white-space: pre-line !important;
 }
 
-img{
+img {
   object-fit: cover;
 }

@@ -22,7 +22,8 @@
       "9": "九（きゅう）"
     },
     "confirm": "確認",
-    "submitError": "提出に失敗しました"
+    "submitError": "提出に失敗しました",
+    "confirmOnChain": "ブロックチェーンに確認"
   },
   "header": {
     "login": "ログイン",
@@ -281,6 +282,16 @@
       "prepareLegalAction": "支払いがない場合、未払い金回収のため法的手続きの準備を進めてください。",
       "considerTermination": "契約条項に基づき、賃貸契約の解除および退去要請を検討してください。",
       "evaluateRental": "再募集の可能性と予想空室期間を評価してください。"
+    },
+    "propertyOperatingStatusDetailsDialog": {
+      "title": "物件詳細",
+      "propertyName": "物件名",
+      "location": "位置",
+      "managementMethod": "委託方法",
+      "rent": "家賃",
+      "status": "状態",
+      "nextPayment": "次回支払",
+      "propertyDescription": "物件説明"
     }
   },
   "footer": {
@@ -545,6 +556,48 @@
       "appeal": "手動審査申し立て"
     }
   },
+  "nodeOperator": {
+    "title": "ノードセンター",
+    "description": "弁護士確認後のチェーン申請タスクを受け取り処理します",
+    "searchPlaceholder": "資産番号またはハッシュ値を検索",
+    "selectCountryPlaceholder": "国を選択してください",
+    "selectTypePlaceholder": "タイプを選択してください",
+    "pendingTasks": "未処理タスク",
+    "completedToday": "今日完了",
+    "totalOnChainAssets": "累計チェーン資産",
+    "columns": {
+      "assetNumber": "資産番号",
+      "lawyerSeal": "弁護士印鑑",
+      "contractAddress": "契約アドレス",
+      "country": "国",
+      "status": "状態",
+      "actions": "操作",
+      "viewDetails": "詳細を表示",
+      "rejectApplication": "申請却下",
+      "confirmOnChain": "チェーン確認"
+    },
+    "status": {
+      "pending": "未処理",
+      "processing": "処理中"
+    },
+    "uploadSuccessModal": {
+      "title": "チェーン成功",
+      "description": "以下の資産のチェーン情報を確認してください",
+      "assetNumber": "資産番号",
+      "lawyerSeal": "弁護士印鑑",
+      "countryRegion": "国/地域",
+      "assetHash": "資産ハッシュ",
+      "transactionHash": "トランザクションハッシュ"
+    },
+    "rejectApplicationModal": {
+      "title": "申請却下",
+      "description": "この資産のチェーン申請を却下する理由を入力してください",
+      "selectRejectionReason": "却下理由を選択",
+      "selectRejectionReasonPlaceholder": "却下理由を選択してください",
+      "detailedExplanation": "詳細説明",
+      "detailedExplanationPlaceholder": "詳細説明を入力してください"
+    }
+  },
   "lawyerWorkbench": {
     "quickFilter": "クイックフィルター",
     "country": "国",
@@ -582,7 +635,7 @@
     "claimForReview": "審査を認領",
     "evaluator": "評価者",
     "pendingConfirmation": "確認待ち",
-    "signAndConfirm": "署名と確認",
+    "signAndConfirm": "オフラインでの最終的な権利です",
     "submitter": "提出者",
     "pendingExecution": "実行待ち",
     "executing": "実行中",
@@ -695,6 +748,32 @@
       "taskType": "事项",
       "mortgageRegistration": "抵当登記（\"移転\"也可）",
       "createdAt": "作成日"
+    },
+    "offlineConfirmation": {
+      "backToList": "案件リストに戻る",
+      "propertyAddress": "物件住所",
+      "propertyCertificateNumber": "権利証書番号",
+      "assetParty": "資産家",
+      "contactNumber": "連絡先電話番号",
+      "serviceWindow": "手続き窓口",
+      "appointmentTime": "予約時間",
+      "caseInfo": "案件情報",
+      "basicInfo": "基本情報",
+      "offlineExecutionProcess": "オフライン実行プロセス",
+      "materialPreparation": "資料準備",
+      "windowSubmission": "窓口提出",
+      "informationVerification": "情報検証",
+      "sealConfirmation": "押印確認",
+      "completion": "完了",
+      "materialPreparationContent": "必要な資料をすべて収集・整理しました",
+      "windowSubmissionContent": "資料を浦东政務サービスセンター2番窓口に提出しました",
+      "informationVerificationContent": "窓口スタッフによる資料情報の検証待ち",
+      "sealConfirmationContent": "検証後の押印確認プロセス",
+      "completionContent": "すべてのオフライン実行プロセスを完了",
+      "completionTime": "完了時間",
+      "currentStep": "現在のステップ",
+      "executing": "オフライン実行中",
+      "task": "タスク"
     },
     "executeCaseDialog": {
       "title": "案件実行操作",

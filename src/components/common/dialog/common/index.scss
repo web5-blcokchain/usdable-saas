@@ -1,36 +1,40 @@
-.common-dialog .ant-modal .ant-modal-content {
-  padding: 0 !important;
-  --common-dialog-padding-x: 24px;
-  --common-dialog-padding-y: 20px;
-  background: transparent;
+.common-dialog.ant-modal {
+  top: 50%;
+  transform: translateY(-50%) !important;
+  @apply max-h-90%;
+  .ant-modal-content {
+    padding: 0 !important;
+    --common-dialog-padding-x: 24px;
+    --common-dialog-padding-y: 20px;
+    background: var(--common-dialog-background, #111417);
 
-  .ant-modal-body {
-    padding: 0 var(--common-dialog-padding-x);
-    background: var(--common-dialog-body-background);
-  }
-  .ant-modal-footer {
-    position: sticky;
-    z-index: 99;
-    bottom: 0;
-    left: 0;
-    background: var(--common-dialog-footer-background, #181b21);
-    padding: var(--common-dialog-padding-y) var(--common-dialog-padding-x);
-    border-top: 1px solid var(--common-dialog-footer-border-color, #1e293b);
-    margin-top: 0;
-    border-radius: var(--common-dialog-header-border-radius, 0 0 8px 08px);
-  }
-  .ant-modal-header {
-    position: sticky;
-    z-index: 99;
-    top: 0;
-    left: 0;
-    background: var(--common-dialog-header-background, #181b21);
-    padding: var(--common-dialog-padding-y) var(--common-dialog-padding-x);
-    border-bottom: 1px solid var(--common-dialog-header-border-color, #1e293b);
-    margin-bottom: 0;
+    .ant-modal-body {
+      padding: 0 var(--common-dialog-padding-x);
+      background: var(--common-dialog-body-background);
+    }
+    .ant-modal-footer {
+      position: sticky;
+      z-index: 99;
+      bottom: 0;
+      left: 0;
+      background: var(--common-dialog-footer-background, #181b21);
+      padding: var(--common-dialog-padding-y) var(--common-dialog-padding-x);
+      border-top: 1px solid var(--common-dialog-footer-border-color, #1e293b);
+      margin-top: 0;
+      border-radius: var(--common-dialog-header-border-radius, 0 0 8px 08px);
+    }
+    .ant-modal-header {
+      position: sticky;
+      z-index: 99;
+      top: 0;
+      left: 0;
+      background: var(--common-dialog-header-background, #181b21);
+      padding: var(--common-dialog-padding-y) var(--common-dialog-padding-x);
+      border-bottom: 1px solid var(--common-dialog-header-border-color, #1e293b);
+      margin-bottom: 0;
+    }
   }
 }
-
 .ant-modal {
   padding-bottom: 0;
 }

@@ -17,10 +17,8 @@ export function CommonDialog({
   return (
     <Modal
       {...props}
-      rootClassName={cn(props.rootClassName, 'common-dialog')}
-      className={cn(props.className, !props.footer && `
-      common-dialog
-      `)}
+      className={cn(props.className, `common-dialog`, !props.footer && `[&.common-dialog>div>.ant-modal-content>.ant-modal-footer]:py-0 
+        [&.common-dialog>div>.ant-modal-content>.ant-modal-footer]:b-0`)}
       closable={false}
       title={(
         <div className="fyc justify-between gap-4">

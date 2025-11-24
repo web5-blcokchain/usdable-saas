@@ -12,10 +12,12 @@ export default function MainHeader() {
   const menu = (
     <Menu className="b-1 b-#2D333B b-solid bg-#161B22! p-0!">
       <Menu.Item>
-        <div className="w-40.5 fyc gap-2 py-2 text-sm text-#D1D5DB">
-          <div className="i-carbon:user-avatar-filled"></div>
-          <div>{t('header.profile')}</div>
-        </div>
+        <Link to="/userInfo">
+          <div className="w-40.5 fyc gap-2 py-2 text-sm text-#D1D5DB">
+            <div className="i-carbon:user-avatar-filled"></div>
+            <div>{t('header.profile')}</div>
+          </div>
+        </Link>
       </Menu.Item>
       <Menu.Item>
         <div className="w-40.5 fyc gap-2 py-2 text-sm text-#D1D5DB">

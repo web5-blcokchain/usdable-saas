@@ -387,12 +387,10 @@ export function PendingClaimCasesTable({
 // 待确权案件（线下确认阶段）
 export function PendingRightConfirmationTable({
   pagination,
-  openDialog,
-  openSignDialog
+  openDialog
 }: {
   pagination?: boolean
   openDialog?: () => void
-  openSignDialog?: (data: any) => void
 }) {
   const { t } = useTranslation()
   const data = [
@@ -461,7 +459,11 @@ export function PendingRightConfirmationTable({
     {
       title: t('lawyerWorkbench.action'),
       key: 'action',
-      render: (_, record) => <div onClick={() => openSignDialog && openSignDialog(record)} className="clickable">{t('lawyerWorkbench.signAndConfirm')}</div>
+      render: (_, record) => (
+        <Link to="/lawyerWorkbench/offlineConfirmation/$id" params={{ id: record.id }}>
+          <div className="clickable">{t('lawyerWorkbench.signAndConfirm')}</div>
+        </Link>
+      )
     }
   ]
   return (
@@ -560,14 +562,14 @@ export function PendingAuctionExecutionTable({
     {
       title: t('lawyerWorkbench.action'),
       key: 'action',
-      render: status => (
+      render: (_, record) => (
         <div className="fyc gap-3">
           <div className="clickable">
             {
-              status === 2 ? t('lawyerWorkbench.claimTask') : t('lawyerWorkbench.uploadContract')
+              record.status === 2 ? t('lawyerWorkbench.claimTask') : t('lawyerWorkbench.uploadContract')
             }
           </div>
-          <div className="clickable" onClick={() => openAuctionDetailDialog && openAuctionDetailDialog(status)}>{t('lawyerWorkbench.viewDetails')}</div>
+          <div className="clickable" onClick={() => openAuctionDetailDialog && openAuctionDetailDialog(record.status)}>{t('lawyerWorkbench.viewDetails')}</div>
         </div>
       )
     }

@@ -1,5 +1,6 @@
 import type { ColumnsType } from 'antd/es/table'
 import { CommonTable } from '@/components/common/common-table'
+import { CommonDialog } from '@/components/common/dialog/common'
 import { formatNumberNoRound } from '@/utils/number'
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { Button, Input, Modal } from 'antd'
@@ -445,6 +446,7 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
       </div>
     )
   }
+  const [propertyOperatingStatusDetailsDialogVisible, setPropertyOperatingStatusDetailsDialogVisible] = useState(false)
 
   const columns: ColumnsType<typeof data[0]> = [
     {
@@ -536,12 +538,17 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
             {dataTypeContent(content.status)}
           </div>
           {content.status === 2 && <div onClick={() => openDefaultDetailsDialog(content)} className="text-sm text-#CF6679 clickable">{t('assete.operatingTable.defaultDetails')}</div>}
+          <div className="clickable" onClick={() => setPropertyOperatingStatusDetailsDialogVisible(true)}>{t('assete.table.view')}</div>
         </div>
       )
     }
   ]
+
   return (
-    <CommonTable data={data} columns={columns} />
+    <div>
+      <CommonTable data={data} columns={columns} />
+      <PropertyOperatingStatusDetailsDialog visible={propertyOperatingStatusDetailsDialogVisible} setVisible={setPropertyOperatingStatusDetailsDialogVisible} />
+    </div>
   )
 }
 
@@ -588,5 +595,64 @@ function AsseteErrorDialog({ visible, setVisible, message }: { visible: boolean,
         </div>
       </div>
     </Modal>
+  )
+}
+
+// 房产运营状态明细详情弹窗
+function PropertyOperatingStatusDetailsDialog({ visible, setVisible }: { visible: boolean, setVisible: (visible: boolean) => void }) {
+  const { t } = useTranslation()
+  return (
+    <CommonDialog
+      open={visible}
+      onCancel={() => setVisible(false)}
+      maskClosable={false}
+      width={894}
+      className={cn('login-dialog [&>div>.ant-modal-content]:!bg-#171b21 b-1 b-solid  b-#1E293B', 'rounded-2')}
+      centered
+      title={<div className="text-lg font-600">{t('assete.propertyOperatingStatusDetailsDialog.title')}</div>}
+      footer={false}
+      closable
+    >
+      <div className="fol gap-6 py-6">
+        <img src={(new URL('@/assets/test/test.png', import.meta.url).href)} className="h-64 w-full rounded-2" alt="" />
+        <div className="grid cols-2 gap-6 [&>div>div:last-child]:mt-1 [&>div>div:first-child]:text-sm [&>div>div:last-child]:text-lg [&>div>div:first-child]:text-#9CA3AF [&>div>div:last-child]:font-500">
+          <div>
+            <div>{t('assete.propertyOperatingStatusDetailsDialog.propertyName')}</div>
+            <div>深江云驿4栋</div>
+          </div>
+          <div>
+            <div>{t('assete.propertyOperatingStatusDetailsDetailsDialog.location')}</div>
+            <div>深圳市南山区</div>
+          </div>
+          <div>
+            <div>{t('assete.propertyOperatingStatusDetailsDialog.managementMethod')}</div>
+            <div>科技未来租赁方案</div>
+          </div>
+          <div>
+            <div>{t('assete.propertyOperatingStatusDetailsDialog.rent')}</div>
+            <div>
+              $
+              {formatNumberNoRound(45000, 6, 0)}
+              /月
+            </div>
+          </div>
+          <div>
+            <div>{t('assete.propertyOperatingStatusDetailsDialog.status')}</div>
+            <div className="fyc gap-2 text-#00FF85">
+              <div className="size-2 rounded-full bg-#00FF85"></div>
+              <div>正常</div>
+            </div>
+          </div>
+          <div>
+            <div>{t('assete.propertyOperatingStatusDetailsDialog.nextPayment')}</div>
+            <div>{dayjs().add(1, 'month').format('MM-DD')}</div>
+          </div>
+        </div>
+        <div>
+          <div className="text-sm text-#9CA3AF font-400">{t('assete.propertyOperatingStatusDetailsDialog.propertyDescription')}</div>
+          <div className="mt-1 text-base text-#D1D5DB font-400">该房产位于深圳市南山区核心地段，交通便利，周边配套设施完善。采用科技未来租赁方案，配备智能门锁、智能温控系统和24小时安保服务，为租户提供安全舒适的居住环境。</div>
+        </div>
+      </div>
+    </CommonDialog>
   )
 }

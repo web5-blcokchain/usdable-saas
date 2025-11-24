@@ -22,7 +22,8 @@
       "9": "Nine"
     },
     "confirm": "Confirm",
-    "submitError": "Submission failed"
+    "submitError": "Submission failed",
+    "confirmOnChain": "Confirm On Chain"
   },
   "header": {
     "login": "Login",
@@ -281,6 +282,16 @@
       "prepareLegalAction": "If payment is not received, prepare to initiate legal action to recover the debt.",
       "considerTermination": "Based on the contract terms, consider terminating the lease and requesting the tenant to vacate.",
       "evaluateRental": "Evaluate the possibility of re-renting and the estimated vacancy period."
+    },
+    "propertyOperatingStatusDetailsDialog": {
+      "title": "Property Details",
+      "propertyName": "Property Name",
+      "location": "Location",
+      "managementMethod": "Management Method",
+      "rent": "Rent",
+      "status": "Status",
+      "nextPayment": "Next Payment",
+      "propertyDescription": "Property Description"
     }
   },
   "footer": {
@@ -545,6 +556,48 @@
       "appeal": "Manual Review Appeal"
     }
   },
+  "nodeOperator": {
+    "title": "Node Center",
+    "description": "Receive and process on-chain application tasks confirmed by lawyers",
+    "searchPlaceholder": "Search asset ID or hash value",
+    "selectCountryPlaceholder": "Please select country",
+    "selectTypePlaceholder": "Please select type",
+    "pendingTasks": "Pending Tasks",
+    "completedToday": "Completed Today",
+    "totalOnChainAssets": "Total On-Chain Assets",
+    "columns": {
+      "assetNumber": "Asset Number",
+      "lawyerSeal": "Lawyer Seal",
+      "contractAddress": "Contract Address",
+      "country": "Country",
+      "status": "Status",
+      "actions": "Actions",
+      "viewDetails": "View Details",
+      "rejectApplication": "Reject Application",
+      "confirmOnChain": "Confirm On-Chain"
+    },
+    "status": {
+      "pending": "Pending",
+      "processing": "Processing"
+    },
+    "uploadSuccessModal": {
+      "title": "On-Chain Success",
+      "description": "Please confirm the following asset on-chain information",
+      "assetNumber": "Asset Number",
+      "lawyerSeal": "Lawyer Seal",
+      "countryRegion": "Country/Region",
+      "assetHash": "Asset Hash",
+      "transactionHash": "Transaction Hash"
+    },
+    "rejectApplicationModal": {
+      "title": "Application Rejected",
+      "description": "Please provide the reason for rejecting this asset on-chain application",
+      "selectRejectionReason": "Select Rejection Reason",
+      "selectRejectionReasonPlaceholder": "Please select rejection reason",
+      "detailedExplanation": "Detailed Explanation",
+      "detailedExplanationPlaceholder": "Please enter detailed explanation"
+    }
+  },
   "lawyerWorkbench": {
     "quickFilter": "Quick Filter",
     "country": "Country",
@@ -582,7 +635,7 @@
     "claimForReview": "Claim for Review",
     "evaluator": "Evaluator",
     "pendingConfirmation": "Pending Confirmation",
-    "signAndConfirm": "Sign and Confirm",
+    "signAndConfirm": "Offline final right confirmation",
     "submitter": "Submitter",
     "pendingExecution": "Pending Execution",
     "executing": "Executing",
@@ -694,6 +747,32 @@
       "taskType": "Item",
       "mortgageRegistration": "Mortgage registration (can be \"transfer\")",
       "createdAt": "Created on"
+    },
+    "offlineConfirmation": {
+      "backToList": "Back to Case List",
+      "propertyAddress": "Property Address",
+      "propertyCertificateNumber": "Property Certificate Number",
+      "assetParty": "Asset Party",
+      "contactNumber": "Contact Number",
+      "serviceWindow": "Service Window",
+      "appointmentTime": "Appointment Time",
+      "caseInfo": "Case Information",
+      "basicInfo": "Basic Information",
+      "offlineExecutionProcess": "Offline Execution Process",
+      "materialPreparation": "Material Preparation",
+      "windowSubmission": "Window Submission",
+      "informationVerification": "Information Verification",
+      "sealConfirmation": "Seal Confirmation",
+      "completion": "Completion",
+      "materialPreparationContent": "All necessary materials have been collected and organized",
+      "windowSubmissionContent": "Materials have been submitted to Window 2 of Pudong Government Service Center",
+      "informationVerificationContent": "Waiting for window staff to verify material information",
+      "sealConfirmationContent": "Seal confirmation process after verification",
+      "completionContent": "Complete all offline execution processes",
+      "completionTime": "Completion Time",
+      "currentStep": "Current Step",
+      "executing": "Offline Execution in Progress",
+      "task": "Task"
     },
     "executeCaseDialog": {
       "title": "Execute Case Operation",

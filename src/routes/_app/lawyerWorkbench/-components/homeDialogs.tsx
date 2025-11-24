@@ -294,7 +294,6 @@ export function CompletedCaseDetailDialog({ visible, setvisible }: {
         <div>
           <div className="text-xl">
             {t('lawyerWorkbench.completedCaseDetailDialog.title')}
-            :AUC-2023-0001
           </div>
           <div className="mt-1 text-base text-#9CA3AF">
             {t('lawyerWorkbench.completedCaseDetailDialog.assetNumber')}
@@ -384,7 +383,7 @@ export function CompletedCaseDetailDialog({ visible, setvisible }: {
           <div>
             <div className="text-lg font-600">{t('lawyerWorkbench.completedCaseDetailDialog.evaluationReportSummary')}</div>
             <div className="mt-4 b b-#30363D rounded-2 bg-#1E2328 p-5">
-              <div className="mt-4 fol gap-2 text-base [&>div]:fol [&>div]:justify-between [&>div]:gap-2 [&>div>div:first-child]:text-#9CA3AF">
+              <div className="fol gap-2 text-base [&>div]:fol [&>div]:justify-between [&>div]:gap-2 [&>div>div:first-child]:text-#9CA3AF">
                 <div>
                   <div>{t('lawyerWorkbench.completedCaseDetailDialog.evaluationAgency')}</div>
                   <div>上海诚信资产评估有限公司</div>

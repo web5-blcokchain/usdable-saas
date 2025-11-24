@@ -22,7 +22,8 @@
       "9": "九"
     },
     "confirm": "确定",
-    "submitError": "提交失败"
+    "submitError": "提交失败",
+    "confirmOnChain": "确认上链"
   },
   "header": {
     "login": "登录",
@@ -283,6 +284,16 @@
       "prepareLegalAction": "如未收到付款，准备启动法律程序追讨欠款",
       "considerTermination": "根据合同条款，考虑终止租赁合同并要求租户搬离",
       "evaluateRental": "评估重新招租的可能性和预计空置期"
+    },
+    "propertyOperatingStatusDetailsDialog": {
+      "title": "房产详情",
+      "propertyName": "房产名称",
+      "location": "位置",
+      "managementMethod": "托管方式",
+      "rent": "租金",
+      "status": "状态",
+      "nextPayment": "下次付款",
+      "propertyDescription": "房产描述"
     }
   },
   "footer": {
@@ -560,6 +571,48 @@
       "appeal": "人工审核申诉"
     }
   },
+  "nodeOperator": {
+    "title": "节点中心",
+    "description": "接收并处理律师确认后的上链申请任务",
+    "searchPlaceholder": "搜索资产编号或哈希值",
+    "selectCountryPlaceholder": "请选择国家",
+    "selectTypePlaceholder": "请选择类型",
+    "pendingTasks": "待处理任务",
+    "completedToday": "今日已完成",
+    "totalOnChainAssets": "累计上链资产",
+    "columns": {
+      "assetNumber": "资产编号",
+      "lawyerSeal": "律师签章",
+      "contractAddress": "合约地址",
+      "country": "国家",
+      "status": "状态",
+      "actions": "操作",
+      "viewDetails": "查看详情",
+      "rejectApplication": "驳回申请",
+      "confirmOnChain": "确认上链"
+    },
+    "status": {
+      "pending": "待处理",
+      "processing": "处理中"
+    },
+    "uploadSuccessModal": {
+      "title": "上链成功",
+      "description": "请确认以下资产的上链信息",
+      "assetNumber": "资产编号",
+      "lawyerSeal": "律师签章",
+      "countryRegion": "国家/地区",
+      "assetHash": "资产哈希",
+      "transactionHash": "交易哈希"
+    },
+    "rejectApplicationModal": {
+      "title": "申请驳回",
+      "description": "请提供驳回此资产上链申请的原因",
+      "selectRejectionReason": "选择驳回原因",
+      "selectRejectionReasonPlaceholder": "请选择驳回原因",
+      "detailedExplanation": "详细说明",
+      "detailedExplanationPlaceholder": "请输入详细说明"
+    }
+  },
   "lawyerWorkbench": {
     "quickFilter": "快捷筛选",
     "country": "国家",
@@ -597,7 +650,7 @@
     "claimForReview": "认领初审",
     "evaluator": "评估方",
     "pendingConfirmation": "待确权",
-    "signAndConfirm": "签章确权",
+    "signAndConfirm": "线下最终确权",
     "submitter": "提交人",
     "pendingExecution": "待执行",
     "executing": "执行中",
@@ -710,6 +763,32 @@
       "taskType": "事项",
       "mortgageRegistration": "抵押登记（可为\"过户\"）",
       "createdAt": "创建于"
+    },
+    "offlineConfirmation": {
+      "backToList": "返回案件列表",
+      "propertyAddress": "房产地址",
+      "propertyCertificateNumber": "产权证号",
+      "assetParty": "资产方",
+      "contactNumber": "联系电话",
+      "serviceWindow": "办理窗口",
+      "appointmentTime": "预约时间",
+      "caseInfo": "案件信息",
+      "basicInfo": "基本信息",
+      "offlineExecutionProcess": "线下执行流程",
+      "materialPreparation": "材料准备",
+      "windowSubmission": "窗口递交",
+      "informationVerification": "信息核验",
+      "sealConfirmation": "盖章确权",
+      "completion": "完成",
+      "materialPreparationContent": "已完成所有必要材料的收集和整理",
+      "windowSubmissionContent": "材料已提交至浦东政务服务中心2号窗口",
+      "informationVerificationContent": "等待窗口工作人员核验材料信息",
+      "sealConfirmationContent": "完成核验后的盖章确权流程",
+      "completionContent": "完成所有线下执行流程",
+      "completionTime": "完成时间",
+      "currentStep": "当前步骤",
+      "executing": "线下执行中",
+      "task": "任务"
     },
     "executeCaseDialog": {
       "title": "执行案件操作",

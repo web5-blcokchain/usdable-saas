@@ -27,7 +27,12 @@ export function CommonTable({
           Table: {
             ...tableConfig,
             headerBg: tableConfig?.headerBg || '#161B22', // 表头背景色
-            borderColor: tableConfig?.borderColor || '#394150'
+            borderColor: tableConfig?.borderColor || '#394150',
+            footerBg: tableConfig?.footerBg || '#161B22',
+            headerBorderRadius: tableConfig?.headerBorderRadius || 12
+          },
+          Pagination: {
+            itemBg: '#161B22'
           }
         }
       }}
@@ -40,7 +45,7 @@ export function CommonTable({
         scroll={{ x: 'max-content' }}
         columns={columns}
         dataSource={data}
-        className={cn('b-t b-#394150 b-t-solid bg-transparent', className)}
+        className={cn('b-t b-#394150 b-t-solid bg-transparent bg-#161B22 rounded-3', className)}
         pagination={typeof pagination === 'boolean'
           ? pagination
           : {
