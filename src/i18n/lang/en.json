@@ -294,6 +294,22 @@
       "propertyDescription": "Property Description"
     }
   },
+  "message": {
+    "messageCenter": "Message Center",
+    "realTimeNotifications": "Receive system notifications and task reminders in real time",
+    "markAllAsRead": "Mark All as Read",
+    "clear": "Clear",
+    "allMessages": "All Messages",
+    "systemNotifications": "System Notifications",
+    "lawyerNotifications": "Lawyer Notifications",
+    "nodeNotifications": "Node Notifications",
+    "unreadMessages": "Unread Messages",
+    "unreadCount": "Unread Messages ({{count}})",
+    "today": "Today",
+    "viewCase": "View Case",
+    "readMessages": "Read Messages",
+    "loadMore": "Load More"
+  },
   "footer": {
     "copyright": "© 2025 Report Management System. All rights reserved.",
     "privacyPolicy": "Privacy Policy",

@@ -111,7 +111,7 @@ function UploadMultifileCard({
                     <div className="i-weui:eyes-on-outlined size-6"></div>
                   </div>
                   <div onClick={() => removeFile?.(index)} className="cursor-pointer clickable">
-                    <div className="bg-#575757; i-material-symbols:delete-outline size-6"></div>
+                    <div className="i-material-symbols:delete-outline size-6 bg-#575757"></div>
                   </div>
                 </div>
               </div>

@@ -12,7 +12,7 @@ export default function MainHeader() {
   const menu = (
     <Menu className="b-1 b-#2D333B b-solid bg-#161B22! p-0!">
       <Menu.Item>
-        <Link to="/userInfo">
+        <Link to="/user/info">
           <div className="w-40.5 fyc gap-2 py-2 text-sm text-#D1D5DB">
             <div className="i-carbon:user-avatar-filled"></div>
             <div>{t('header.profile')}</div>
@@ -20,10 +20,12 @@ export default function MainHeader() {
         </Link>
       </Menu.Item>
       <Menu.Item>
-        <div className="w-40.5 fyc gap-2 py-2 text-sm text-#D1D5DB">
-          <div className="i-tdesign:setting-1-filled"></div>
-          <div>{t('header.accountSettings')}</div>
-        </div>
+        <Link to="/user/setting">
+          <div className="w-40.5 fyc gap-2 py-2 text-sm text-#D1D5DB">
+            <div className="i-tdesign:setting-1-filled"></div>
+            <div>{t('header.accountSettings')}</div>
+          </div>
+        </Link>
       </Menu.Item>
       {/* 评估方才显示 */}
       <Menu.Item>
@@ -43,10 +45,10 @@ export default function MainHeader() {
 
   return (
     <header className="sticky left-0 top-0 z-99 bg-#0c0f13">
-      <div className="fyc justify-between px-20 py-3">
+      <div className="fyc justify-between px-22 py-3">
         <div className="fyc gap-2">
           {/* TODO 在登录后跳转到自己管理页的首页 */}
-          <Link to="/">
+          <Link to="/register">
             {' '}
             <img className="h-14" src={logo} alt="" />
           </Link>
@@ -66,9 +68,11 @@ export default function MainHeader() {
                 )
               : (
                   <div className="fyc">
-                    <Badge count={5}>
-                      <div className="i-mdi:bell text-4.5 text-#9da3ae"></div>
-                    </Badge>
+                    <Link to="/user/message">
+                      <Badge count={5}>
+                        <div className="i-mdi:bell text-4.5 text-#9da3ae"></div>
+                      </Badge>
+                    </Link>
                     <Dropdown open={open} onOpenChange={setOpen} overlay={menu}>
                       <div className="ml-4 fyc gap-2">
                         <div className="size-10 overflow-hidden b-2 b-#00E5FF80 rounded-full b-solid">

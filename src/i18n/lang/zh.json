@@ -296,6 +296,22 @@
       "propertyDescription": "房产描述"
     }
   },
+  "message": {
+    "messageCenter": "消息中心",
+    "realTimeNotifications": "实时接收系统通知与任务提醒",
+    "markAllAsRead": "全部已读",
+    "clear": "清空",
+    "allMessages": "全部消息",
+    "systemNotifications": "系统通知",
+    "lawyerNotifications": "律师通知",
+    "nodeNotifications": "节点通知",
+    "unreadMessages": "未读消息",
+    "unreadCount": "未读消息 ({{count}})",
+    "today": "今天",
+    "viewCase": "查看案件",
+    "readMessages": "已读消息",
+    "loadMore": "加载更多"
+  },
   "footer": {
     "copyright": "© 2025 报告管理系统. 保留所有权利.",
     "privacyPolicy": "隐私政策",

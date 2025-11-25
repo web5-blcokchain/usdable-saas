@@ -294,6 +294,22 @@
       "propertyDescription": "物件説明"
     }
   },
+  "message": {
+    "messageCenter": "メッセージセンター",
+    "realTimeNotifications": "システム通知とタスクリマインダーをリアルタイムで受信",
+    "markAllAsRead": "すべて既読",
+    "clear": "クリア",
+    "allMessages": "すべてのメッセージ",
+    "systemNotifications": "システム通知",
+    "lawyerNotifications": "弁護士通知",
+    "nodeNotifications": "ノード通知",
+    "unreadMessages": "未読メッセージ",
+    "unreadCount": "未読メッセージ ({{count}})",
+    "today": "今日",
+    "viewCase": "案件を表示",
+    "readMessages": "既読メッセージ",
+    "loadMore": "さらに読み込む"
+  },
   "footer": {
     "copyright": "© 2025 レポート管理システム. すべての権利を保留します.",
     "privacyPolicy": "プライバシーポリシー",

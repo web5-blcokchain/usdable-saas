@@ -155,14 +155,15 @@ function RouteComponent() {
       <div className="mt-11 flex flex-col gap-8">
         {/* 待初审案件 */}
         <PendingInitialReviewTable openDialog={() => showTableAllDialog(0)} />
-        {/* 待线下执行案件 */}
-        <PendingOfflineExecutionTable openDialog={() => showTableAllDialog(1)} />
-        {/* 已完成案件 */}
-        <CompletedCasesTable openCaseDetailDialog={data => setCompletedEndData({ visible: true, data })} openDialog={() => showTableAllDialog(2)} />
+
         {/* 待认领案件（初审阶段） */}
         <PendingClaimCasesTable openConfirmClaimDialog={data => setConfirmClaimDialogData({ visible: true, data })} openDialog={() => showTableAllDialog(3)} />
+        {/* 待线下执行案件 */}
+        <PendingOfflineExecutionTable openDialog={() => showTableAllDialog(1)} />
         {/* 待确权案件（线下确认阶段） */}
         <PendingRightConfirmationTable openDialog={() => showTableAllDialog(4)} />
+        {/* 已完成案件 */}
+        <CompletedCasesTable openCaseDetailDialog={data => setCompletedEndData({ visible: true, data })} openDialog={() => showTableAllDialog(2)} />
         {/* 待执行拍卖案件 */}
         <PendingAuctionExecutionTable openAuctionDetailDialog={data => setAuctionCaseData({ visible: true, data })} openDialog={() => showTableAllDialog(5)} />
         {/* 已完成拍卖案件 */}

@@ -169,9 +169,12 @@ export function PendingOfflineExecutionTable({
       title: t('lawyerWorkbench.action'),
       key: 'action',
       render: (_, record) => (
-        <Link to="/lawyerWorkbench/offlineExecution/$id" params={{ id: record.id }}>
-          <div className="c lickable">{t('lawyerWorkbench.execute')}</div>
-        </Link>
+        <div className="fyc gap-2">
+          <Link to="/lawyerWorkbench/offlineExecution/$id" params={{ id: record.id }}>
+            <div className="c lickable">{t('lawyerWorkbench.offlineProcessingExecution')}</div>
+          </Link>
+          {/* <div>{t('lawyerWorkbench.view')}</div> */}
+        </div>
       )
     }
   ]

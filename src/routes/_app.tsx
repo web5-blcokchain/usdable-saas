@@ -1,6 +1,7 @@
 import MainLayout from '@/components/layouts/main'
+import { OtherLayout } from '@/components/layouts/other'
 import { useRouteGuard } from '@/hooks/route-guard'
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { createFileRoute, Outlet, useRouterState } from '@tanstack/react-router'
 import ReactDOM from 'react-dom'
 import { ToastContainer } from 'react-toastify'
 
@@ -11,14 +12,23 @@ export const Route = createFileRoute('/_app')({
 function AppLayoutComponent() {
   // 使用路由守卫
   useRouteGuard()
+  const router = useRouterState()
+  const pathKey = router.location.pathname // 每次路由变化时更新
 
   return (
     <div className="app-content h-100vh overflow-hidden overflow-y-scroll">
       <PortalToast />
       <div className="bg-background text-text">
-        <MainLayout>
-          <Outlet />
-        </MainLayout>
+        {pathKey !== '/' && (
+          <MainLayout>
+            <Outlet />
+          </MainLayout>
+        )}
+        {pathKey === '/' && (
+          <OtherLayout>
+            <Outlet />
+          </OtherLayout>
+        )}
       </div>
     </div>
   )

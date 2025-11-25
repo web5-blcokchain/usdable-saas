@@ -20,12 +20,15 @@ import { Route as AppEvaluationReportManagementIndexImport } from './routes/_app
 // Create Virtual Routes
 
 const AppIndexLazyImport = createFileRoute('/_app/')()
-const AppUserInfoIndexLazyImport = createFileRoute('/_app/userInfo/')()
+const AppRegisterIndexLazyImport = createFileRoute('/_app/register/')()
 const AppNodeOperatorIndexLazyImport = createFileRoute('/_app/nodeOperator/')()
 const AppLawyerWorkbenchIndexLazyImport = createFileRoute(
   '/_app/lawyerWorkbench/',
 )()
 const AppAsseteIndexLazyImport = createFileRoute('/_app/assete/')()
+const AppUserSettingIndexLazyImport = createFileRoute('/_app/user/setting/')()
+const AppUserMessageIndexLazyImport = createFileRoute('/_app/user/message/')()
+const AppUserInfoIndexLazyImport = createFileRoute('/_app/user/info/')()
 const AppAsseteAddAsseteIndexLazyImport = createFileRoute(
   '/_app/assete/addAssete/',
 )()
@@ -56,12 +59,12 @@ const AppIndexLazyRoute = AppIndexLazyImport.update({
   getParentRoute: () => AppRoute,
 } as any).lazy(() => import('./routes/_app/index.lazy').then((d) => d.Route))
 
-const AppUserInfoIndexLazyRoute = AppUserInfoIndexLazyImport.update({
-  id: '/userInfo/',
-  path: '/userInfo/',
+const AppRegisterIndexLazyRoute = AppRegisterIndexLazyImport.update({
+  id: '/register/',
+  path: '/register/',
   getParentRoute: () => AppRoute,
 } as any).lazy(() =>
-  import('./routes/_app/userInfo/index.lazy').then((d) => d.Route),
+  import('./routes/_app/register/index.lazy').then((d) => d.Route),
 )
 
 const AppNodeOperatorIndexLazyRoute = AppNodeOperatorIndexLazyImport.update({
@@ -94,6 +97,30 @@ const AppEvaluationIndexRoute = AppEvaluationIndexImport.update({
   path: '/evaluation/',
   getParentRoute: () => AppRoute,
 } as any)
+
+const AppUserSettingIndexLazyRoute = AppUserSettingIndexLazyImport.update({
+  id: '/user/setting/',
+  path: '/user/setting/',
+  getParentRoute: () => AppRoute,
+} as any).lazy(() =>
+  import('./routes/_app/user/setting/index.lazy').then((d) => d.Route),
+)
+
+const AppUserMessageIndexLazyRoute = AppUserMessageIndexLazyImport.update({
+  id: '/user/message/',
+  path: '/user/message/',
+  getParentRoute: () => AppRoute,
+} as any).lazy(() =>
+  import('./routes/_app/user/message/index.lazy').then((d) => d.Route),
+)
+
+const AppUserInfoIndexLazyRoute = AppUserInfoIndexLazyImport.update({
+  id: '/user/info/',
+  path: '/user/info/',
+  getParentRoute: () => AppRoute,
+} as any).lazy(() =>
+  import('./routes/_app/user/info/index.lazy').then((d) => d.Route),
+)
 
 const AppAsseteAddAsseteIndexLazyRoute =
   AppAsseteAddAsseteIndexLazyImport.update({
@@ -206,11 +233,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppNodeOperatorIndexLazyImport
       parentRoute: typeof AppImport
     }
-    '/_app/userInfo/': {
-      id: '/_app/userInfo/'
-      path: '/userInfo'
-      fullPath: '/userInfo'
-      preLoaderRoute: typeof AppUserInfoIndexLazyImport
+    '/_app/register/': {
+      id: '/_app/register/'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof AppRegisterIndexLazyImport
       parentRoute: typeof AppImport
     }
     '/_app/assete/info/$id': {
@@ -262,6 +289,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAsseteAddAsseteIndexLazyImport
       parentRoute: typeof AppImport
     }
+    '/_app/user/info/': {
+      id: '/_app/user/info/'
+      path: '/user/info'
+      fullPath: '/user/info'
+      preLoaderRoute: typeof AppUserInfoIndexLazyImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/user/message/': {
+      id: '/_app/user/message/'
+      path: '/user/message'
+      fullPath: '/user/message'
+      preLoaderRoute: typeof AppUserMessageIndexLazyImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/user/setting/': {
+      id: '/_app/user/setting/'
+      path: '/user/setting'
+      fullPath: '/user/setting'
+      preLoaderRoute: typeof AppUserSettingIndexLazyImport
+      parentRoute: typeof AppImport
+    }
   }
 }
 
@@ -273,7 +321,7 @@ interface AppRouteChildren {
   AppAsseteIndexLazyRoute: typeof AppAsseteIndexLazyRoute
   AppLawyerWorkbenchIndexLazyRoute: typeof AppLawyerWorkbenchIndexLazyRoute
   AppNodeOperatorIndexLazyRoute: typeof AppNodeOperatorIndexLazyRoute
-  AppUserInfoIndexLazyRoute: typeof AppUserInfoIndexLazyRoute
+  AppRegisterIndexLazyRoute: typeof AppRegisterIndexLazyRoute
   AppAsseteInfoIdLazyRoute: typeof AppAsseteInfoIdLazyRoute
   AppEvaluationInfoIdLazyRoute: typeof AppEvaluationInfoIdLazyRoute
   AppLawyerWorkbenchInitialReviewIdLazyRoute: typeof AppLawyerWorkbenchInitialReviewIdLazyRoute
@@ -281,6 +329,9 @@ interface AppRouteChildren {
   AppLawyerWorkbenchOfflineExecutionIdLazyRoute: typeof AppLawyerWorkbenchOfflineExecutionIdLazyRoute
   AppEvaluationReportManagementIndexRoute: typeof AppEvaluationReportManagementIndexRoute
   AppAsseteAddAsseteIndexLazyRoute: typeof AppAsseteAddAsseteIndexLazyRoute
+  AppUserInfoIndexLazyRoute: typeof AppUserInfoIndexLazyRoute
+  AppUserMessageIndexLazyRoute: typeof AppUserMessageIndexLazyRoute
+  AppUserSettingIndexLazyRoute: typeof AppUserSettingIndexLazyRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -289,7 +340,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAsseteIndexLazyRoute: AppAsseteIndexLazyRoute,
   AppLawyerWorkbenchIndexLazyRoute: AppLawyerWorkbenchIndexLazyRoute,
   AppNodeOperatorIndexLazyRoute: AppNodeOperatorIndexLazyRoute,
-  AppUserInfoIndexLazyRoute: AppUserInfoIndexLazyRoute,
+  AppRegisterIndexLazyRoute: AppRegisterIndexLazyRoute,
   AppAsseteInfoIdLazyRoute: AppAsseteInfoIdLazyRoute,
   AppEvaluationInfoIdLazyRoute: AppEvaluationInfoIdLazyRoute,
   AppLawyerWorkbenchInitialReviewIdLazyRoute:
@@ -301,6 +352,9 @@ const AppRouteChildren: AppRouteChildren = {
   AppEvaluationReportManagementIndexRoute:
     AppEvaluationReportManagementIndexRoute,
   AppAsseteAddAsseteIndexLazyRoute: AppAsseteAddAsseteIndexLazyRoute,
+  AppUserInfoIndexLazyRoute: AppUserInfoIndexLazyRoute,
+  AppUserMessageIndexLazyRoute: AppUserMessageIndexLazyRoute,
+  AppUserSettingIndexLazyRoute: AppUserSettingIndexLazyRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -312,7 +366,7 @@ export interface FileRoutesByFullPath {
   '/assete': typeof AppAsseteIndexLazyRoute
   '/lawyerWorkbench': typeof AppLawyerWorkbenchIndexLazyRoute
   '/nodeOperator': typeof AppNodeOperatorIndexLazyRoute
-  '/userInfo': typeof AppUserInfoIndexLazyRoute
+  '/register': typeof AppRegisterIndexLazyRoute
   '/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
   '/evaluation/info/$id': typeof AppEvaluationInfoIdLazyRoute
   '/lawyerWorkbench/initialReview/$id': typeof AppLawyerWorkbenchInitialReviewIdLazyRoute
@@ -320,6 +374,9 @@ export interface FileRoutesByFullPath {
   '/lawyerWorkbench/offlineExecution/$id': typeof AppLawyerWorkbenchOfflineExecutionIdLazyRoute
   '/evaluation/reportManagement': typeof AppEvaluationReportManagementIndexRoute
   '/assete/addAssete': typeof AppAsseteAddAsseteIndexLazyRoute
+  '/user/info': typeof AppUserInfoIndexLazyRoute
+  '/user/message': typeof AppUserMessageIndexLazyRoute
+  '/user/setting': typeof AppUserSettingIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -328,7 +385,7 @@ export interface FileRoutesByTo {
   '/assete': typeof AppAsseteIndexLazyRoute
   '/lawyerWorkbench': typeof AppLawyerWorkbenchIndexLazyRoute
   '/nodeOperator': typeof AppNodeOperatorIndexLazyRoute
-  '/userInfo': typeof AppUserInfoIndexLazyRoute
+  '/register': typeof AppRegisterIndexLazyRoute
   '/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
   '/evaluation/info/$id': typeof AppEvaluationInfoIdLazyRoute
   '/lawyerWorkbench/initialReview/$id': typeof AppLawyerWorkbenchInitialReviewIdLazyRoute
@@ -336,6 +393,9 @@ export interface FileRoutesByTo {
   '/lawyerWorkbench/offlineExecution/$id': typeof AppLawyerWorkbenchOfflineExecutionIdLazyRoute
   '/evaluation/reportManagement': typeof AppEvaluationReportManagementIndexRoute
   '/assete/addAssete': typeof AppAsseteAddAsseteIndexLazyRoute
+  '/user/info': typeof AppUserInfoIndexLazyRoute
+  '/user/message': typeof AppUserMessageIndexLazyRoute
+  '/user/setting': typeof AppUserSettingIndexLazyRoute
 }
 
 export interface FileRoutesById {
@@ -346,7 +406,7 @@ export interface FileRoutesById {
   '/_app/assete/': typeof AppAsseteIndexLazyRoute
   '/_app/lawyerWorkbench/': typeof AppLawyerWorkbenchIndexLazyRoute
   '/_app/nodeOperator/': typeof AppNodeOperatorIndexLazyRoute
-  '/_app/userInfo/': typeof AppUserInfoIndexLazyRoute
+  '/_app/register/': typeof AppRegisterIndexLazyRoute
   '/_app/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
   '/_app/evaluation/info/$id': typeof AppEvaluationInfoIdLazyRoute
   '/_app/lawyerWorkbench/initialReview/$id': typeof AppLawyerWorkbenchInitialReviewIdLazyRoute
@@ -354,6 +414,9 @@ export interface FileRoutesById {
   '/_app/lawyerWorkbench/offlineExecution/$id': typeof AppLawyerWorkbenchOfflineExecutionIdLazyRoute
   '/_app/evaluation/reportManagement/': typeof AppEvaluationReportManagementIndexRoute
   '/_app/assete/addAssete/': typeof AppAsseteAddAsseteIndexLazyRoute
+  '/_app/user/info/': typeof AppUserInfoIndexLazyRoute
+  '/_app/user/message/': typeof AppUserMessageIndexLazyRoute
+  '/_app/user/setting/': typeof AppUserSettingIndexLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -365,7 +428,7 @@ export interface FileRouteTypes {
     | '/assete'
     | '/lawyerWorkbench'
     | '/nodeOperator'
-    | '/userInfo'
+    | '/register'
     | '/assete/info/$id'
     | '/evaluation/info/$id'
     | '/lawyerWorkbench/initialReview/$id'
@@ -373,6 +436,9 @@ export interface FileRouteTypes {
     | '/lawyerWorkbench/offlineExecution/$id'
     | '/evaluation/reportManagement'
     | '/assete/addAssete'
+    | '/user/info'
+    | '/user/message'
+    | '/user/setting'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -380,7 +446,7 @@ export interface FileRouteTypes {
     | '/assete'
     | '/lawyerWorkbench'
     | '/nodeOperator'
-    | '/userInfo'
+    | '/register'
     | '/assete/info/$id'
     | '/evaluation/info/$id'
     | '/lawyerWorkbench/initialReview/$id'
@@ -388,6 +454,9 @@ export interface FileRouteTypes {
     | '/lawyerWorkbench/offlineExecution/$id'
     | '/evaluation/reportManagement'
     | '/assete/addAssete'
+    | '/user/info'
+    | '/user/message'
+    | '/user/setting'
   id:
     | '__root__'
     | '/_app'
@@ -396,7 +465,7 @@ export interface FileRouteTypes {
     | '/_app/assete/'
     | '/_app/lawyerWorkbench/'
     | '/_app/nodeOperator/'
-    | '/_app/userInfo/'
+    | '/_app/register/'
     | '/_app/assete/info/$id'
     | '/_app/evaluation/info/$id'
     | '/_app/lawyerWorkbench/initialReview/$id'
@@ -404,6 +473,9 @@ export interface FileRouteTypes {
     | '/_app/lawyerWorkbench/offlineExecution/$id'
     | '/_app/evaluation/reportManagement/'
     | '/_app/assete/addAssete/'
+    | '/_app/user/info/'
+    | '/_app/user/message/'
+    | '/_app/user/setting/'
   fileRoutesById: FileRoutesById
 }
 
@@ -436,14 +508,17 @@ export const routeTree = rootRoute
         "/_app/assete/",
         "/_app/lawyerWorkbench/",
         "/_app/nodeOperator/",
-        "/_app/userInfo/",
+        "/_app/register/",
         "/_app/assete/info/$id",
         "/_app/evaluation/info/$id",
         "/_app/lawyerWorkbench/initialReview/$id",
         "/_app/lawyerWorkbench/offlineConfirmation/$id",
         "/_app/lawyerWorkbench/offlineExecution/$id",
         "/_app/evaluation/reportManagement/",
-        "/_app/assete/addAssete/"
+        "/_app/assete/addAssete/",
+        "/_app/user/info/",
+        "/_app/user/message/",
+        "/_app/user/setting/"
       ]
     },
     "/_app/": {
@@ -466,8 +541,8 @@ export const routeTree = rootRoute
       "filePath": "_app/nodeOperator/index.lazy.tsx",
       "parent": "/_app"
     },
-    "/_app/userInfo/": {
-      "filePath": "_app/userInfo/index.lazy.tsx",
+    "/_app/register/": {
+      "filePath": "_app/register/index.lazy.tsx",
       "parent": "/_app"
     },
     "/_app/assete/info/$id": {
@@ -496,6 +571,18 @@ export const routeTree = rootRoute
     },
     "/_app/assete/addAssete/": {
       "filePath": "_app/assete/addAssete/index.lazy.tsx",
+      "parent": "/_app"
+    },
+    "/_app/user/info/": {
+      "filePath": "_app/user/info/index.lazy.tsx",
+      "parent": "/_app"
+    },
+    "/_app/user/message/": {
+      "filePath": "_app/user/message/index.lazy.tsx",
+      "parent": "/_app"
+    },
+    "/_app/user/setting/": {
+      "filePath": "_app/user/setting/index.lazy.tsx",
       "parent": "/_app"
     }
   }
