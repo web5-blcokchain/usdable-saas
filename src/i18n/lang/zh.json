@@ -30,7 +30,15 @@
     "profile": "个人资料",
     "accountSettings": "账户设置",
     "reportManagement": "报告管理",
-    "logout": "退出登录"
+    "logout": "退出登录",
+    "nav": {
+      "home": "首页",
+      "coreValue": "核心价值",
+      "chainProcess": "RWA 上链流程",
+      "chainTransparency": "资产上链透明度",
+      "platformAdvantages": "平台优势"
+    },
+    "startUsing": "开始使用"
   },
   "home": {
     "selectIdentity": "选择您的身份",
@@ -43,7 +51,230 @@
     "verifyAssets": "验证资产资料",
     "lawOffice": "律师事务所",
     "lawOfficeDesc": "提供法律服务、合规审查和法律意见的专业机构",
-    "legalCompliance": "法律合规支持"
+    "legalCompliance": "法律合规支持",
+    "chainProcess": {
+      "title": "RWA 上链标准流程",
+      "descriptionDesktop": "六步流程，大气、极简、沉稳，直接代表平台能力",
+      "descriptionMobile": "这个模块直接代表平台能力，展示从资产提交到投资分红的完整流程",
+      "steps": [
+        {
+          "title": "资产方提交房产信息",
+          "desc": "产权证、合同、估值材料一键上传"
+        },
+        {
+          "title": "律师初审",
+          "desc": "律师验证房产资料合法性与真实性"
+        },
+        {
+          "title": "评估方审核",
+          "desc": "第三方评估机构审查估值、租金与风险评级"
+        },
+        {
+          "title": "线下律师确权",
+          "desc": "资产所有权法律确认，生成确权文书"
+        },
+        {
+          "title": "节点上链",
+          "desc": "节点运营商执行最终链上登记，产生资产链上哈希，铸造对应 HRWA Token"
+        },
+        {
+          "title": "投资端认购与分红",
+          "desc": "投资人可在系统购买 Token，租金收益链上自动分发"
+        }
+      ]
+    },
+    "chainTransparency": {
+      "title": "资产上链透明度",
+      "description": "为投资端提供资产上链的全流程透明化能力",
+      "features": [
+        {
+          "title": "链上哈希 & 确权文书可验证",
+          "content": "每一份资产上链后都生成唯一哈希值，所有确权文书可随时验证，确保资产真实性。"
+        },
+        {
+          "title": "每一步流程都有时间戳",
+          "content": "资产从提交到上链的每一步操作都记录精确时间戳，形成完整可追溯的操作历史。"
+        },
+        {
+          "title": "收益分配与交易记录透明",
+          "content": "全资产的收益分配、持仓、交易记录链上透明，投资人可随时查看资产状态与收益情况。"
+        }
+      ],
+      "assetShowcase": {
+        "title": "已上链资产展示（示例）",
+        "description": "链上资产信息透明化展示",
+        "status": "已上链",
+        "propertyInfo": {
+          "name": "上海市浦东新区世纪大道1号",
+          "id": "HRWA-7294",
+          "type": "资产类型",
+          "typeValue": "商业办公楼",
+          "valuation": "估值",
+          "valuationValue": "$ 125,000,000",
+          "area": "面积",
+          "areaValue": "2,500 m ²",
+          "onChainDate": "上链日期"
+        },
+        "onChainInfo": {
+          "hashTitle": "链上哈希",
+          "hashValue": "0x7aF9bD3e4c8A7f2E5d1C9B0a3F6E8D2C4B1A9F0E7D6C5B4A3S2D1F0E9D8C7B6A5",
+          "distributionTitle": "收益分配",
+          "expectedReturn": "预期年化收益率",
+          "expectedReturnValue": "5.8%",
+          "distributedIncome": "已分配收益",
+          "distributedIncomeValue": "$ 3,245,800"
+        },
+        "progress": {
+          "title": "上链进度",
+          "step1": "资产方提交",
+          "step2": "律师审核 & 评估",
+          "step3": "线下确权",
+          "step4": "节点上链完成"
+        },
+        "mobileInfo": {
+          "nameLabel": "资产名称",
+          "nameValue": "上海浦东新区滨江壹号公寓",
+          "valueLabel": "资产价值",
+          "valueValue": "$8,500,000",
+          "hashLabel": "链上哈希",
+          "hashValue": "0x7aF2E4D8...9Bc1A3F5",
+          "dateLabel": "上链日期",
+          "dateValue": "2023年11月15日",
+          "tokenTotal": "Token总量",
+          "tokenTotalValue": "850,000 HRWA",
+          "currentPrice": "当前价格",
+          "currentPriceValue": "¥10.25",
+          "annualReturn": "年化收益",
+          "annualReturnValue": "4.8%",
+          "holders": "持有人数",
+          "holdersValue": "128"
+        }
+      }
+    },
+    "contentEnd": {
+      "title1": "准备好让资产进入",
+      "title2": "链上时代",
+      "title3": "了吗？",
+      "description": "加入我们，体验安全、透明、高效的RWA资产上链服务，开启房产数字化新征程。",
+      "button1": "提交资产上链",
+      "button2": "浏览已上链资产"
+    },
+    "coreValue": {
+      "title": "核心价值",
+      "values": [
+        {
+          "title": "全流程在线化",
+          "description": "从线下到链上，实现资产全生命周期管理",
+          "tags": [
+            "资产上传",
+            "合规审查",
+            "评估确权",
+            "链上登记",
+            "Token铸造"
+          ]
+        },
+        {
+          "title": "合规可信",
+          "description1": "从线下到链上，实现资产全生命周期管理",
+          "description2": "每一步审核都有专业机构、链上记录与不可篡改哈希。"
+        },
+        {
+          "title": "合规可信",
+          "description": "认购与分红全流程自动化管理",
+          "description2": "链上记录资产收益，收益自动分发至 Token 持有人。"
+        }
+      ]
+    },
+    "homeContent": {
+      "titleDesktop1": "让每一套房产，都能在",
+      "titleDesktop2": "链上拥有可信的身份",
+      "titleMobile1": "让真实世界资产",
+      "titleMobile2": "安全、透明地上链",
+      "description1": "让每一套房产，都能在链上拥有可信的身份",
+      "description2": "从资产上传、法律审核、评估确权到节点上链、投资人认购与分红，",
+      "description3": "RWA 全流程在一个平台里完成。",
+      "button1": "开始上链",
+      "button2": "了解更多"
+    },
+    "platformAdvantages": {
+      "title": "平台优势",
+      "description": "三大核心优势，体现平台主观价值",
+      "advantages": [
+        {
+          "title": "安全合规体系",
+          "content": "律师 + 节点双审查机制，确保每一笔资产上链都符合法律法规要求，保障资产安全。",
+          "list": [
+            "专业律师团队审核",
+            "多节点共识验证",
+            "不可篡改链上记录"
+          ]
+        },
+        {
+          "title": "跨机构协同 SaaS",
+          "content": "连接律师、评估机构、节点运营商等多方角色，实现跨机构高效协作，加速资产上链流程。",
+          "list": [
+            "多角色权限管理",
+            "实时协作与沟通",
+            "标准化工作流程"
+          ]
+        },
+        {
+          "title": "自动化 Token 流通与分红",
+          "content": "智能合约自动执行资产收益分配，投资人无需手动操作，实现被动收入自动化管理。",
+          "list": [
+            "链上收益自动分发",
+            "透明化收益记录",
+            "灵活的投资组合管理"
+          ]
+        }
+      ]
+    },
+    "platformRole": {
+      "title": "平台角色",
+      "description": "五大核心角色，凸显SaaS多角色生态系统",
+      "roles": [
+        {
+          "title": "资产方",
+          "content": [
+            "提交资产信息",
+            "查看审核进度",
+            "补充相关材料"
+          ]
+        },
+        {
+          "title": "律师审核方",
+          "content": [
+            "资产合法性初审",
+            "材料合规核查",
+            "出具审核意见"
+          ]
+        },
+        {
+          "title": "评估方",
+          "content": [
+            "估值审核",
+            "风险评定",
+            "租金模型确认"
+          ]
+        },
+        {
+          "title": "线下律师确权",
+          "content": [
+            "确权文书签署",
+            "法律背书上链",
+            "所有权确认"
+          ]
+        },
+        {
+          "title": "节点运营商",
+          "content": [
+            "最终审查",
+            "链上登记",
+            "Token铸造"
+          ]
+        }
+      ]
+    }
   },
   "assete": {
     "assetOnChainStatus": "资产上链状态",
@@ -864,5 +1095,85 @@
       "evaluationMethod": "评估方法",
       "relatedDocuments": "相关文件"
     }
+  },
+  "user": {
+    "info": {
+      "title": "个人资料",
+      "description": "编辑您的个人信息和偏好设置",
+      "back": "返回",
+      "saveChanges": "保存修改",
+      "avatarInstruction1": "点击相机图标更换头像",
+      "avatarInstruction2": "支持JPG、PNG格式，大小不超过5MB",
+      "username": "姓名",
+      "usernamePlaceholder": "请输入姓名",
+      "nickname": "昵称",
+      "nicknamePlaceholder": "请输入昵称",
+      "phone": "手机号",
+      "phonePlaceholder": "请输入手机号",
+      "modify": "修改",
+      "email": "邮箱",
+      "emailPlaceholder": "请输入邮箱",
+      "introduction": "个人简介",
+      "introductionPlaceholder": "请输入个人简介"
+    },
+    "setting": {
+      "title": "账户设置",
+      "description": "管理您的账户安全和隐私设置",
+      "back": "返回",
+      "saveChanges": "保存修改",
+      "securitySetting": "安全设置",
+      "twoFactorAuth": "二次验证",
+      "googleAuth": "Google Authenticator",
+      "googleAuthDesc": "启用后登录时需要验证Google验证码",
+      "smsAuth": "短信验证",
+      "smsAuthDesc": "启用后敏感操作需要验证短信验证码",
+      "walletSetting": "钱包绑定设置",
+      "walletSettingDesc": "绑定并验证您的数字钱包地址，用于资产上链与收益接收。",
+      "wallet": "钱包",
+      "walletAddress": "钱包地址",
+      "bindingStatus": "绑定状态:",
+      "unbound": "未绑定",
+      "connectWallet": "连接钱包",
+      "privacySetting": "隐私设置",
+      "personalInfoVisibility": "个人信息可见性",
+      "personalInfoVisibilityDesc": "控制您的个人信息对其他用户的可见性",
+      "assetInfoProtection": "资产信息保护",
+      "assetInfoProtectionDesc": "隐藏您的资产估值和交易记录",
+      "receiveMarketingInfo": "接收营销信息",
+      "receiveMarketingInfoDesc": "接收产品更新和促销活动信息",
+      "notificationSetting": "通知设置",
+      "assetStatusUpdate": "资产状态更新",
+      "assetStatusUpdateDesc": "资产审核状态变更时通知",
+      "systemAnnouncement": "系统公告",
+      "systemAnnouncementDesc": "接收平台重要公告和更新信息",
+      "accountActivityAlert": "账户活动提醒",
+      "accountActivityAlertDesc": "异常登录和敏感操作提醒"
+    }
+  },
+  "layoutFooter": {
+    "platformServices": "平台服务",
+    "assetOnChain": "资产上链",
+    "complianceReview": "合规审查",
+    "evaluationConfirmation": "评估确权",
+    "investmentSubscription": "投资认购",
+    "incomeDistribution": "收益分红",
+    "institutionalCooperation": "机构合作",
+    "reviewInstitutionCooperation": "审核机构合作",
+    "nodeCooperation": "节点合作",
+    "evaluationInstitution": "评估机构入驻",
+    "lawyerTeamCooperation": "律师团队合作",
+    "strategicPartners": "战略合作伙伴",
+    "legalCompliance": "法律与合规",
+    "complianceStatement": "合规声明",
+    "riskDisclosure": "风险披露",
+    "privacyPolicy": "隐私政策",
+    "legalAgreement": "法律协议",
+    "contactUs": "联系方式",
+    "platformIntroduction": "平台简介",
+    "platformDescription1": "让真实世界资产安全、透明地上链，为房产资产提供可信的链上身份。",
+    "platformDescription2": "我们致力于打造安全、透明、高效的房产上链平台，让真实世界资产能够便捷地进入区块链世界，实现资产数字化与价值流通。",
+    "copyright": "© 2023 RWA Chain. 保留所有权利。",
+    "termsOfService": "服务条款",
+    "cookiePolicy": "Cookie 政策"
   }
 }

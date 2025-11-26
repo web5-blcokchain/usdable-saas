@@ -22,10 +22,11 @@ const MainLayout: FC = ({
       <App>
         <div className="mx-a min-h-screen min-w-1024px text-white">
           <AnimatePresence>
-            <motion.div
+             <motion.div
               key={pathKey}
               initial={{ x: 100, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
+              // exit={{ x: -100, opacity: 0 }}
               transition={{ duration: 0.4, ease: 'easeInOut' }}
             >
               <ConfigProvider locale={
@@ -34,7 +35,8 @@ const MainLayout: FC = ({
               >
                 {children}
               </ConfigProvider>
-            </motion.div>
+            </motion.div> 
+            
           </AnimatePresence>
           <BackTop className="my-backtop" target={() => (document.querySelector('.app-content')) as HTMLElement}>
             <div className="backtop-btn size-12 fcc rounded-full bg-#737373">

@@ -9,7 +9,7 @@ import { screenToTop } from '@/utils'
 import { Button, Checkbox, DatePicker, Form, Input, Select } from 'antd'
 import FormItem from 'antd/es/form/FormItem'
 import { AnimatePresence, motion } from 'framer-motion'
-import UploadMultifileCard from '../common/upload/uploa-multifile-card'
+import UploadMultifileCard from '@/components/common/upload/uploa-multifile-card'
 import { RegisterStatus } from './registerStatus'
 
 function AnimationComponent({ animKey, children, className }: { animKey: string, children: React.ReactNode, className?: string }) {
@@ -83,7 +83,7 @@ export function EvaluatorRegister({ back }: { back: () => void }) {
         successButton={{
           text: '进入资产上传中心',
           onClick: () => {
-          // TODO 跳转进入资产上传中心
+            // TODO 跳转进入资产上传中心
           }
         }}
       />
@@ -305,10 +305,10 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
                 height="auto"
                 // loading={uploadFileLoading}
                 removeFile={(_index) => {
-                // setFileUrl(fileUrl.filter((_, i) => i !== index))
+                  // setFileUrl(fileUrl.filter((_, i) => i !== index))
                 }}
                 beforeUpload={(_file) => {
-                // beforeUpload(file)
+                  // beforeUpload(file)
                 }}
               >
                 <div className="py-3">
@@ -342,10 +342,10 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
                 height="auto"
                 // loading={uploadFileLoading}
                 removeFile={(_index) => {
-                // setFileUrl(fileUrl.filter((_, i) => i !== index))
+                  // setFileUrl(fileUrl.filter((_, i) => i !== index))
                 }}
                 beforeUpload={(_file) => {
-                // beforeUpload(file)
+                  // beforeUpload(file)
                 }}
               >
                 <div className="py-3">
@@ -379,10 +379,10 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
                 height="auto"
                 // loading={uploadFileLoading}
                 removeFile={(_index) => {
-                // setFileUrl(fileUrl.filter((_, i) => i !== index))
+                  // setFileUrl(fileUrl.filter((_, i) => i !== index))
                 }}
                 beforeUpload={(_file) => {
-                // beforeUpload(file)
+                  // beforeUpload(file)
                 }}
               >
                 <div className="py-3">
@@ -428,10 +428,10 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
                 height="auto"
                 // loading={uploadFileLoading}
                 removeFile={(_index) => {
-                // setFileUrl(fileUrl.filter((_, i) => i !== index))
+                  // setFileUrl(fileUrl.filter((_, i) => i !== index))
                 }}
                 beforeUpload={(_file) => {
-                // beforeUpload(file)
+                  // beforeUpload(file)
                 }}
               >
                 <div className="py-3">
@@ -485,10 +485,10 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
                 height="auto"
                 // loading={uploadFileLoading}
                 removeFile={(_index) => {
-                // setFileUrl(fileUrl.filter((_, i) => i !== index))
+                  // setFileUrl(fileUrl.filter((_, i) => i !== index))
                 }}
                 beforeUpload={(_file) => {
-                // beforeUpload(file)
+                  // beforeUpload(file)
                 }}
               >
                 <div className="py-3">

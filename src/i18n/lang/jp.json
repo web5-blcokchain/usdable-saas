@@ -30,7 +30,15 @@
     "profile": "プロフィール",
     "accountSettings": "アカウント設定",
     "reportManagement": "レポート管理",
-    "logout": "ログアウト"
+    "logout": "ログアウト",
+    "nav": {
+      "home": "ホーム",
+      "coreValue": "核心価値",
+      "chainProcess": "RWA ブロックチェーン化プロセス",
+      "chainTransparency": "資産ブロックチェーン化透明性",
+      "platformAdvantages": "プラットフォーム優位性"
+    },
+    "startUsing": "使い始める"
   },
   "home": {
     "selectIdentity": "あなたの身分を選択してください",
@@ -43,7 +51,230 @@
     "verifyAssets": "資産情報の検証",
     "lawOffice": "法律事務所",
     "lawOfficeDesc": "法律サービス、コンプライアンス審査、法律意見を提供する専門機関",
-    "legalCompliance": "法的コンプライアンスサポート"
+    "legalCompliance": "法的コンプライアンスサポート",
+    "chainProcess": {
+      "title": "RWA ブロックチェーン化標準プロセス",
+      "descriptionDesktop": "6ステッププロセス、大気・極小・沈着、プラットフォーム能力を直接表す",
+      "descriptionMobile": "このモジュールはプラットフォーム能力を直接表し、資産提出から投資分配までの完全なプロセスを示す",
+      "steps": [
+        {
+          "title": "資産家が物件情報を提出",
+          "desc": "所有権証、契約書、評価資料をワンクリックでアップロード"
+        },
+        {
+          "title": "弁護士予備審査",
+          "desc": "弁護士が物件資料の合法性と真正性を検証"
+        },
+        {
+          "title": "評価機関審査",
+          "desc": "第三者評価機関が評価額、家賃、リスク評価を審査"
+        },
+        {
+          "title": "オフライン弁護士確権",
+          "desc": "資産所有権の法的確認、確権文書を生成"
+        },
+        {
+          "title": "ノードブロックチェーン化",
+          "desc": "ノード運営者が最終ブロックチェーン登録を実行、資産ブロックチェーンハッシュを生成、対応HRWAトークンを鋳造"
+        },
+        {
+          "title": "投資端申込と分配",
+          "desc": "投資家はシステムでトークンを購入でき、家賃収益はブロックチェーン上で自動分配"
+        }
+      ]
+    },
+    "chainTransparency": {
+      "title": "資産ブロックチェーン化透明性",
+      "description": "投資端に資産ブロックチェーン化のフルプロセス透明化能力を提供",
+      "features": [
+        {
+          "title": "ブロックチェーンハッシュ&確権文書検証可",
+          "content": "資産がブロックチェーン化されるたびに一意のハッシュ値が生成され、すべての確権文書は随時検証可能で、資産の真正性を確保。"
+        },
+        {
+          "title": "各プロセスステップにタイムスタンプ",
+          "content": "資産の提出からブロックチェーン化までの各操作に正確なタイムスタンプを記録、完全で追跡可能な操作履歴を形成。"
+        },
+        {
+          "title": "収益分配と取引記録の透明性",
+          "content": "全資産の収益分配、保有、取引記録をブロックチェーン上で透明化、投資家は随時資産状態と収益状況を確認可能。"
+        }
+      ],
+      "assetShowcase": {
+        "title": "ブロックチェーン化資産表示（例）",
+        "description": "ブロックチェーン資産情報の透明化表示",
+        "status": "ブロックチェーン化済",
+        "propertyInfo": {
+          "name": "上海市浦東新区世紀大道1号",
+          "id": "HRWA-7294",
+          "type": "資産タイプ",
+          "typeValue": "商業オフィスビル",
+          "valuation": "評価額",
+          "valuationValue": "$ 125,000,000",
+          "area": "面積",
+          "areaValue": "2,500 m ²",
+          "onChainDate": "ブロックチェーン化日"
+        },
+        "onChainInfo": {
+          "hashTitle": "ブロックチェーンハッシュ",
+          "hashValue": "0x7aF9bD3e4c8A7f2E5d1C9B0a3F6E8D2C4B1A9F0E7D6C5B4A3S2D1F0E9D8C7B6A5",
+          "distributionTitle": "収益分配",
+          "expectedReturn": "予想年利回り",
+          "expectedReturnValue": "5.8%",
+          "distributedIncome": "分配済収益",
+          "distributedIncomeValue": "$ 3,245,800"
+        },
+        "progress": {
+          "title": "ブロックチェーン化進捗",
+          "step1": "資産家提出",
+          "step2": "弁護士審査&評価",
+          "step3": "オフライン確権",
+          "step4": "ノードブロックチェーン化完了"
+        },
+        "mobileInfo": {
+          "nameLabel": "資産名",
+          "nameValue": "上海浦東新区浜江壹号アパート",
+          "valueLabel": "資産価値",
+          "valueValue": "$8,500,000",
+          "hashLabel": "ブロックチェーンハッシュ",
+          "hashValue": "0x7aF2E4D8...9Bc1A3F5",
+          "dateLabel": "ブロックチェーン化日",
+          "dateValue": "2023年11月15日",
+          "tokenTotal": "トークン総量",
+          "tokenTotalValue": "850,000 HRWA",
+          "currentPrice": "現在価格",
+          "currentPriceValue": "¥10.25",
+          "annualReturn": "年利回り",
+          "annualReturnValue": "4.8%",
+          "holders": "保有者数",
+          "holdersValue": "128"
+        }
+      }
+    },
+    "contentEnd": {
+      "title1": "資産を",
+      "title2": "ブロックチェーン時代",
+      "title3": "に備えていますか？",
+      "description": "私たちに参加して、安全・透明・効率的なRWA資産ブロックチェーン化サービスを体験し、不動産デジタル化の新しい旅に出てください。",
+      "button1": "資産をブロックチェーン化に提出",
+      "button2": "ブロックチェーン化済資産を閲覧"
+    },
+    "coreValue": {
+      "title": "核心価値",
+      "values": [
+        {
+          "title": "フルプロセスオンライン化",
+          "description": "オフラインからブロックチェーンまで、資産のライフサイクル全管理を実現",
+          "tags": [
+            "資産アップロード",
+            "コンプライアンス審査",
+            "評価確権",
+            "ブロックチェーン登録",
+            "トークン鋳造"
+          ]
+        },
+        {
+          "title": "コンプライアンス信頼性",
+          "description1": "オフラインからブロックチェーンまで、資産のライフサイクル全管理を実現",
+          "description2": "各審査ステップには専門機関、ブロックチェーン記録、改ざん不可ハッシュがあります。"
+        },
+        {
+          "title": "コンプライアンス信頼性",
+          "description": "申込と分配プロセスのフル自動化管理",
+          "description2": "ブロックチェーン上に資産収益を記録、トークン保有者に自動分配。"
+        }
+      ]
+    },
+    "homeContent": {
+      "titleDesktop1": "すべての不動産を",
+      "titleDesktop2": "ブロックチェーン上で信頼できる身分を持たせる",
+      "titleMobile1": "現実世界資産",
+      "titleMobile2": "安全・透明なブロックチェーン化",
+      "description1": "すべての不動産をブロックチェーン上で信頼できる身分を持たせる",
+      "description2": "資産アップロード、法的審査、評価確権からノードブロックチェーン化、投資家申込と分配まで、",
+      "description3": "RWAのフルプロセスを一つのプラットフォームで完了。",
+      "button1": "ブロックチェーン化を開始",
+      "button2": "詳しく見る"
+    },
+    "platformAdvantages": {
+      "title": "プラットフォーム優位性",
+      "description": "三大核心優位性、プラットフォーム主観価値を体現",
+      "advantages": [
+        {
+          "title": "安全コンプライアンス体系",
+          "content": "弁護士+ノードの二重審査メカニズム、各資産のブロックチェーン化が法令要求と資産安全を確保。",
+          "list": [
+            "専門弁護士チーム審査",
+            "マルチノード合意検証",
+            "改ざん不可ブロックチェーン記録"
+          ]
+        },
+        {
+          "title": "跨機関協同SaaS",
+          "content": "弁護士、評価機関、ノード運営者など複数関係者を接続、跨機関の効率的協同を実現、資産ブロックチェーン化プロセスを加速。",
+          "list": [
+            "マルチロール権限管理",
+            "リアルタイム協同とコミュニケーション",
+            "標準化ワークフロー"
+          ]
+        },
+        {
+          "title": "自動化トークン流通と分配",
+          "content": "スマートコントラクトが資産収益分配を自動実行、投資家は手動操作不要、受動収入の自動化管理を実現。",
+          "list": [
+            "ブロックチェーン収益自動分配",
+            "透明化収益記録",
+            "柔軟な投資ポートフォリオ管理"
+          ]
+        }
+      ]
+    },
+    "platformRole": {
+      "title": "プラットフォームロール",
+      "description": "五大核心ロール、SaaSマルチロールエコシステムを際立たせる",
+      "roles": [
+        {
+          "title": "資産家",
+          "content": [
+            "資産情報提出",
+            "審査進捗確認",
+            "関連資料補足"
+          ]
+        },
+        {
+          "title": "弁護士審査方",
+          "content": [
+            "資産合法性予備審査",
+            "資料コンプライアンス検査",
+            "審査意見発行"
+          ]
+        },
+        {
+          "title": "評価方",
+          "content": [
+            "評価審査",
+            "リスク評価",
+            "家賃モデル確認"
+          ]
+        },
+        {
+          "title": "オフライン弁護士確権",
+          "content": [
+            "確権文書署名",
+            "法的背書ブロックチェーン化",
+            "所有権確認"
+          ]
+        },
+        {
+          "title": "ノード運営者",
+          "content": [
+            "最終審査",
+            "ブロックチェーン登録",
+            "トークン鋳造"
+          ]
+        }
+      ]
+    }
   },
   "assete": {
     "assetOnChainStatus": "資産のブロックチェーン化状況",
@@ -849,5 +1080,31 @@
       "evaluationMethod": "評価方法",
       "relatedDocuments": "関連書類"
     }
+  },
+  "layoutFooter": {
+    "platformServices": "プラットフォームサービス",
+    "assetOnChain": "資産ブロックチェーン化",
+    "complianceReview": "コンプライアンス審査",
+    "evaluationConfirmation": "評価確権",
+    "investmentSubscription": "投資申込",
+    "incomeDistribution": "収益分配",
+    "institutionalCooperation": "機関協力",
+    "reviewInstitutionCooperation": "審査機関協力",
+    "nodeCooperation": "ノード協力",
+    "evaluationInstitution": "評価機関入居",
+    "lawyerTeamCooperation": "弁護士チーム協力",
+    "strategicPartners": "戦略パートナー",
+    "legalCompliance": "法律とコンプライアンス",
+    "complianceStatement": "コンプライアンス声明",
+    "riskDisclosure": "リスク開示",
+    "privacyPolicy": "プライバシーポリシー",
+    "legalAgreement": "法律協議",
+    "contactUs": "お問い合わせ",
+    "platformIntroduction": "プラットフォーム紹介",
+    "platformDescription1": "現実世界資産を安全・透明にブロックチェーン化し、不動産資産に信頼できるチェーン上身分を提供します。",
+    "platformDescription2": "我々は安全・透明・効率的な不動産ブロックチェーン化プラットフォームの構築に努め、現実世界資産がブロックチェーン世界に簡単に参入し、資産デジタル化と価値流通を実現できるようにしています。",
+    "copyright": "© 2023 RWA Chain. すべての権利を留保します。",
+    "termsOfService": "利用規則",
+    "cookiePolicy": "Cookieポリシー"
   }
 }

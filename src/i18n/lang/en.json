@@ -30,7 +30,15 @@
     "profile": "Profile",
     "accountSettings": "Account Settings",
     "reportManagement": "Report Management",
-    "logout": "Logout"
+    "logout": "Logout",
+    "nav": {
+      "home": "Home",
+      "coreValue": "Core Value",
+      "chainProcess": "RWA On-Chain Process",
+      "chainTransparency": "Asset On-Chain Transparency",
+      "platformAdvantages": "Platform Advantages"
+    },
+    "startUsing": "Start Using"
   },
   "home": {
     "selectIdentity": "Select Your Identity",
@@ -43,7 +51,230 @@
     "verifyAssets": "Verify Asset Information",
     "lawOffice": "Law Office",
     "lawOfficeDesc": "Professional institutions providing legal services, compliance review, and legal opinions",
-    "legalCompliance": "Legal Compliance Support"
+    "legalCompliance": "Legal Compliance Support",
+    "chainProcess": {
+      "title": "RWA On-Chain Standard Process",
+      "descriptionDesktop": "Six-step process, grand, minimalist, and stable, directly representing platform capabilities",
+      "descriptionMobile": "This module directly represents platform capabilities, showing the complete process from asset submission to investment distribution",
+      "steps": [
+        {
+          "title": "Asset Party Submits Property Information",
+          "desc": "Property certificates, contracts, and valuation materials uploaded with one click"
+        },
+        {
+          "title": "Lawyer Preliminary Review",
+          "desc": "Lawyers verify the legality and authenticity of property documents"
+        },
+        {
+          "title": "Evaluator Review",
+          "desc": "Third-party evaluation agencies review valuations, rents, and risk ratings"
+        },
+        {
+          "title": "Offline Lawyer Confirmation",
+          "desc": "Legal confirmation of asset ownership, generating confirmation documents"
+        },
+        {
+          "title": "Node On-Chain",
+          "desc": "Node operators execute final on-chain registration, generate asset on-chain hash, and mint corresponding HRWA Token"
+        },
+        {
+          "title": "Investment Subscription and Distribution",
+          "desc": "Investors can purchase Tokens in the system, and rental income is automatically distributed on-chain"
+        }
+      ]
+    },
+    "chainTransparency": {
+      "title": "Asset On-Chain Transparency",
+      "description": "Providing full-process transparency for asset on-chain capabilities for the investment side",
+      "features": [
+        {
+          "title": "On-Chain Hash & Verifiable Confirmation Documents",
+          "content": "Each asset generates a unique hash value after being put on-chain, and all confirmation documents can be verified at any time to ensure asset authenticity."
+        },
+        {
+          "title": "Every Process Step Has Timestamps",
+          "content": "Every operation from submission to on-chain recording is timestamped, forming a complete and traceable operational history."
+        },
+        {
+          "title": "Transparent Income Distribution and Transaction Records",
+          "content": "On-chain transparency of income distribution, holdings, and transaction records for all assets, allowing investors to check asset status and income at any time."
+        }
+      ],
+      "assetShowcase": {
+        "title": "On-Chain Asset Display (Example)",
+        "description": "Transparent display of on-chain asset information",
+        "status": "On-Chain",
+        "propertyInfo": {
+          "name": "No. 1 Century Avenue, Pudong New District, Shanghai",
+          "id": "HRWA-7294",
+          "type": "Asset Type",
+          "typeValue": "Commercial Office Building",
+          "valuation": "Valuation",
+          "valuationValue": "$ 125,000,000",
+          "area": "Area",
+          "areaValue": "2,500 m ²",
+          "onChainDate": "On-Chain Date"
+        },
+        "onChainInfo": {
+          "hashTitle": "On-Chain Hash",
+          "hashValue": "0x7aF9bD3e4c8A7f2E5d1C9B0a3F6E8D2C4B1A9F0E7D6C5B4A3S2D1F0E9D8C7B6A5",
+          "distributionTitle": "Income Distribution",
+          "expectedReturn": "Expected Annual Return Rate",
+          "expectedReturnValue": "5.8%",
+          "distributedIncome": "Distributed Income",
+          "distributedIncomeValue": "$ 3,245,800"
+        },
+        "progress": {
+          "title": "On-Chain Progress",
+          "step1": "Asset Party Submission",
+          "step2": "Lawyer Review & Evaluation",
+          "step3": "Offline Confirmation",
+          "step4": "Node On-Chain Completion"
+        },
+        "mobileInfo": {
+          "nameLabel": "Asset Name",
+          "nameValue": "Binjiang No. 1 Apartment, Pudong New District, Shanghai",
+          "valueLabel": "Asset Value",
+          "valueValue": "$8,500,000",
+          "hashLabel": "On-Chain Hash",
+          "hashValue": "0x7aF2E4D8...9Bc1A3F5",
+          "dateLabel": "On-Chain Date",
+          "dateValue": "November 15, 2023",
+          "tokenTotal": "Total Tokens",
+          "tokenTotalValue": "850,000 HRWA",
+          "currentPrice": "Current Price",
+          "currentPriceValue": "¥10.25",
+          "annualReturn": "Annual Return",
+          "annualReturnValue": "4.8%",
+          "holders": "Number of Holders",
+          "holdersValue": "128"
+        }
+      }
+    },
+    "contentEnd": {
+      "title1": "Ready to bring assets into the",
+      "title2": "On-Chain Era",
+      "title3": "?",
+      "description": "Join us to experience safe, transparent, and efficient RWA asset on-chain services, and embark on a new journey of real estate digitalization.",
+      "button1": "Submit Asset for On-Chain",
+      "button2": "Browse On-Chain Assets"
+    },
+    "coreValue": {
+      "title": "Core Value",
+      "values": [
+        {
+          "title": "Full Process Online",
+          "description": "From offline to on-chain, achieving full lifecycle management of assets",
+          "tags": [
+            "Asset Upload",
+            "Compliance Review",
+            "Evaluation Confirmation",
+            "On-Chain Registration",
+            "Token Minting"
+          ]
+        },
+        {
+          "title": "Compliant and Trustworthy",
+          "description1": "From offline to on-chain, achieving full lifecycle management of assets",
+          "description2": "Every review step has professional institutions, on-chain records, and immutable hashes."
+        },
+        {
+          "title": "Compliant and Trustworthy",
+          "description": "Full automation management of subscription and distribution processes",
+          "description2": "On-chain recording of asset income, automatically distributed to Token holders."
+        }
+      ]
+    },
+    "homeContent": {
+      "titleDesktop1": "Let every property",
+      "titleDesktop2": "Have a credible identity on-chain",
+      "titleMobile1": "Real World Assets",
+      "titleMobile2": "Safe and Transparent On-Chain",
+      "description1": "Let every property have a credible identity on-chain",
+      "description2": "From asset upload, legal review, evaluation confirmation to node on-chain, investor subscription and distribution,",
+      "description3": "The entire RWA process is completed in one platform.",
+      "button1": "Start On-Chain",
+      "button2": "Learn More"
+    },
+    "platformAdvantages": {
+      "title": "Platform Advantages",
+      "description": "Three core advantages reflecting the platform's subjective value",
+      "advantages": [
+        {
+          "title": "Safe and Compliant System",
+          "content": "Dual review mechanism of lawyers + nodes to ensure that every asset on-chain complies with legal requirements and asset security.",
+          "list": [
+            "Professional Lawyer Team Review",
+            "Multi-Node Consensus Verification",
+            "Immutable On-Chain Records"
+          ]
+        },
+        {
+          "title": "Cross-Organization Collaborative SaaS",
+          "content": "Connecting multiple parties such as lawyers, evaluation agencies, and node operators to achieve efficient cross-organization collaboration and accelerate the asset on-chain process.",
+          "list": [
+            "Multi-Role Permission Management",
+            "Real-Time Collaboration and Communication",
+            "Standardized Workflows"
+          ]
+        },
+        {
+          "title": "Automated Token Circulation and Distribution",
+          "content": "Smart contracts automatically execute asset income distribution, investors do not need manual operations, achieving automated passive income management.",
+          "list": [
+            "Automatic On-Chain Income Distribution",
+            "Transparent Income Records",
+            "Flexible Investment Portfolio Management"
+          ]
+        }
+      ]
+    },
+    "platformRole": {
+      "title": "Platform Roles",
+      "description": "Five core roles highlighting the SaaS multi-role ecosystem",
+      "roles": [
+        {
+          "title": "Asset Party",
+          "content": [
+            "Submit Asset Information",
+            "View Review Progress",
+            "Supplement Relevant Materials"
+          ]
+        },
+        {
+          "title": "Lawyer Reviewer",
+          "content": [
+            "Preliminary Review of Asset Legality",
+            "Compliance Verification of Materials",
+            "Issue Review Opinions"
+          ]
+        },
+        {
+          "title": "Evaluator",
+          "content": [
+            "Valuation Review",
+            "Risk Assessment",
+            "Rent Model Confirmation"
+          ]
+        },
+        {
+          "title": "Offline Lawyer Confirmation",
+          "content": [
+            "Confirmation Document Signing",
+            "Legal Endorsement On-Chain",
+            "Ownership Confirmation"
+          ]
+        },
+        {
+          "title": "Node Operator",
+          "content": [
+            "Final Review",
+            "On-Chain Registration",
+            "Token Minting"
+          ]
+        }
+      ]
+    }
   },
   "assete": {
     "assetOnChainStatus": "Asset On-Chain Status",
@@ -848,5 +1079,31 @@
       "evaluationMethod": "Evaluation Method",
       "relatedDocuments": "Related Documents"
     }
+  },
+  "layoutFooter": {
+    "platformServices": "Platform Services",
+    "assetOnChain": "Asset On-Chain",
+    "complianceReview": "Compliance Review",
+    "evaluationConfirmation": "Evaluation Confirmation",
+    "investmentSubscription": "Investment Subscription",
+    "incomeDistribution": "Income Distribution",
+    "institutionalCooperation": "Institutional Cooperation",
+    "reviewInstitutionCooperation": "Review Institution Cooperation",
+    "nodeCooperation": "Node Cooperation",
+    "evaluationInstitution": "Evaluation Institution",
+    "lawyerTeamCooperation": "Lawyer Team Cooperation",
+    "strategicPartners": "Strategic Partners",
+    "legalCompliance": "Legal & Compliance",
+    "complianceStatement": "Compliance Statement",
+    "riskDisclosure": "Risk Disclosure",
+    "privacyPolicy": "Privacy Policy",
+    "legalAgreement": "Legal Agreement",
+    "contactUs": "Contact Us",
+    "platformIntroduction": "Platform Introduction",
+    "platformDescription1": "Bringing real-world assets securely and transparently on-chain, providing credible on-chain identities for property assets.",
+    "platformDescription2": "We are committed to building a safe, transparent, and efficient real estate on-chain platform, enabling real-world assets to easily enter the blockchain world and achieve asset digitization and value circulation.",
+    "copyright": "© 2023 RWA Chain. All rights reserved.",
+    "termsOfService": "Terms of Service",
+    "cookiePolicy": "Cookie Policy"
   }
 }

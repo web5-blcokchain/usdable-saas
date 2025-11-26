@@ -3,7 +3,7 @@ import companyIcom from '@/assets/images/compony.png'
 import fileIcon from '@/assets/images/register/file-blue.png'
 import lawyerIcon from '@/assets/images/register/lawyer.png'
 import { Button, Checkbox, Divider, Form, Input, Select } from 'antd'
-import UploadMultifileCard from '../common/upload/uploa-multifile-card'
+import UploadMultifileCard from '@/components/common/upload/uploa-multifile-card'
 import { RegisterStatus } from './registerStatus'
 
 // 律师事务所注册

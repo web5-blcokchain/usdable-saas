@@ -99,7 +99,11 @@ export default function MainHeader() {
   )
 }
 
-function LanguageSelect() {
+/**
+ * 多语言选择
+ * @returns {JSX.Element}
+ */
+export function LanguageSelect() {
   const lang = useUserStore(state => state.language)
   const setLang = useUserStore(state => state.setLanguage)
 

@@ -8,7 +8,7 @@ import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-// 节点中心首页
+// 节点中心首页 已移除
 export function RouteComponent() {
   const { t } = useTranslation()
   const data = [

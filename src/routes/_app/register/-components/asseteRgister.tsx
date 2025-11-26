@@ -2,7 +2,7 @@ import type { RuleObject } from 'antd/es/form'
 import componyIcon from '@/assets/images/compony-green.png'
 import userIcon from '@/assets/images/user.png'
 import { Button, Checkbox, Form, Input, Radio } from 'antd'
-import UploadMultifileCard from '../common/upload/uploa-multifile-card'
+import UploadMultifileCard from '@/components/common/upload/uploa-multifile-card'
 import { RegisterStatus } from './registerStatus'
 
 // 资产方注册
