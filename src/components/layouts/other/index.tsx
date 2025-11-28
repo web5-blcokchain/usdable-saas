@@ -7,7 +7,7 @@ export const OtherLayout: FC = ({
   return (
     <>
       <OtherHeader />
-      <div className="min-h-100vh" id="other-layout">
+      <div className="min-h-100vh w-full overflow-hidden" id="other-layout">
         {children}
       </div>
       <OtherFooter />

@@ -1,9 +1,17 @@
-import type { RuleObject } from 'antd/es/form'
+import type { UserRegisterModel } from '@/api/apiMyInfoApi'
+import apiMyInfoApi from '@/api/apiMyInfoApi'
+import { getLocation, uploadFile } from '@/api/common'
 import companyIcom from '@/assets/images/compony.png'
 import fileIcon from '@/assets/images/register/file-blue.png'
 import lawyerIcon from '@/assets/images/register/lawyer.png'
-import { Button, Checkbox, Divider, Form, Input, Select } from 'antd'
 import UploadMultifileCard from '@/components/common/upload/uploa-multifile-card'
+import { useUserStore } from '@/stores/user'
+import { envConfig } from '@/utils/envConfig'
+import { getToken } from '@/utils/user'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useNavigate } from '@tanstack/react-router'
+import { Button, Checkbox, Divider, Form, Input, Select } from 'antd'
+import { useWatch } from 'antd/es/form/Form'
 import { RegisterStatus } from './registerStatus'
 
 // 律师事务所注册
@@ -13,25 +21,92 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
   const [isSuccess, setIsSuccess] = useState(false)
   const [registerStatus, setRegisterStatus] = useState(1)
   const [errorMessage, setErrorMessage] = useState('未找到工商登记记录，请检查公司名称或营业执照号')
-  const subjectTypeList = [
-    {
-      value: '1',
-      label: '主体类型1'
-    },
-    {
-      value: '2',
-      label: '主体类型2'
-    }
-  ]
+  const navigate = useNavigate()
 
-  const onFinish = (values: any) => {
-    console.log('✅ 表单通过验证:', values)
-    setIsSuccess(true)
-    setRegisterStatus(1)
-    setErrorMessage('')
+  // 生成执业年限
+  const subjectTypeList = Array.from({ length: 20 }, (_, i) => {
+    return {
+      value: i + 1,
+      label: <div>{`${i + 1}${t('common.year')}${(i === 19) ? '+' : ''}`}</div>
+    }
+  })
+
+  // 获取专业领域类型 specialize
+  const { data: entitySpecialtyList, isFetching: entitySpecialtyListLoading } = useQuery({
+    queryKey: ['getEntityTypeSpecialty'],
+    queryFn: async () => {
+      const data = await apiMyInfoApi.getEntityTypeSpecialty()
+      return data.data
+    },
+    select: (data) => {
+      return data?.map(item => ({
+        value: item.id,
+        label: (
+          <div>
+            {i18n.language === 'en'
+              ? item.name_en
+              : (
+                  i18n.language === 'zh' ? item.name_zh_cn : item.name_ja
+                )}
+          </div>
+        )
+      }))
+    }
+  })
+  // 获取国家列表
+  const { data: countryList, isFetching: locationDataLoading } = useQuery({
+    queryKey: ['getLocation'],
+    queryFn: async () => {
+      const data = await getLocation({
+        level: 2
+      })
+      return data.data
+    },
+    select(data) {
+      // 处理数据,
+      const newData = data?.map(item => ({
+        value: item.id,
+        label: item.name
+      })) || [] as any[]
+      return newData
+    }
+  })
+
+  const { userData } = useUserStore()
+  // 用户注册
+  const { mutateAsync: userResgiter, isPending: isRegistering } = useMutation({
+    mutationKey: ['userRegitser'],
+    mutationFn: async (values: UserRegisterModel) => {
+      // 判断用户是否是被拒后，再次申请
+      return userData?.user?.audit_status !== 2 ? apiMyInfoApi.regitser(values) : apiMyInfoApi.resubmitRegister(values)
+    }
+  })
+
+  // 表单提交
+  const onFinish = async (values: any) => {
+    const data = {
+      ...values,
+      type: '5',
+      token: getToken() || '',
+      agree_compliance_promise: values.agree_compliance_promise ? '1' : '0',
+      agree_asset_compliance: values.agree_asset_compliance ? '1' : '0',
+      agree_aml_statement: values.agree_aml_statement ? '1' : '0',
+      agree_service_terms: values.agree_service_terms ? '1' : '0'
+    }
+
+    await userResgiter({
+      ...data
+    }).then((res) => {
+      if (res.code === 1) {
+        setIsSuccess(true)
+        setRegisterStatus(0)
+        setErrorMessage('')
+      }
+    })
   }
 
   const [errorFormItem, setErrorFormItem] = useState<string[]>([])
+  // 表单验证失败
   const onFinishFailed = (errorInfo: any) => {
     let errorList = [] as string[];
     (errorInfo.errorFields as any[]).forEach((res: any) => {
@@ -41,18 +116,35 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
     console.log('❌ 验证失败:', errorInfo, errorList)
   }
 
-  const fileValidator = (_: RuleObject, value: string[]) => {
-    const file = value || []
-    if (!file[0]) {
-      return Promise.reject(t('register.lawOffice.uploadOfficeLicenseError'))
+  // 文件上传
+  const { mutateAsync: uploadIdCardFileMutate } = useMutation({
+    mutationKey: ['uploadFile'],
+    mutationFn: async (data: { file: File }) => {
+      const formData = new FormData()
+      formData.append('file', data.file)
+      return uploadFile(formData)
     }
-    else if (!file[1]) {
-      return Promise.reject(t('register.lawOffice.uploadLawyerLicenseError'))
-    }
-    if (!file[2]) {
-      return Promise.reject(t('register.lawOffice.uploadBarProofError'))
-    }
-    return Promise.resolve()
+  })
+  const [uploadFileLoading, setUploadFileLoading] = useState([] as number[])
+  const firmLicenseFile = useWatch('firm_license_file', form)
+  const lawyerLicenseFile = useWatch('lawyer_license_file', form)
+  const businessLicenseFile = useWatch('bar_membership_file', form)
+
+  // 文件上传
+  async function uploadIdCardFile(data: File, name: string, index: number) {
+    setUploadFileLoading(prev => [...prev, index])
+    await uploadIdCardFileMutate({ file: data }).then((res) => {
+      if (res.code === 1) {
+        form.setFieldValue(name, res.data?.file.full_url)
+      }
+    }).finally(() => {
+      setUploadFileLoading(prev => prev.filter(item => item !== index))
+    })
+  }
+
+  // 判断是否为图片
+  const fileIsUrl = (url: string) => {
+    return url && url.includes(envConfig.imageApiUrl)
   }
 
   useEffect(() => {
@@ -77,9 +169,10 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
         </div>
         <Form form={form} layout="vertical" className="mt-6" onFinish={onFinish} onFinishFailed={onFinishFailed}>
           <div className="grid cols-2 gap-x-6 max-md:cols-1 max-md:gap-0">
+            {/* 律所名字 */}
             <Form.Item
               required
-              name="name"
+              name="lawyer_name"
               label={t('register.lawOffice.officeName')}
               rules={[{
                 required: true,
@@ -88,21 +181,25 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
             >
               <Input className="h-12.5 b-#374151 bg-#1E2328" placeholder={t('register.lawOffice.officeNamePlaceholder')} />
             </Form.Item>
-            <Form.Item required name="address" label={t('register.lawOffice.registrationAddress')} rules={[{ required: true, message: t('register.lawOffice.registrationAddressPlaceholder') }]}>
+            {/* 注册国家地址 */}
+            <Form.Item required name="country" label={t('register.lawOffice.registrationAddress')} rules={[{ required: true, message: t('register.lawOffice.registrationAddressPlaceholder') }]}>
               <Select
                 placeholder={t('register.lawOffice.registrationAddressPlaceholder')}
-                options={subjectTypeList}
+                options={countryList}
+                loading={locationDataLoading}
               />
             </Form.Item>
           </div>
-          <Form.Item required name="licenseNumber" label={t('register.lawOffice.licenseNumber')} rules={[{ required: true, message: t('register.lawOffice.licenseNumberPlaceholder') }]}>
+          {/* 律所执业许可证号 */}
+          <Form.Item required name="practice_license_number" label={t('register.lawOffice.licenseNumber')} rules={[{ required: true, message: t('register.lawOffice.licenseNumberPlaceholder') }]}>
             <div className="relative">
               <Input className="h-12.5 b-#374151 bg-#1E2328" placeholder={t('register.lawOffice.licenseNumberPlaceholder')}></Input>
-              <Button className="absolute right-3 top-1/2 transform-translate-y--50% b-#00E6FF33 bg-#00E6FF33 px-3 py-1 text-3 text-#00E5FF">验证</Button>
+              {/* <Button className="absolute right-3 top-1/2 transform-translate-y--50% b-#00E6FF33 bg-#00E6FF33 px-3 py-1 text-3 text-#00E5FF">验证</Button> */}
             </div>
           </Form.Item>
+          {/* 律所联系方式 */}
           <div className="grid cols-2 gap-x-6 max-md:cols-1 max-md:gap-0">
-            <Form.Item required name="contact" label={t('register.lawOffice.contact')} rules={[{ required: true, message: t('register.lawOffice.contactPlaceholder') }]}>
+            <Form.Item required name="lawyer_phone" label={t('register.lawOffice.contact')} rules={[{ required: true, message: t('register.lawOffice.contactPlaceholder') }]}>
               <Input className="h-12.5 b-#374151 bg-#1E2328" placeholder={t('register.lawOffice.contactPlaceholder')} />
             </Form.Item>
           </div>
@@ -112,28 +209,35 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
             <div>{t('register.lawOffice.leadLawyerInfo')}</div>
           </div>
           <div className="grid cols-2 gap-x-6 max-md:grid-cols-1 max-md:gap-0">
-            <Form.Item required name="lawyeName" label={t('register.lawOffice.lawyerName')} rules={[{ required: true, message: t('register.lawOffice.lawyerNamePlaceholder') }]}>
+            {/* 律师姓名 */}
+            <Form.Item required name="nickname" label={t('register.lawOffice.lawyerName')} rules={[{ required: true, message: t('register.lawOffice.lawyerNamePlaceholder') }]}>
               <Input className="h-12.5 b-#374151 bg-#1E2328" placeholder={t('register.lawOffice.lawyerNamePlaceholder')} />
             </Form.Item>
-            <Form.Item required name="lawyeLicenseNumber" label={t('register.lawOffice.licenseNo')} rules={[{ required: true, message: t('register.lawOffice.licenseNoPlaceholder') }]}>
+            {/* 律师执业证号 */}
+            <Form.Item required name="lawyer_license_no" label={t('register.lawOffice.licenseNo')} rules={[{ required: true, message: t('register.lawOffice.licenseNoPlaceholder') }]}>
               <Input className="h-12.5 b-#374151 bg-#1E2328" placeholder={t('register.lawOffice.licenseNoPlaceholder')} />
             </Form.Item>
-            <Form.Item required name="lawyeLicenseAge" label={t('register.lawOffice.yearsOfPractice')} rules={[{ required: true, message: t('register.lawOffice.yearsOfPracticePlaceholder') }]}>
+            {/* 律师执业年限 */}
+            <Form.Item required name="lawyer_practice_years" label={t('register.lawOffice.yearsOfPractice')} rules={[{ required: true, message: t('register.lawOffice.yearsOfPracticePlaceholder') }]}>
               <Select
                 placeholder={t('register.lawOffice.yearsOfPracticePlaceholder')}
                 options={subjectTypeList}
               />
             </Form.Item>
-            <Form.Item required name="lawyeLicenseType" label={t('register.lawOffice.specialization')} rules={[{ required: true, message: t('register.lawOffice.specializationPlaceholder') }]}>
+            {/* 专业领域 */}
+            <Form.Item required name="specialty" label={t('register.lawOffice.specialization')} rules={[{ required: true, message: t('register.lawOffice.specializationPlaceholder') }]}>
               <Select
                 placeholder={t('register.lawOffice.specializationPlaceholder')}
-                options={subjectTypeList}
+                options={entitySpecialtyList}
+                loading={entitySpecialtyListLoading}
               />
             </Form.Item>
-            <Form.Item required name="lawyePhone" label={t('register.lawOffice.phone')} rules={[{ required: true, message: t('register.asset.phonePlaceholder') }]}>
+            {/* 律师手机号 */}
+            <Form.Item required name="mobile" label={t('register.lawOffice.phone')} rules={[{ required: true, message: t('register.asset.phonePlaceholder') }]}>
               <Input className="h-12.5 b-#374151 bg-#1E2328" placeholder={t('register.asset.phonePlaceholder')} />
             </Form.Item>
-            <Form.Item required name="lawyeEmail" label={t('register.lawOffice.email')} rules={[{ required: true, message: t('register.asset.emailPlaceholder') }]}>
+            {/* 律师邮箱 */}
+            <Form.Item required name="email" label={t('register.lawOffice.email')} rules={[{ required: true, message: t('register.asset.emailPlaceholder') }]}>
               <Input className="h-12.5 b-#374151 bg-#1E2328" placeholder={t('register.asset.emailPlaceholder')} />
             </Form.Item>
           </div>
@@ -144,118 +248,122 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
           </div>
           <Form.Item
             required
-            name="certificates"
-            rules={[{
-              // 自定义验证
-              validator: fileValidator
-            }]}
           >
             <div className="fccc gap-6 [&>div]:w-full">
-              <UploadMultifileCard
-                className={cn(
-                  'flex gap-3 [&>div>div>div>div]:b-2',
-                  `${(errorFormItem.includes('certificates') && !form.getFieldValue('certificates')?.[0]) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
-                )}
-                fileType="image/png,image/jpg,application/pdf"
-                fileUrl={[]}
-                maxLength={1}
-                width="100%"
-                height="auto"
-                // loading={uploadFileLoading}
-                removeFile={(_index) => {
-                // setFileUrl(fileUrl.filter((_, i) => i !== index))
-                }}
-                beforeUpload={(_file) => {
-                // beforeUpload(file)
-                }}
-              >
-                <div className="w-full px-6.5">
-                  <div className="mb-4 fccc gap-2">
-                    <img className="h-10" src={new URL('@/assets/images/register/compony-grey.png', import.meta.url).href} alt="" />
-                    <div className="fcc gap-1 text-sm text-#8B949E">
-                      <span>{t('register.lawOffice.officeLicense')}</span>
-                      <span className="text-#EF4444">*</span>
+              {/* 律师事务所执照扫描件 */}
+              <Form.Item name="firm_license_file" rules={[{ required: true, message: t('register.lawOffice.uploadOfficeLicenseError') }]}>
+                <UploadMultifileCard
+                  className={cn(
+                    'flex gap-3 [&>div>div>div>div]:b-2',
+                    `${(errorFormItem.includes('certificates') && !form.getFieldValue('certificates')?.[0]) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
+                  )}
+                  fileType="image/png,image/jpg,application/pdf"
+                  fileUrl={fileIsUrl(firmLicenseFile) ? [firmLicenseFile] : []}
+                  maxLength={1}
+                  width="100%"
+                  height="auto"
+                  loading={uploadFileLoading.includes(0)}
+                  removeFile={(_index) => {
+                    form.setFieldValue('firm_license_file', [])
+                  }}
+                  beforeUpload={(file) => {
+                    uploadIdCardFile(file, 'firm_license_file', 0)
+                  }}
+                >
+                  <div className="w-full px-6.5">
+                    <div className="mb-4 fccc gap-2">
+                      <img className="h-10" src={new URL('@/assets/images/register/compony-grey.png', import.meta.url).href} alt="" />
+                      <div className="fcc gap-1 text-sm text-#8B949E">
+                        <span>{t('register.lawOffice.officeLicense')}</span>
+                        <span className="text-#EF4444">*</span>
+                      </div>
+                    </div>
+                    <div className="w-full rounded-2 bg-#1E242880 px-3 py-10">
+                      <div className="fcc pb-2">
+                        <img className="h-10" src={new URL('@/assets/images/register/cloud.png', import.meta.url).href} alt="" />
+                      </div>
+                      <div className="w-full overflow-hidden text-center text-sm text-#9CA3AF">{t('register.lawOffice.uploadOfficeLicense')}</div>
+                      <div className="w-full overflow-hidden text-center text-xs text-#6B7280">{t('register.lawOffice.fileSupport')}</div>
                     </div>
                   </div>
-                  <div className="w-full rounded-2 bg-#1E242880 px-3 py-10">
-                    <div className="fcc pb-2">
-                      <img className="h-10" src={new URL('@/assets/images/register/cloud.png', import.meta.url).href} alt="" />
+                </UploadMultifileCard>
+              </Form.Item>
+              {/* 主办律师执业证扫描件 */}
+              <Form.Item name="lawyer_license_file" rules={[{ required: true, message: t('register.lawOffice.uploadLawyerLicenseError') }]}>
+                <UploadMultifileCard
+                  className={cn(
+                    'flex gap-3 [&>div>div>div>div]:b-2',
+                    `${(errorFormItem.includes('certificates') && !form.getFieldValue('certificates')?.[1]) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
+                  )}
+                  fileType="image/png,image/jpg,application/pdf"
+                  fileUrl={fileIsUrl(lawyerLicenseFile) ? [lawyerLicenseFile] : []}
+                  maxLength={1}
+                  width="100%"
+                  height="auto"
+                  loading={uploadFileLoading.includes(1)}
+                  removeFile={(_index) => {
+                    form.setFieldValue('lawyer_license_file', '')
+                  }}
+                  beforeUpload={(file) => {
+                    uploadIdCardFile(file, 'lawyer_license_file', 1)
+                  }}
+                >
+                  <div className="w-full px-6.5">
+                    <div className="mb-4 fccc gap-2">
+                      <img className="h-10" src={new URL('@/assets/images/register/userCard.png', import.meta.url).href} alt="" />
+                      <div className="fcc gap-1 text-sm text-#8B949E">
+                        <span>{t('register.lawOffice.leadLawyerLicense')}</span>
+                        <span className="text-#EF4444">*</span>
+                      </div>
                     </div>
-                    <div className="w-full overflow-hidden text-center text-sm text-#9CA3AF">{t('register.lawOffice.uploadOfficeLicense')}</div>
-                    <div className="w-full overflow-hidden text-center text-xs text-#6B7280">{t('register.lawOffice.fileSupport')}</div>
-                  </div>
-                </div>
-              </UploadMultifileCard>
-              <UploadMultifileCard
-                className={cn(
-                  'flex gap-3 [&>div>div>div>div]:b-2',
-                  `${(errorFormItem.includes('certificates') && !form.getFieldValue('certificates')?.[1]) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
-                )}
-                fileType="image/png,image/jpg,application/pdf"
-                fileUrl={[]}
-                maxLength={1}
-                width="100%"
-                height="auto"
-                // loading={uploadFileLoading}
-                removeFile={(_index) => {
-                // setFileUrl(fileUrl.filter((_, i) => i !== index))
-                }}
-                beforeUpload={(_file) => {
-                // beforeUpload(file)
-                }}
-              >
-                <div className="w-full px-6.5">
-                  <div className="mb-4 fccc gap-2">
-                    <img className="h-10" src={new URL('@/assets/images/register/userCard.png', import.meta.url).href} alt="" />
-                    <div className="fcc gap-1 text-sm text-#8B949E">
-                      <span>{t('register.lawOffice.leadLawyerLicense')}</span>
-                      <span className="text-#EF4444">*</span>
-                    </div>
-                  </div>
-                  <div className="w-full rounded-2 bg-#1E242880 px-3 py-10">
-                    <div className="fcc pb-2">
-                      <img className="h-10" src={new URL('@/assets/images/register/cloud.png', import.meta.url).href} alt="" />
-                    </div>
-                    <div className="w-full overflow-hidden text-center text-sm text-#9CA3AF">{t('register.lawOffice.uploadLawyerLicense')}</div>
-                    <div className="w-full overflow-hidden text-center text-xs text-#6B7280">{t('register.lawOffice.fileSupport')}</div>
-                  </div>
-                </div>
-              </UploadMultifileCard>
-              <UploadMultifileCard
-                className={cn(
-                  'flex gap-3 [&>div>div>div>div]:b-2',
-                  `${(errorFormItem.includes('certificates') && !form.getFieldValue('certificates')?.[2]) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
-                )}
-                fileType="image/png,image/jpg,application/pdf"
-                fileUrl={[]}
-                maxLength={1}
-                width="100%"
-                height="auto"
-                // loading={uploadFileLoading}
-                removeFile={(_index) => {
-                // setFileUrl(fileUrl.filter((_, i) => i !== index))
-                }}
-                beforeUpload={(_file) => {
-                // beforeUpload(file)
-                }}
-              >
-                <div className="w-full px-6.5">
-                  <div className="mb-4 fccc gap-2">
-                    <img className="h-10" src={new URL('@/assets/images/register/thorn.png', import.meta.url).href} alt="" />
-                    <div className="fcc gap-1 text-sm text-#8B949E">
-                      <span>{t('register.lawOffice.barAssociationProof')}</span>
-                      <span className="text-#EF4444">*</span>
+                    <div className="w-full rounded-2 bg-#1E242880 px-3 py-10">
+                      <div className="fcc pb-2">
+                        <img className="h-10" src={new URL('@/assets/images/register/cloud.png', import.meta.url).href} alt="" />
+                      </div>
+                      <div className="w-full overflow-hidden text-center text-sm text-#9CA3AF">{t('register.lawOffice.uploadLawyerLicense')}</div>
+                      <div className="w-full overflow-hidden text-center text-xs text-#6B7280">{t('register.lawOffice.fileSupport')}</div>
                     </div>
                   </div>
-                  <div className="w-full rounded-2 bg-#1E242880 px-3 py-10">
-                    <div className="fcc pb-2">
-                      <img className="h-10" src={new URL('@/assets/images/register/cloud.png', import.meta.url).href} alt="" />
+                </UploadMultifileCard>
+              </Form.Item>
+              {/* 所属律师协会会员证明 */}
+              <Form.Item name="bar_membership_file" rules={[{ required: true, message: t('register.lawOffice.barAssociationProof') }]}>
+                <UploadMultifileCard
+                  className={cn(
+                    'flex gap-3 [&>div>div>div>div]:b-2',
+                    `${(errorFormItem.includes('certificates') && !form.getFieldValue('certificates')?.[2]) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
+                  )}
+                  fileType="image/png,image/jpg,application/pdf"
+                  fileUrl={fileIsUrl(businessLicenseFile) ? [businessLicenseFile] : []}
+                  maxLength={1}
+                  width="100%"
+                  height="auto"
+                  loading={uploadFileLoading.includes(2)}
+                  removeFile={(_index) => {
+                    form.setFieldValue('bar_membership_file', '')
+                  }}
+                  beforeUpload={(file) => {
+                    uploadIdCardFile(file, 'bar_membership_file', 2)
+                  }}
+                >
+                  <div className="w-full px-6.5">
+                    <div className="mb-4 fccc gap-2">
+                      <img className="h-10" src={new URL('@/assets/images/register/thorn.png', import.meta.url).href} alt="" />
+                      <div className="fcc gap-1 text-sm text-#8B949E">
+                        <span>{t('register.lawOffice.barAssociationProof')}</span>
+                        <span className="text-#EF4444">*</span>
+                      </div>
                     </div>
-                    <div className="w-full overflow-hidden text-center text-sm text-#9CA3AF">{t('register.lawOffice.uploadBarProof')}</div>
-                    <div className="w-full overflow-hidden text-center text-xs text-#6B7280">{t('register.lawOffice.fileSupport')}</div>
+                    <div className="w-full rounded-2 bg-#1E242880 px-3 py-10">
+                      <div className="fcc pb-2">
+                        <img className="h-10" src={new URL('@/assets/images/register/cloud.png', import.meta.url).href} alt="" />
+                      </div>
+                      <div className="w-full overflow-hidden text-center text-sm text-#9CA3AF">{t('register.lawOffice.uploadBarProof')}</div>
+                      <div className="w-full overflow-hidden text-center text-xs text-#6B7280">{t('register.lawOffice.fileSupport')}</div>
+                    </div>
                   </div>
-                </div>
-              </UploadMultifileCard>
+                </UploadMultifileCard>
+              </Form.Item>
             </div>
           </Form.Item>
           <div className="fyc gap-3 text-6">
@@ -264,7 +372,20 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
           </div>
           <div className="mt-6 rounded-2 bg-#1E242880 p-6">
             <div className="mb-3 text-base">{t('register.lawOffice.complianceCommitment')}</div>
-            <Form.Item valuePropName="checked" name="agreementFirst" className="mb-1" rules={[{ required: true, message: t('register.lawOffice.readServiceAgreement') }]}>
+            {/* 合规承诺 */}
+            <Form.Item
+              valuePropName="checked"
+              name="agree_compliance_promise"
+              className="mb-1"
+              rules={[
+                {
+                  validator: (_, value) =>
+                    value
+                      ? Promise.resolve()
+                      : Promise.reject(new Error(t('register.lawOffice.readServiceAgreement')))
+                }
+              ]}
+            >
               <div className="fyc">
                 <Checkbox className="text-sm text-#D1D5DB">
                   {t('register.lawOffice.agreeTerms')}
@@ -277,11 +398,69 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
                 <span className="text-sm text-#EF4444">*</span>
               </div>
             </Form.Item>
-            <Form.Item valuePropName="checked" name="agreementSecond" className="mb-0" rules={[{ required: true, message: t('register.lawOffice.agreeTermsError') }]}>
+            {/* 是否同意《资产上链合规声明》 */}
+            <Form.Item
+              valuePropName="checked"
+              name="agree_asset_compliance"
+              className="mb-1"
+              rules={[
+                {
+                  validator: (_, value) =>
+                    value
+                      ? Promise.resolve()
+                      : Promise.reject(new Error(t('register.lawOffice.agreeTermsError')))
+                }
+              ]}
+            >
               <div className="fyc">
                 <Checkbox className="text-sm text-#D1D5DB">{t('register.lawOffice.agreeNotarization')}</Checkbox>
                 <span className="text-sm text-#EF4444">*</span>
               </div>
+            </Form.Item>
+            {/* 反洗钱承诺 */}
+            <Form.Item
+              valuePropName="checked"
+              className="mb-1"
+              name="agree_aml_statement"
+              rules={[
+                {
+                  validator: (_, value) =>
+                    value
+                      ? Promise.resolve()
+                      : Promise.reject(new Error(t('register.asset.amlCommitmentPlaceholder')))
+                }
+              ]}
+            >
+              <Checkbox className="text-sm text-#D1D5DB">
+                {t('register.asset.agreeAML')}
+                <span className="text-#00E5FF">
+                  《
+                  {t('register.asset.amlCommitment')}
+                  》
+                </span>
+              </Checkbox>
+            </Form.Item>
+            {/* 平台注册服务协议 */}
+            <Form.Item
+              valuePropName="checked"
+              name="agree_service_terms"
+              rules={[
+                {
+                  validator: (_, value) =>
+                    value
+                      ? Promise.resolve()
+                      : Promise.reject(new Error(t('register.asset.pleaseAgreePlatformRegistrationServiceAgreement')))
+                }
+              ]}
+            >
+              <Checkbox className="text-sm text-#D1D5DB">
+                {t('register.asset.agreeAML')}
+                <span className="text-#00E5FF">
+                  《
+                  {t('register.asset.platformRegistrationServiceAgreement')}
+                  》
+                </span>
+              </Checkbox>
             </Form.Item>
           </div>
           <div className="mt-6 b b-#00FF844D rounded-2 b-solid bg-#00FF891A p-6">
@@ -297,7 +476,7 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
           </div>
           <Form.Item className="mt-32">
             <div className="text-end">
-              <Button type="primary" htmlType="submit" className="h-10.5 px-4 text-base text-black">
+              <Button loading={isRegistering} type="primary" htmlType="submit" className="h-10.5 px-4 text-base text-black">
                 {t('register.lawOffice.submit')}
               </Button>
             </div>
@@ -314,9 +493,10 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
           back()
         }}
         successButton={{
-          text: t('register.asset.enterAssetCenter'),
+          text: t('register.asset.enterLawyerTaskCenter'),
           onClick: () => {
             // TODO 跳转进入资产上传中心
+            navigate({ to: '/evaluation' })
           }
         }}
       />

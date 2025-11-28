@@ -1,6 +1,7 @@
 export const envConfig = {
   // API 配置
   apiUrl: import.meta.env.VITE_PUBLIC_API_URL,
+  imageApiUrl: import.meta.env.VITE_PUBLIC_IMAGE_API_URL,
 
   // Privy 配置
   privyAppId: import.meta.env.VITE_PUBLIC_PRIVY_APP_ID,

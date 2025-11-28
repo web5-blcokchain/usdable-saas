@@ -23,7 +23,8 @@
     },
     "confirm": "確認",
     "submitError": "提出に失敗しました",
-    "confirmOnChain": "ブロックチェーンに確認"
+    "confirmOnChain": "ブロックチェーンに確認",
+    "year": "ねんです"
   },
   "header": {
     "login": "ログイン",
@@ -692,7 +693,12 @@
       "complianceDeclarationPlaceholder": "資産のオンチェーンコンプライアンス声明を読み、同意してください",
       "amlCommitmentPlaceholder": "マネーロンダリング防止の誓約書を読み、同意してください",
       "creditCodePlaceholder": "統一社会信用コードを入力してください",
-      "legalPersonNamePlaceholder": "法定代表者の氏名を入力してください"
+      "legalPersonNamePlaceholder": "法定代表者の氏名を入力してください",
+      "idFrontAndBack": "身分証明書正反面上传",
+      "readAMLTerms": "全文を調べます。 ",
+      "amlTerms": "本契約は、評価機関(以下「甲」)とプラットフォーム運営者(以下「乙」)の間で締結されます。甲方は国家の関連法律法規を遵守し、真実で効果的な評価サービスを提供することを承諾します。乙は技術サポートとプラットフォームサービスを提供し、評価プロセスの公正性と透明性を保証します。",
+      "platformRegistrationServiceAgreement": "プラットフォーム登録サービス協定",
+      "pleaseAgreePlatformRegistrationServiceAgreement": "同意プラットフォーム登録サービス合意してください"
     },
     "evaluator": {
       "title": "評価機関登録",
@@ -800,7 +806,8 @@
       "enterAssetCenter": "資産アップロードセンターへ",
       "failed": "登録失敗",
       "retry": "再入力",
-      "appeal": "手動審査申し立て"
+      "appeal": "手動審査申し立て",
+      "pending": "登録成功、審査中"
     }
   },
   "nodeOperator": {
@@ -854,11 +861,11 @@
     "selectTimeRange": "時間範囲を選択してください",
     "selectCaseStatus": "案件状態を選択してください",
     "pendingInitialReview": "予備審査待ち案件",
-    "pendingOfflineConfirmation": "オフライン確認待ち案件",
+    "pendingOfflineConfirmation": "オフラインでの実行案件待ちです",
     "completedCases": "完了案件",
     "completedAuctionCases": "完了オークション案件",
     "auctionTasks": "オークション待機案件",
-    "pendingClaimInitialReview": "未認領案件（予備審査）",
+    "pendingClaimInitialReview": "認知待ち事件(初審の段階です)",
     "pendingClaimOfflineConfirmation": "未認領案件（オフライン確認）",
     "viewDetails": "詳細を表示",
     "pendingRightConfirmation": "権利確認待ち案件（オフライン確認段階）",
@@ -891,6 +898,7 @@
     "auctionPrice": "オークション成約価格",
     "allocating": "分配中",
     "allocationCompleted": "分配完了",
+    "offlineExecutionText": "オフラインで行う実行",
     "initialReview": {
       "back": "戻る",
       "fileReviewArea": "ファイル審査エリア",
@@ -1106,5 +1114,18 @@
     "copyright": "© 2023 RWA Chain. すべての権利を留保します。",
     "termsOfService": "利用規則",
     "cookiePolicy": "Cookieポリシー"
+  },
+  "login": {
+    "sign_in_with_wallet": "ウォレットで登録",
+    "sign_in_with_apple": "Apple アカウントでログイン",
+    "sign_in_with_google": "Google アカウントでログイン",
+    "login_with_email": "メールでログイン",
+    "login_title": "お帰りなさい！",
+    "login_content": "デジタル資産の旅を始めましょう",
+    "register_message": "先にidを選択して登録します",
+    "login_message": "登録をお願いします"
+  },
+  "privy": {
+    "login_header": "ログインまたは登録"
   }
 }

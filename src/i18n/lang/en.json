@@ -23,7 +23,9 @@
     },
     "confirm": "Confirm",
     "submitError": "Submission failed",
-    "confirmOnChain": "Confirm On Chain"
+    "confirmOnChain": "Confirm On Chain",
+    "year": "Year"
+
   },
   "header": {
     "login": "Login",
@@ -692,7 +694,12 @@
       "complianceDeclarationPlaceholder": "Please read and agree to the Asset On-Chain Compliance Declaration",
       "amlCommitmentPlaceholder": "Please read and agree to the Anti-Money Laundering Commitment",
       "creditCodePlaceholder": "Please enter the unified social credit code",
-      "legalPersonNamePlaceholder": "Please enter the legal representative’s name"
+      "legalPersonNamePlaceholder": "Please enter the legal representative’s name",
+      "idFrontAndBack": "ID Front and Back",
+      "readAMLTerms": "Read",
+      "amlTerms": "This agreement is jointly signed by the evaluation institution (hereinafter referred to as \"Party A\") and the platform operator (hereinafter referred to as \"Party B\")... Party A undertakes to comply with relevant national laws and regulations and provide true and effective evaluation services... Party B is responsible for providing technical support and platform services to ensure the fairness and transparency of the evaluation process...",
+      "platformRegistrationServiceAgreement": "Platform Registration Service Agreement",
+      "pleaseAgreePlatformRegistrationServiceAgreement": "Please agree to the Platform Registration Service Agreement"
     },
     "evaluator": {
       "title": "Evaluator Institution Registration",
@@ -800,7 +807,8 @@
       "enterAssetCenter": "Enter Asset Upload Center",
       "failed": "Registration Failed",
       "retry": "Retry",
-      "appeal": "Manual Review Appeal"
+      "appeal": "Manual Review Appeal",
+      "pending": "Your registration is successful, waiting for backend review"
     }
   },
   "nodeOperator": {
@@ -854,11 +862,11 @@
     "selectTimeRange": "Please select time range",
     "selectCaseStatus": "Please select case status",
     "pendingInitialReview": "Pending Initial Review Cases",
-    "pendingOfflineConfirmation": "Pending Offline Confirmation Cases",
+    "pendingOfflineConfirmation": "Cases awaiting offline enforcement",
     "completedCases": "Completed Cases",
     "completedAuctionCases": "Completed Auction Cases",
     "auctionTasks": "Pending Auction Cases",
-    "pendingClaimInitialReview": "Pending Claim Cases (Initial Review)",
+    "pendingClaimInitialReview": "Pending claim cases (Preliminary Review Stage)",
     "pendingClaimOfflineConfirmation": "Pending Claim Cases (Offline Confirmation)",
     "viewDetails": "View Details",
     "pendingRightConfirmation": "Pending Right Confirmation Cases (Offline Confirmation Stage)",
@@ -891,6 +899,7 @@
     "auctionPrice": "Auction Price",
     "allocating": "Allocating",
     "allocationCompleted": "Allocation Completed",
+    "offlineExecutionText": "Offline Execution",
     "initialReview": {
       "back": "Back",
       "fileReviewArea": "File Review Area",
@@ -1105,5 +1114,18 @@
     "copyright": "© 2023 RWA Chain. All rights reserved.",
     "termsOfService": "Terms of Service",
     "cookiePolicy": "Cookie Policy"
+  },
+  "login": {
+    "sign_in_with_wallet": "Sign up with Wallet",
+    "sign_in_with_apple": "Sign in with Apple",
+    "sign_in_with_google": "Sign in with Google",
+    "login_with_email": "Log in with Email",
+    "login_title": "Glad to Have You Back!",
+    "login_content": "Start Your Digital Asset Journey",
+    "register_message": "Please select your identity to register",
+    "login_message": "Please login first"
+  },
+  "privy": {
+    "login_header": "Login or Register"
   }
 }

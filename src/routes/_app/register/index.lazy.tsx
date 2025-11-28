@@ -1,8 +1,10 @@
 import balanceIcon from '@/assets/images/balance.png'
 import componyIcon from '@/assets/images/compony.png'
 import homeIcon from '@/assets/images/home.png'
+import { useUserStore } from '@/stores/user'
 import { screenToTop } from '@/utils'
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { usePrivy } from '@privy-io/react-auth'
+import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
 import { ConfigProvider } from 'antd'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
@@ -10,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { AsseteRgister } from './-components/asseteRgister'
 import { EvaluatorRegister } from './-components/evaluatorRegister'
 import { LawOfficeRegister } from './-components/lawOfficeRegister'
+import { RegisterStatus } from './-components/registerStatus'
 import './index.lazy.scss'
 
 export const Route = createLazyFileRoute('/_app/register/')({
@@ -33,6 +36,10 @@ function AnimationComponent({ animKey, children, className }: { animKey: string,
 
 function RouteComponent() {
   const { t, i18n } = useTranslation()
+  const { userData } = useUserStore()
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [registerStatus, setRegisterStatus] = useState(0)
+  const [errorMessage, setErrorMessage] = useState('Error')
 
   const selectType = [
     {
@@ -59,13 +66,100 @@ function RouteComponent() {
   ]
 
   const [selectStatus, setSelectStatus] = useState(0)
+  const navigate = useNavigate()
+
+  const { authenticated } = usePrivy()
+
+  // 切换注册页面，未登录显示提示
+  function changeSelectStatus(index: number) {
+    setSelectStatus(index)
+  }
+
+  // 监听认证状态变化，如果未登录则返回表单首页
+  useEffect(() => {
+    if (!authenticated) {
+      setSelectStatus(0)
+    }
+  }, [authenticated])
+
+  // 监听用户数据变化，如果用户未审核通过，则返回表单首页，并显示弹窗
+  const [lastDialog, setLastDialog] = useState(0)
+  const [dialogButton, setDialogButton] = useState({
+    text: '',
+    onClick: () => { }
+  })
+
+  useEffect(() => {
+    if (userData && userData?.user?.audit_status === 2) {
+      setSelectStatus(0)
+      // 弹出间隔不能少于5s
+      if (Date.now() - lastDialog > 5000) {
+        setIsSuccess(true)
+      }
+      setRegisterStatus(2)
+      setLastDialog(Date.now())
+      setErrorMessage(userData.user?.review_remark)
+    }
+    else if (userData && userData?.user?.audit_status === 1) {
+      if (Date.now() - lastDialog > 5000) {
+        setIsSuccess(true)
+      }
+
+      // 根据用户类型设置按钮文本和点击事件
+      let buttonConfig
+      switch (userData.user?.type) {
+        case 3:
+          buttonConfig = {
+            text: t('register.asset.enterAssetCenter'),
+            onClick: () => {
+              navigate({ to: '/assete' })
+            }
+          }
+          break
+        case 4:
+          buttonConfig = {
+            text: t('register.asset.enterEvaluationTaskCenter'),
+            onClick: () => {
+              navigate({ to: '/evaluation' })
+            }
+          }
+          break
+        default:
+          buttonConfig = {
+            text: t('register.asset.enterLawyerTaskCenter'),
+            onClick: () => {
+              navigate({ to: '/lawyerWorkbench' })
+            }
+          }
+      }
+
+      setDialogButton(buttonConfig)
+      setRegisterStatus(1)
+      setLastDialog(Date.now())
+      setErrorMessage(userData.user?.review_remark)
+    }
+  }, [userData, t, navigate])
 
   useEffect(() => {
     screenToTop()
   }, [selectStatus])
 
+  let lastStatus = 0
   const selectComponent = useMemo(() => {
-    switch (selectStatus) {
+    let status = selectStatus
+    // 如果未登录则返回表单首页
+    if ((!authenticated || !userData?.user?.id) && selectStatus > 0 && lastStatus !== status) {
+      toast.error(t('login.pleaseLogin'))
+      setSelectStatus(0)
+      status = 0
+    }
+    else if (userData?.user?.audit_status === 1 && selectStatus > 0 && lastStatus !== status) {
+      toast.info(t('login.userRegistered'))
+      setSelectStatus(0)
+      status = 0
+    }
+    lastStatus = selectStatus
+    switch (status) {
       case 0:
         return (
           <AnimationComponent className="mt-41 fcc px-66 max-md:mt-3 max-md:px-4 max-xl:px-12% max-md:pb-30" animKey="frist">
@@ -75,7 +169,7 @@ function RouteComponent() {
               <div className="grid grid-cols-3 mt-10 gap-6 max-md:grid-cols-1">
                 {
                   selectType.map((item, index) => (
-                    <div key={item.title} onClick={() => setSelectStatus(index + 1)} className="flex flex-col border-1 b-#30363D rounded-3 b-solid p-6 clickable">
+                    <div key={item.title} onClick={() => { changeSelectStatus(index + 1) }} className="flex flex-col border-1 b-#30363D rounded-3 b-solid p-6 clickable">
                       <div className="flex-1">
                         <div className="size-14 fcc rounded-2 bg-#161B22">
                           <img src={item.icon} className="h-8" alt="" />
@@ -111,7 +205,7 @@ function RouteComponent() {
         )
     }
   }, [selectStatus, i18n.language])
-
+  // TODO 失败或审核弹窗
   return (
     <div>
       <ConfigProvider
@@ -131,7 +225,16 @@ function RouteComponent() {
           }
         </AnimatePresence>
       </ConfigProvider>
-
+      <RegisterStatus
+        visible={isSuccess}
+        setVisible={setIsSuccess}
+        type={registerStatus}
+        errorMessage={errorMessage}
+        back={() => {
+          setIsSuccess(false)
+        }}
+        successButton={dialogButton}
+      />
     </div>
   )
 }

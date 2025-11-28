@@ -1,7 +1,8 @@
 export interface ResponseData<T> {
   code: number
-  message: string
+  msg: string
   data: T
+  time: number
 }
 export interface DataListResponse<T> {
   count: number
@@ -11,6 +12,6 @@ export interface DataListResponse<T> {
 }
 export interface ResponseListData<T> {
   code: number
-  message: string
+  msg: string
   data: DataListResponse<T>
 }

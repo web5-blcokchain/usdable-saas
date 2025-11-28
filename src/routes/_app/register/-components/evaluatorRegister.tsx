@@ -1,15 +1,23 @@
-import type { FormInstance, RuleObject } from 'antd/es/form'
+import type { UserRegisterModel } from '@/api/apiMyInfoApi'
+import type { FormInstance } from 'antd/es/form'
+import apiMyInfoApi from '@/api/apiMyInfoApi'
+import { getLocation, uploadFile } from '@/api/common'
 import componyIcon from '@/assets/images/compony.png'
 import componyIcom from '@/assets/images/register/compony-grey.png'
 import fileIcon from '@/assets/images/register/file.png'
 import userCardIcon from '@/assets/images/register/userCard.png'
-import signTextIcom from '@/assets/images/register/userSign-text.png'
 import signIcom from '@/assets/images/register/userSign.png'
+import UploadMultifileCard from '@/components/common/upload/uploa-multifile-card'
+import { useUserStore } from '@/stores/user'
 import { screenToTop } from '@/utils'
+import { envConfig } from '@/utils/envConfig'
+import { getToken } from '@/utils/user'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useNavigate } from '@tanstack/react-router'
 import { Button, Checkbox, DatePicker, Form, Input, Select } from 'antd'
+import { useWatch } from 'antd/es/form/Form'
 import FormItem from 'antd/es/form/FormItem'
 import { AnimatePresence, motion } from 'framer-motion'
-import UploadMultifileCard from '@/components/common/upload/uploa-multifile-card'
 import { RegisterStatus } from './registerStatus'
 
 function AnimationComponent({ animKey, children, className }: { animKey: string, children: React.ReactNode, className?: string }) {
@@ -31,16 +39,72 @@ function AnimationComponent({ animKey, children, className }: { animKey: string,
 export function EvaluatorRegister({ back }: { back: () => void }) {
   const [firstForm] = Form.useForm()
   const [secondForm] = Form.useForm()
-  const [step, setStep] = useState(0)
+  const [step, setStep] = useState(0) // 显示第几个表单
   const [isSuccess, setIsSuccess] = useState(false)
-  const [registerStatus, setRegisterStatus] = useState(1)
+  const [registerStatus, setRegisterStatus] = useState(0)
   const [errorMessage, setErrorMessage] = useState('机构资质审核失败')
+  const { userData } = useUserStore()
+  const navigate = useNavigate()
+  const { t } = useTranslation()
 
-  const onFinish = (values: any) => {
-    console.log('✅ 表单通过验证:', values)
-    setIsSuccess(true)
-    setRegisterStatus(1)
-    setErrorMessage('')
+  const { mutateAsync: userResgiter } = useMutation({
+    mutationKey: ['userRegitser'],
+    mutationFn: async (values: UserRegisterModel) => {
+      return userData?.user?.audit_status !== 2 ? apiMyInfoApi.regitser(values) : apiMyInfoApi.resubmitRegister(values)
+    }
+  })
+
+  /**
+   * 表单提交
+   * @param values
+   */
+  const onFinish = async (values: any) => {
+    await userResgiter({
+      ...values,
+      type: '4',
+      token: getToken() || '',
+      agree_asset_compliance: '1'
+    }).then((res) => {
+      if (res.code === 1) {
+        setIsSuccess(true)
+        setRegisterStatus(0)
+        setErrorMessage('')
+      }
+    })
+  }
+
+  const [sumbitData, setSumbitData] = useState<UserRegisterModel>({})
+
+  const formStep = async (step: number, values: any) => {
+    switch (step) {
+      case 0: {
+        // 处理表单数据
+        const data = {
+          ...values,
+          year: values.year.$y
+        }
+        setSumbitData(data)
+        // 跳转到第二步,并滚动到顶部
+        setStep(1)
+        screenToTop({
+          top: 0,
+          behavior: 'smooth'
+        })
+      } break
+      case 1: {
+        const data = {
+          ...values,
+          agree_aml_statement: values.agree_aml_statement ? 1 : 0,
+          service_agreement_status: values.service_agreement_status ? 1 : 0
+        }
+        await onFinish({
+          ...sumbitData,
+          ...data
+        })
+      } break
+      default:
+        return null
+    }
   }
 
   useEffect(() => {
@@ -53,23 +117,26 @@ export function EvaluatorRegister({ back }: { back: () => void }) {
     <div className="mt-6 fccc px-66 pb-53 max-md:px-4">
 
       <AnimatePresence mode="wait">
-        {step === 0 && (
-          <AnimationComponent animKey="firstStep" className="w-full">
-            <FirstStep
-              form={firstForm}
-              back={back}
-              onFinish={() => {
-                setStep(1)
-                screenToTop()
-              }}
-            />
-          </AnimationComponent>
-        )}
-        {step === 1 && (
-          <AnimationComponent animKey="secondStep" className="w-full">
-            <SecondStep form={secondForm} back={() => setStep(0)} onFinish={onFinish} />
-          </AnimationComponent>
-        )}
+        <AnimationComponent animKey="firstStep" className="w-full">
+          <FirstStep
+            className={step === 0 ? 'block' : 'hidden'}
+            form={firstForm}
+            back={back}
+            onFinish={(value) => {
+              formStep(0, value)
+            }}
+          />
+        </AnimationComponent>
+        <AnimationComponent animKey="secondStep" className="w-full">
+          <SecondStep
+            className={step === 1 ? 'block' : 'hidden'}
+            form={secondForm}
+            back={() => setStep(0)}
+            onFinish={async (value) => {
+              await formStep(1, value)
+            }}
+          />
+        </AnimationComponent>
       </AnimatePresence>
       <RegisterStatus
         visible={isSuccess}
@@ -81,9 +148,10 @@ export function EvaluatorRegister({ back }: { back: () => void }) {
           back()
         }}
         successButton={{
-          text: '进入资产上传中心',
+          text: t('register.asset.enterEvaluationTaskCenter'),
           onClick: () => {
             // TODO 跳转进入资产上传中心
+            navigate({ to: '/evaluation' })
           }
         }}
       />
@@ -92,41 +160,118 @@ export function EvaluatorRegister({ back }: { back: () => void }) {
 }
 
 // 第一个表单
-function FirstStep({ form, back, onFinish }: { form: FormInstance<any>, back: () => void, onFinish: (values?: any) => void }) {
-  const { t } = useTranslation()
-  const subjectTypeList = [
-    {
-      value: '1',
-      label: '主体类型1'
+function FirstStep({ form, back, onFinish, className }: {
+  form: FormInstance<any>
+  back: () => void
+  onFinish: (values?: any) => void
+  className?: string
+}) {
+  const { t, i18n } = useTranslation()
+
+  interface LocationData {
+    value: number
+    label: string
+  }
+  // 地区数据
+  const [locationData, setLocationData] = useState({
+    country: [] as LocationData[],
+    province: [] as LocationData[],
+    city: [] as LocationData[]
+  })
+  const [selectPid, setSelectPid] = useState({
+    country: 0,
+    province: 0,
+    selectedLocation: 0
+  })
+
+  // 获取地区数据
+  const { isFetching: locationDataLoading } = useQuery({
+    queryKey: ['getLocation', selectPid],
+    queryFn: async () => {
+      const data = await getLocation({
+        level: selectPid.selectedLocation + 2,
+        parent_id: selectPid.selectedLocation === 1
+          ? selectPid.country
+          : (
+              selectPid.selectedLocation === 2 ? selectPid.province : undefined
+            )
+      })
+      // 处理数据,
+      const newData = data?.data?.map(item => ({
+        value: item.id,
+        label: item.name
+      })) || [] as LocationData[]
+      console.log(newData)
+
+      setLocationData((pre) => {
+        if (selectPid.selectedLocation === 0) {
+          return {
+            ...pre,
+            country: newData
+          }
+        }
+        else if (selectPid.selectedLocation === 1) {
+          return {
+            ...pre,
+            province: newData
+          }
+        }
+        else {
+          return {
+            ...pre,
+            city: newData
+          }
+        }
+      })
+      return data.data
+    }
+  })
+  // 修改地区
+  const changeCity = (val: number, index: number) => {
+    if (index === 0) {
+      setSelectPid(pre => ({
+        ...pre,
+        country: val,
+        selectedLocation: 1
+      }))
+      form.setFieldValue('province', '')
+      form.setFieldValue('city', '')
+    }
+    else if (index === 1) {
+      setSelectPid(pre => ({
+        ...pre,
+        province: val,
+        selectedLocation: 2
+      }))
+      form.setFieldValue('city', '')
+    }
+  }
+
+  // 获取主体类型
+  const { data: entityTypeList, isLoading: entityTypeListLoading } = useQuery({
+    queryKey: ['getEntityType'],
+    queryFn: async () => {
+      const data = await apiMyInfoApi.getEntityType()
+      return data.data
     },
-    {
-      value: '2',
-      label: '主体类型2'
+    select: (data) => {
+      return data?.map(item => ({
+        value: item.id,
+        label: (
+          <div>
+            {i18n.language === 'en'
+              ? item.name_en
+              : (
+                  i18n.language === 'zh' ? item.name_zh_cn : item.name_ja
+                )}
+          </div>
+        )
+      }))
     }
-  ]
+  })
 
-  const changeCity = (val: string, index: number) => {
-    const city = (form.getFieldValue('city') as string || ',,').split(',')
-    city[index] = val
-    form.setFieldValue('city', city.join(','))
-  }
-
-  const cityRule = (_rule: RuleObject, value: string) => {
-    const city = value?.split(',') || []
-
-    if (!city[0]) {
-      return Promise.reject(t('register.evaluator.selectCountryPlaceholder'))
-    }
-    if (!city[1]) {
-      return Promise.reject(t('register.evaluator.selectProvincePlaceholder'))
-    }
-    if (!city[2]) {
-      return Promise.reject(t('register.evaluator.selectCityPlaceholder'))
-    }
-    return Promise.resolve()
-  }
   return (
-    <div>
+    <div className={className}>
       <div className="w-full">
         <div onClick={back} className="w-fit fcc gap-1 clickable">
           <div className="i-ic:round-arrow-back text-6 text-white"></div>
@@ -141,55 +286,62 @@ function FirstStep({ form, back, onFinish }: { form: FormInstance<any>, back: ()
         </div>
         <Form onFinish={onFinish} form={form} layout="vertical" className="">
           <div className="grid grid-cols-2 gap-6 max-md:grid-cols-1 max-md:gap-0">
+            {/* 机构名称 */}
             <Form.Item
               required
               label={t('register.evaluator.companyName')}
-              name="componyName"
+              name="nickname"
               rules={[{ required: true, message: t('register.evaluator.companyName') }]}
             >
               <Input placeholder={t('register.evaluator.businessLicenseMatch')} />
             </Form.Item>
+            {/* 主体类型 */}
             <Form.Item
               required
               label={t('register.evaluator.entityType')}
-              name="type"
+              name="entity_type_id"
               rules={[{ required: true, message: t('register.evaluator.selectEntityTypepPlaceholder') }]}
             >
               <Select
                 placeholder={t('register.evaluator.selectEntityTypepPlaceholder')}
-                options={subjectTypeList}
+                options={entityTypeList}
+                loading={entityTypeListLoading}
               />
             </Form.Item>
+            {/* 统一社会信用代码 */}
             <Form.Item
               required
               label={t('register.asset.creditCode')}
-              name="creditCode"
+              name="uscc"
               rules={[{ required: true, message: t('register.asset.creditCodePlaceholder') }]}
             >
               <Input
                 placeholder={t('register.asset.creditCodePlaceholder')}
               />
             </Form.Item>
+            {/* 联系人姓名 */}
             <Form.Item
               required
               label={t('register.evaluator.contactName')}
-              name="contactName"
+              name="contact_name"
               rules={[{ required: true, message: t('register.evaluator.enterContactNamePlaceholder') }]}
             >
               <Input
                 placeholder={t('register.evaluator.enterContactNamePlaceholder')}
               />
             </Form.Item>
+            {/* 联系人电话 */}
             <Form.Item
               required
               label={t('register.asset.phone')}
-              name="phone"
+              name="mobile"
               rules={[{ required: true, message: t('register.asset.phonePlaceholder') }]}
             >
               <Input
                 placeholder={t('register.asset.phonePlaceholder')}
               />
             </Form.Item>
+            {/* 联系人邮箱 */}
             <Form.Item
               required
               label={t('register.evaluator.email')}
@@ -204,45 +356,63 @@ function FirstStep({ form, back, onFinish }: { form: FormInstance<any>, back: ()
               />
             </Form.Item>
           </div>
+          {/* 国家/省份/城市 */}
           <Form.Item
             required
             label={t('register.evaluator.country')}
             name="country"
-            rules={[
-              { validator: cityRule }
-            ]}
           >
             <div className="grid grid-cols-3 gap-3">
-              <Select
-                placeholder={t('register.evaluator.country')}
-                onChange={val => changeCity(val, 0)}
-                options={subjectTypeList}
-              />
-              <Select
-                placeholder={t('register.evaluator.province')}
-                onChange={val => changeCity(val, 1)}
-                options={subjectTypeList}
-              />
-              <Select
-                placeholder={t('register.evaluator.city')}
-                onChange={val => changeCity(val, 2)}
-                options={subjectTypeList}
-              />
+              <Form.Item
+                name="country"
+                rules={[{ required: true, message: t('register.evaluator.selectCountryPlaceholder') }]}
+              >
+                <Select
+                  placeholder={t('register.evaluator.country')}
+                  loading={locationDataLoading && selectPid.selectedLocation === 0}
+                  onChange={val => changeCity(val, 0)}
+                  options={locationData.country}
+                />
+              </Form.Item>
+              <Form.Item
+                name="province"
+                rules={[{ required: true, message: t('register.evaluator.selectProvincePlaceholder') }]}
+              >
+                <Select
+                  placeholder={t('register.evaluator.province')}
+                  loading={locationDataLoading && selectPid.selectedLocation === 1}
+                  onChange={val => changeCity(val, 1)}
+                  options={locationData.province}
+                />
+              </Form.Item>
+              <Form.Item
+                name="city"
+                rules={[{ required: true, message: t('register.evaluator.selectCityPlaceholder') }]}
+              >
+                <Select
+                  placeholder={t('register.evaluator.city')}
+                  loading={locationDataLoading && selectPid.selectedLocation === 2}
+                  onChange={val => changeCity(val, 2)}
+                  options={locationData.city}
+                />
+              </Form.Item>
             </div>
           </Form.Item>
+          {/* 办公地址 */}
           <Form.Item label={t('register.evaluator.address')} name="address">
             <Input
               placeholder={t('register.evaluator.enterAddressPlaceholder')}
             />
           </Form.Item>
           <div className="grid grid-cols-2 gap-6">
+            {/* 成立年份 */}
             <Form.Item
               required
               label={t('register.evaluator.establishmentYear')}
-              name="date"
+              name="year"
               rules={[{ required: true, message: t('register.evaluator.selectEstablishmentYearPlaceholder') }]}
             >
-              <DatePicker placeholder={t('register.evaluator.selectEstablishmentYearPlaceholder')} className="h-12.5 w-full b-#374151 bg-#1E2328 [&>div>input]:!bg-transparent" />
+              <DatePicker picker="year" placeholder={t('register.evaluator.selectEstablishmentYearPlaceholder')} className="h-12.5 w-full b-#374151 bg-#1E2328 [&>div>input]:!bg-transparent" />
             </Form.Item>
           </div>
           <Form.Item>
@@ -259,9 +429,48 @@ function FirstStep({ form, back, onFinish }: { form: FormInstance<any>, back: ()
 }
 
 // 第二个表单
-export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, back: () => void, onFinish: (values: any) => void }) {
+export function SecondStep({ form, back, onFinish, className }: {
+  form: FormInstance<any>
+  back: () => void
+  onFinish: (values: any) => Promise<void>
+  className?: string
+}) {
   const { t } = useTranslation()
   const [errorFormItem, setErrorFormItem] = useState<string[]>([])
+  const officePhotos = useWatch('officePhotos', form)
+  const antiMoneyLaunderingStatement = useWatch('anti_money_laundering_statement', form)
+  const evaluationQualificationCertificate = useWatch('evaluation_qualification_certificate', form)
+  const chiefAppraiserCertificate = useWatch('chief_appraiser_certificate', form)
+  const businessLicense = useWatch('business_license', form)
+
+  const { mutateAsync: uploadIdCardFileMutate } = useMutation({
+    mutationKey: ['uploadFile'],
+    mutationFn: async (data: { file: File }) => {
+      const formData = new FormData()
+      formData.append('file', data.file)
+      return uploadFile(formData)
+    }
+  })
+  const [uploadFileLoading, setUploadFileLoading] = useState([] as number[])
+
+  // 文件上传
+  async function uploadIdCardFile(data: File, name: string, index: number) {
+    setUploadFileLoading(prev => [...prev, index])
+    await uploadIdCardFileMutate({ file: data }).then((res) => {
+      if (res.code === 1) {
+        form.setFieldValue(name, res.data?.file.full_url)
+      }
+    }).finally(() => {
+      setUploadFileLoading(prev => prev.filter(item => item !== index))
+    })
+  }
+
+  // 判断是否为图片
+  const fileIsUrl = (url: string) => {
+    return url && url.includes(envConfig.imageApiUrl)
+  }
+
+  // 验证表单失败列表
   const onFinishFailed = (errorInfo: any) => {
     let errorList = [] as string[];
     (errorInfo.errorFields as any[]).forEach((res: any) => {
@@ -271,8 +480,16 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
     console.log('❌ 验证失败:', errorInfo, errorList)
   }
 
+  const [sumbitLoading, setSumbitLoading] = useState(false)
+  async function sumbitForm(values: any) {
+    setSumbitLoading(true)
+    await onFinish(values).finally(() => {
+      setSumbitLoading(false)
+    })
+  }
+
   return (
-    <div>
+    <div className={className}>
       <div className="w-full">
         <div onClick={back} className="w-fit fcc gap-1 clickable">
           <div className="i-ic:round-arrow-back text-6 text-white"></div>
@@ -283,8 +500,9 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
         <div className="mb-6 fyc gap-3">
           <div className="text-lg font-600">{t('register.evaluator.uploadCredentials')}</div>
         </div>
-        <Form form={form} onFinish={onFinish} onFinishFailed={onFinishFailed}>
-          <FormItem name="businessLicense" rules={[{ required: true, message: <div>{t('register.evaluator.uploadBusinessLicense')}</div> }]}>
+        <Form form={form} onFinish={sumbitForm} onFinishFailed={onFinishFailed}>
+          {/* 机构营业执照 */}
+          <FormItem name="business_license" rules={[{ required: true, message: <div>{t('register.evaluator.uploadBusinessLicense')}</div> }]}>
             <div className="upload-card">
               <div>
                 <span className="mr-1 text-4 text-white font-bold">{t('register.evaluator.businessLicense')}</span>
@@ -296,19 +514,19 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
               <UploadMultifileCard
                 className={cn(
                   'flex gap-3 [&>div>div>div>div]:b-2',
-                  `${(errorFormItem.includes('businessLicense')) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
+                  `${(errorFormItem.includes('business_license')) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
                 )}
                 fileType="image/png,image/jpg,application/pdf"
-                fileUrl={[]}
+                fileUrl={fileIsUrl(businessLicense) ? [businessLicense] : []}
                 maxLength={1}
                 width="100%"
                 height="auto"
-                // loading={uploadFileLoading}
+                loading={uploadFileLoading.includes(0)}
                 removeFile={(_index) => {
-                  // setFileUrl(fileUrl.filter((_, i) => i !== index))
+                  form.setFieldValue(`business_license`, '')
                 }}
-                beforeUpload={(_file) => {
-                  // beforeUpload(file)
+                beforeUpload={(file) => {
+                  uploadIdCardFile(file, `business_license`, 0)
                 }}
               >
                 <div className="py-3">
@@ -321,7 +539,8 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
               </UploadMultifileCard>
             </div>
           </FormItem>
-          <FormItem name="certificate1" rules={[{ required: true, message: t('register.evaluator.uploadChiefAppraiserCert') }]}>
+          {/* 主评估师资格证书 */}
+          <FormItem name="chief_appraiser_certificate" rules={[{ required: true, message: t('register.evaluator.uploadChiefAppraiserCert') }]}>
             <div className="upload-card">
               <div>
                 <span className="mr-1 text-4 text-white font-bold">{t('register.evaluator.chiefAppraiserCert')}</span>
@@ -333,19 +552,19 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
               <UploadMultifileCard
                 className={cn(
                   'flex gap-3 [&>div>div>div>div]:b-2',
-                  `${(errorFormItem.includes('certificate1')) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
+                  `${(errorFormItem.includes('chief_appraiser_certificate')) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
                 )}
                 fileType="image/png,image/jpg,application/pdf"
-                fileUrl={[]}
+                fileUrl={fileIsUrl(chiefAppraiserCertificate) ? [chiefAppraiserCertificate] : []}
                 maxLength={1}
                 width="100%"
                 height="auto"
-                // loading={uploadFileLoading}
+                loading={uploadFileLoading.includes(1)}
                 removeFile={(_index) => {
-                  // setFileUrl(fileUrl.filter((_, i) => i !== index))
+                  form.setFieldValue(`chief_appraiser_certificate`, '')
                 }}
-                beforeUpload={(_file) => {
-                  // beforeUpload(file)
+                beforeUpload={(file) => {
+                  uploadIdCardFile(file, `chief_appraiser_certificate`, 1)
                 }}
               >
                 <div className="py-3">
@@ -358,7 +577,8 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
               </UploadMultifileCard>
             </div>
           </FormItem>
-          <FormItem name="certificate2" rules={[{ required: true, message: t('register.evaluator.uploadAppraisalCert') }]}>
+          {/* 评估资质证书 */}
+          <FormItem name="evaluation_qualification_certificate" rules={[{ required: true, message: t('register.evaluator.uploadAppraisalCert') }]}>
             <div className="upload-card">
               <div>
                 <span className="mr-1 text-4 text-white font-bold">{t('register.evaluator.appraisalCert')}</span>
@@ -370,19 +590,19 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
               <UploadMultifileCard
                 className={cn(
                   'flex gap-3 [&>div>div>div>div]:b-2',
-                  `${(errorFormItem.includes('certificate2')) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
+                  `${(errorFormItem.includes('evaluation_qualification_certificate')) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
                 )}
                 fileType="image/png,image/jpg,application/pdf"
-                fileUrl={[]}
+                fileUrl={fileIsUrl(evaluationQualificationCertificate) ? [evaluationQualificationCertificate] : []}
                 maxLength={1}
                 width="100%"
                 height="auto"
-                // loading={uploadFileLoading}
+                loading={uploadFileLoading.includes(2)}
                 removeFile={(_index) => {
-                  // setFileUrl(fileUrl.filter((_, i) => i !== index))
+                  form.setFieldValue(`evaluation_qualification_certificate`, '')
                 }}
-                beforeUpload={(_file) => {
-                  // beforeUpload(file)
+                beforeUpload={(file) => {
+                  uploadIdCardFile(file, `evaluation_qualification_certificate`, 2)
                 }}
               >
                 <div className="py-3">
@@ -395,6 +615,7 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
               </UploadMultifileCard>
             </div>
           </FormItem>
+          {/* 反洗钱声明 */}
           <div className="upload-card mb-6">
             <div>
               <span className="mr-1 text-4 text-white font-bold">{t('register.evaluator.amlStatement')}</span>
@@ -403,8 +624,21 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
             <div className="mb-4 mt-1 text-sm text-#6B7280">
               {t('register.evaluator.amlStatement')}
             </div>
-            <Form.Item valuePropName="checked" name="agreement" className="mb-1" rules={[{ required: true, message: t('register.evaluator.readAMLTerms') }]}>
-              <Checkbox className="text-sm text-#D1D5DB">
+
+            <Form.Item
+              valuePropName="checked"
+              name="agree_aml_statement"
+              className="mb-1"
+              rules={[
+                {
+                  validator: (_, value) =>
+                    value
+                      ? Promise.resolve()
+                      : Promise.reject(new Error(t('register.evaluator.readAMLTerms')))
+                }
+              ]}
+            >
+              <Checkbox defaultChecked={form.getFieldValue(`agree_asset_compliance`)} className="text-sm text-#D1D5DB">
                 {t('register.evaluator.agreeAMLTerms')}
                 {' '}
                 <span className="text-#00E5FF">
@@ -415,23 +649,23 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
                 {t('register.evaluator.followLaws')}
               </Checkbox>
             </Form.Item>
-            <FormItem name="declaration" rules={[{ required: true, message: t('register.evaluator.uploadAMLStatement') }]}>
+            <FormItem name="anti_money_laundering_statement" rules={[{ required: true, message: t('register.evaluator.uploadAMLStatement') }]}>
               <UploadMultifileCard
                 className={cn(
                   'flex gap-3 [&>div>div>div>div]:b-2',
-                  `${(errorFormItem.includes('declaration')) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
+                  `${(errorFormItem.includes('anti_money_laundering_statement')) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
                 )}
                 fileType="image/png,image/jpg,application/pdf"
-                fileUrl={[]}
+                fileUrl={fileIsUrl(antiMoneyLaunderingStatement) ? [antiMoneyLaunderingStatement] : []}
                 maxLength={1}
                 width="100%"
                 height="auto"
-                // loading={uploadFileLoading}
+                loading={uploadFileLoading.includes(3)}
                 removeFile={(_index) => {
-                  // setFileUrl(fileUrl.filter((_, i) => i !== index))
+                  form.setFieldValue(`anti_money_laundering_statement`, '')
                 }}
-                beforeUpload={(_file) => {
-                  // beforeUpload(file)
+                beforeUpload={(file) => {
+                  uploadIdCardFile(file, `anti_money_laundering_statement`, 3)
                 }}
               >
                 <div className="py-3">
@@ -443,7 +677,8 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
               </UploadMultifileCard>
             </FormItem>
           </div>
-          <FormItem name="userSign" rules={[{ required: true, message: t('register.evaluator.signServiceAgreement') }]}>
+          {/* 服务协议签署 */}
+          {/* <FormItem name="office_photo" rules={[{ required: true, message: t('register.evaluator.signServiceAgreement') }]}>
             <div className="upload-card">
               <div>
                 <span className="text-4 text-white font-bold">
@@ -464,7 +699,8 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
                 <span>{t('register.evaluator.onlineSign')}</span>
               </Button>
             </div>
-          </FormItem>
+          </FormItem> */}
+          {/* 办公室照片 */}
           <FormItem name="officePhotos">
             <div className="upload-card">
               <div>
@@ -479,16 +715,16 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
                   `${(errorFormItem.includes('officePhotos')) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
                 )}
                 fileType="image/png,image/jpg,application/pdf"
-                fileUrl={[]}
+                fileUrl={fileIsUrl(officePhotos) ? [officePhotos] : []}
                 maxLength={1}
                 width="100%"
                 height="auto"
-                // loading={uploadFileLoading}
+                loading={uploadFileLoading.includes(4)}
                 removeFile={(_index) => {
-                  // setFileUrl(fileUrl.filter((_, i) => i !== index))
+                  form.setFieldValue(`officePhotos`, '')
                 }}
-                beforeUpload={(_file) => {
-                  // beforeUpload(file)
+                beforeUpload={(file) => {
+                  uploadIdCardFile(file, `officePhotos`, 4)
                 }}
               >
                 <div className="py-3">
@@ -500,9 +736,60 @@ export function SecondStep({ form, back, onFinish }: { form: FormInstance<any>, 
               </UploadMultifileCard>
             </div>
           </FormItem>
+          <Form.Item
+            className="mb-2"
+            valuePropName="checked"
+            name="service_agreement_status"
+            rules={[
+              {
+                validator: (_, value) =>
+                  value
+                    ? Promise.resolve()
+                    : Promise.reject(new Error(t('register.asset.amlCommitmentPlaceholder')))
+              }
+            ]}
+          >
+            <div>
+              <div className="w-full fyc justify-between text-sm text-primary">
+                <Checkbox defaultChecked={form.getFieldValue(`service_agreement_status`)} className="text-sm text-#D1D5DB">
+                  {t('register.asset.agreeAML')}
+                  <span className="text-#00E5FF">
+                    {t('register.evaluator.serviceAgreementTitle')}
+                  </span>
+                </Checkbox>
+                <div className="clickable">{t('register.asset.readAMLTerms')}</div>
+              </div>
+              {/* 最多两行，超出显示... */}
+              <div className="[-webkit-box-orient:vertical] [-webkit-line-clamp:2] [display:-webkit-box] mt-3 overflow-hidden text-sm text-#6B7280">
+                {t('register.asset.amlTerms')}
+              </div>
+            </div>
+          </Form.Item>
+          <Form.Item
+            valuePropName="checked"
+            name="agree_asset_compliance"
+            className="mb-1"
+            rules={[
+              {
+                validator: (_, value) =>
+                  value
+                    ? Promise.resolve()
+                    : Promise.reject(new Error(t('register.asset.complianceDeclarationPlaceholder')))
+              }
+            ]}
+          >
+            <Checkbox defaultChecked={form.getFieldValue(`agreementFirst`)} className="text-sm text-#D1D5DB">
+              {t('register.asset.agreeCompliance')}
+              <span className="text-#00E5FF">
+                《
+                {t('register.asset.complianceDeclaration')}
+                》
+              </span>
+            </Checkbox>
+          </Form.Item>
           <Form.Item>
             <div className="text-end">
-              <Button type="primary" htmlType="submit" className="h-10.5 px-4 text-base text-black">
+              <Button loading={sumbitLoading} type="primary" htmlType="submit" className="h-10.5 px-4 text-base text-black">
                 {t('register.evaluator.submit')}
               </Button>
             </div>

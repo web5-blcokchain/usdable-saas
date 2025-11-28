@@ -7,7 +7,7 @@ axios.defaults.baseURL = Env.apiUrl
 axios.defaults.headers.common.server = true
 
 export interface ResponseData<T> {
-  code?: number
+  code?: 0 | 1 | 401 | number
   data?: T
   msg?: string
   time?: number
@@ -31,7 +31,7 @@ axios.interceptors.request.use(
   }
 )
 
-const errorList: { message: string, time: number }[] = []
+let errorList: { message: string, time: number }[] = []
 axios.interceptors.response.use(async (res: ResponseData<any>) => {
   const code = _get(res.data, 'code', 0)
   // 401 账户不存在不需要提示，因为是强制跳转创建账号页面 TODO Expired token
@@ -39,7 +39,7 @@ axios.interceptors.response.use(async (res: ResponseData<any>) => {
   const config = (res as any).config
   if (config)
     fullUrl = config.url
-  if ((code === 401 && fullUrl.includes('/api/info/userInfo'))) {
+  if ((code === 401 && fullUrl.includes('/api/user/getRegisterInfo'))) {
     return res.data
   }
   if (code !== 1 && fullUrl.includes('/api/info/addContractLog')) {
@@ -58,6 +58,16 @@ axios.interceptors.response.use(async (res: ResponseData<any>) => {
     if (!hasError) {
       toast.error(message)
       errorList.push({ message, time: Date.now() })
+    }
+    else {
+      errorList = errorList.map((item) => {
+        if (item.message === message && item.time > Date.now() - 5000) {
+          return { ...item, time: Date.now() }
+        }
+        else {
+          return item
+        }
+      })
     }
     throw new Error(message)
   }

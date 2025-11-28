@@ -16,9 +16,11 @@ export function RegisterStatus({ visible, setVisible, className, type, back, suc
   errorMessage: string
 }) {
   return (
-    type === 1
-      ? <RegisterSuccess visible={visible} className={className} back={back} successButton={successButton} />
-      : <RegisterError visible={visible} className={className} errorMessage={errorMessage} setVisible={setVisible} />
+    type === 0
+      ? <RegisterLoading visible={visible} className={className} back={back} />
+      : type === 1
+        ? <RegisterSuccess visible={visible} className={className} back={back} successButton={successButton} />
+        : <RegisterError visible={visible} className={className} errorMessage={errorMessage} setVisible={setVisible} />
   )
 }
 
@@ -80,6 +82,34 @@ export function RegisterError({ visible, className, errorMessage, setVisible }: 
           <span className="clickable">{t('register.status.appeal')}</span>
         </div>
 
+      </div>
+    </Modal>
+  )
+}
+
+// 注册成功但未审核
+export function RegisterLoading({ visible, className, back }:
+{ visible: boolean, className?: string, back: () => void }) {
+  const { t } = useTranslation()
+  return (
+    <Modal
+      closable={false}
+      open={visible}
+      onCancel={close}
+      maskClosable={false}
+      className={cn('login-dialog [&>div>.ant-modal-content]:!bg-#0D1117', className)}
+      centered
+      footer={() => (<div></div>)}
+    >
+      <div className="fccc p-4">
+        <div className="size-20 fcc b-2 b-#00E5FF rounded-full b-solid">
+          <img src={successIcon} className="h-10" alt="" />
+        </div>
+        <div className="mt-4.5 text-10 text-white font-600 leading-15">{t('register.status.success')}</div>
+        <div className="mt-2 text-lg text-#D1D5DB">{t('register.status.pending')}</div>
+        <div className="mt-8 fyc gap-4">
+          <Button onClick={back} className="h-13.5 w-45 b-#374151 bg-#000000 text-4 font-600">{t('register.status.backToHome')}</Button>
+        </div>
       </div>
     </Modal>
   )

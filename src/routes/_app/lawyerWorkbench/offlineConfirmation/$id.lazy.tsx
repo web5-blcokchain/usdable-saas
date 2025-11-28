@@ -1,3 +1,4 @@
+import type { TimelineItemProps } from 'antd/lib'
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { Timeline } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -71,6 +72,41 @@ function RouteComponent() {
     }
   }
 
+  const timeLine: TimelineItemProps[] = useMemo(() => {
+    return stepData.map((item, index) => {
+      return {
+        dot: stepIcon(index, item.endTime ? 0 : (index > 0 && !!stepData[index - 1].endTime) ? 1 : 2),
+        children: (
+          <div className="pl-6">
+            <div className={cn('text-base', (item.endTime || (index > 0 && !!stepData[index - 1].endTime)) ? 'text-white' : 'text-#6B7280')}>
+              {item.title}
+            </div>
+            <div className={cn('text-sm mt-1', (item.endTime || (index > 0 && !!stepData[index - 1].endTime)) ? 'text-#9CA3AF' : 'text-#6B7280')}>
+              {item.content}
+            </div>
+            {item.endTime && (
+              <div className="mt-1 text-xs text-#00E5FF font-400">
+                {t('lawyerWorkbench.offlineConfirmation.completionTime')}
+                :
+                {' '}
+                {item.endTime}
+              </div>
+            )}
+            {(index > 0 && !!stepData[index - 1].endTime) && (
+              <div className="mt-1 text-xs text-#00FF85 font-400">
+                {t('lawyerWorkbench.offlineConfirmation.currentStep')}
+                : Step
+                {index + 1}
+                /
+                {stepData.length}
+              </div>
+            )}
+          </div>
+        )
+      } as TimelineItemProps
+    })
+  }, [stepData])
+
   return (
     <div className="px-22 py-13">
       <div className="w-full">
@@ -109,42 +145,7 @@ function RouteComponent() {
       <div className="mt-8 rounded-3 bg-#161B22 p-6">
         <div className="text-xl font-600">{t('lawyerWorkbench.offlineConfirmation.offlineExecutionProcess')}</div>
         <div className="mt-9">
-          <Timeline>
-            {
-              stepData.map((item, index) => (
-                <Timeline.Item
-                  className="[&>.ant-timeline-item-head]:!bg-transparent [&>.ant-timeline-item-tail]:!bg-#00E5FF"
-                  key={index}
-                  dot={stepIcon(index, item.endTime ? 0 : (index > 0 && !!stepData[index - 1].endTime) ? 1 : 2)}
-                >
-                  <div className="pl-6">
-                    <div className={cn('text-base', (item.endTime || (index > 0 && !!stepData[index - 1].endTime)) ? 'text-white' : 'text-#6B7280')}>
-                      {item.title}
-                    </div>
-                    <div className={cn('text-sm mt-1', (item.endTime || (index > 0 && !!stepData[index - 1].endTime)) ? 'text-#9CA3AF' : 'text-#6B7280')}>
-                      {item.content}
-                    </div>
-                    {item.endTime && (
-                      <div className="mt-1 text-xs text-#00E5FF font-400">
-                        {t('lawyerWorkbench.offlineConfirmation.completionTime')}
-                        :
-                        {' '}
-                        {item.endTime}
-                      </div>
-                    )}
-                    {(index > 0 && !!stepData[index - 1].endTime) && (
-                      <div className="mt-1 text-xs text-#00FF85 font-400">
-                        {t('lawyerWorkbench.offlineConfirmation.currentStep')}
-                        : Step
-                        {index + 1}
-                        /
-                        {stepData.length}
-                      </div>
-                    )}
-                  </div>
-                </Timeline.Item>
-              ))
-            }
+          <Timeline items={timeLine}>
           </Timeline>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { useRouterState } from '@tanstack/react-router'
-import { App, BackTop, ConfigProvider } from 'antd'
+import { App, ConfigProvider, FloatButton } from 'antd'
 import enUS from 'antd/locale/en_US'
 import jaJP from 'antd/locale/ja_JP'
 import zhCN from 'antd/locale/zh_CN'
@@ -17,12 +17,12 @@ const MainLayout: FC = ({
   const { i18n } = useTranslation()
 
   return (
-    <>
+    <div className="min-w-1024px bg-black">
       <MainHeader />
       <App>
-        <div className="mx-a min-h-screen min-w-1024px text-white">
+        <div className="mx-a min-h-screen overflow-hidden text-white">
           <AnimatePresence>
-             <motion.div
+            <motion.div
               key={pathKey}
               initial={{ x: 100, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -35,18 +35,18 @@ const MainLayout: FC = ({
               >
                 {children}
               </ConfigProvider>
-            </motion.div> 
-            
+            </motion.div>
+
           </AnimatePresence>
-          <BackTop className="my-backtop" target={() => (document.querySelector('.app-content')) as HTMLElement}>
+          <FloatButton.BackTop className="my-backtop" target={() => (document.querySelector('.app-content')) as HTMLElement}>
             <div className="backtop-btn size-12 fcc rounded-full bg-#737373">
               <div className="text-balck i-carbon:back-to-top text-xl"></div>
             </div>
-          </BackTop>
+          </FloatButton.BackTop>
         </div>
       </App>
       <MainFooter />
-    </>
+    </div>
   )
 }
 

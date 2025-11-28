@@ -16,7 +16,7 @@ function AppLayoutComponent() {
   const pathKey = router.location.pathname // 每次路由变化时更新
 
   return (
-    <div className="app-content h-100vh overflow-hidden overflow-y-scroll">
+    <div className="app-content h-100vh overflow-y-scroll">
       <PortalToast />
       <div className="bg-background text-text">
         {pathKey !== '/' && (

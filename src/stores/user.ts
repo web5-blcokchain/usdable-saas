@@ -1,4 +1,4 @@
-import type { RegisterParams, UserResponse } from '@/api/apiMyInfoApi'
+import type { UserRegisterModel as RegisterParams, UserResponse } from '@/api/apiMyInfoApi'
 import type { StateCreator } from 'zustand'
 import { TOKEN_LANG_KEY } from '@/constants/user'
 import { UserCode } from '@/enums/user'
@@ -49,7 +49,7 @@ const store: StateCreator<StoreState, [], [['zustand/persist', Partial<StoreStat
     },
     getUserInfo: () => {
       set(state => ({ refreshUserInfo: state.refreshUserInfo > 10000 ? 1 : state.refreshUserInfo + 1 }))
-    },
+    }
   }),
   {
     name: 'userInfo',

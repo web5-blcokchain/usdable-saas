@@ -1,7 +1,11 @@
+import type { AssetsOperationData, SubmissionData } from '@/api/assetsApi'
 import type { ColumnsType } from 'antd/es/table'
+import assetsApi from '@/api/assetsApi'
 import { CommonTable } from '@/components/common/common-table'
 import { CommonDialog } from '@/components/common/dialog/common'
 import { formatNumberNoRound } from '@/utils/number'
+import { joinImagePath } from '@/utils/url'
+import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { Button, Input, Modal } from 'antd'
 import dayjs from 'dayjs'
@@ -16,78 +20,97 @@ export const Route = createLazyFileRoute('/_app/assete/')({
 function RouteComponent() {
   const { t } = useTranslation()
 
-  const [assetStatus, _setAssetStatus] = useState([
-    {
-      title: 'assete.assetStatus.totalOnChain',
-      num: `$${formatNumberNoRound(234230.21, 6, 0)}`,
-      icon: (
-        <div className="size-10 fcc rounded-full bg-#CD647833">
-          <div className="i-ic:round-warning text-4 text-#c26c7a"></div>
-        </div>
-      )
-    },
-    {
-      title: 'assete.assetStatus.verifying',
-      num: 5,
-      icon: (
-        <div className="size-10 fcc rounded-full bg-#2E2F1F">
-          <img className="h-4" src={new URL('@/assets/icon/assete/icon-2.png', import.meta.url).href} alt="" />
-        </div>
-      )
-    },
-    {
-      title: 'assete.assetStatus.onChainSuccess',
-      num: 19,
-      icon: (
-        <div className="size-10 fcc rounded-full bg-#00FF8733">
-          <div className="i-ep:success-filled text-4 text-#75fb92"></div>
-        </div>
-      )
-    },
-    {
-      title: 'assete.assetStatus.onChainFailed',
-      num: 2,
-      icon: (
-        <div className="size-10 fcc rounded-full bg-#CD647833">
-          <div className="i-ic:round-warning text-4 text-#c26c7a"></div>
-        </div>
-      )
+  const { data: assetStatistics } = useQuery({
+    queryKey: ['getSubmissionStatistics'],
+    queryFn: async () => {
+      const res = await assetsApi.getSubmissionStatistics()
+      return res.data
     }
-  ])
+  })
 
-  const [assetOperatingStatus, _setAssetOperatingStatus] = useState([
-    {
+  // 资产上链状态
+  const assetStatus = useMemo(() => {
+    return [
+      {
+        title: 'assete.assetStatus.totalOnChain',
+        num: `$${formatNumberNoRound(assetStatistics?.total_on_chain || 0, 6, 0)}`,
+        icon: (
+          <div className="size-10 fcc rounded-full bg-#CD647833">
+            <div className="i-ic:round-warning text-4 text-#c26c7a"></div>
+          </div>
+        )
+      },
+      {
+        title: 'assete.assetStatus.verifying',
+        num: assetStatistics?.total_on_chain || 0,
+        icon: (
+          <div className="size-10 fcc rounded-full bg-#2E2F1F">
+            <img className="h-4" src={new URL('@/assets/icon/assete/icon-2.png', import.meta.url).href} alt="" />
+          </div>
+        )
+      },
+      {
+        title: 'assete.assetStatus.onChainSuccess',
+        num: assetStatistics?.on_chain || 0,
+        icon: (
+          <div className="size-10 fcc rounded-full bg-#00FF8733">
+            <div className="i-ep:success-filled text-4 text-#75fb92"></div>
+          </div>
+        )
+      },
+      {
+        title: 'assete.assetStatus.onChainFailed',
+        num: assetStatistics?.failed || 0,
+        icon: (
+          <div className="size-10 fcc rounded-full bg-#CD647833">
+            <div className="i-ic:round-warning text-4 text-#c26c7a"></div>
+          </div>
+        )
+      }
+    ]
+  }, [assetStatistics])
+
+  const { data: assetsOperationSummary } = useQuery({
+    queryKey: ['getAssetsOperationSummary'],
+    queryFn: async () => {
+      const res = await assetsApi.getAssetsOperationSummary()
+      return res.data
+    }
+  })
+
+  // 资产运营状态
+  const assetOperatingStatus = useMemo(() => {
+    return [{
       title: 'assete.assetOperatingStatus.monthlyRent',
-      num: `$${formatNumberNoRound(326500, 6, 0)}`,
+      num: `$${formatNumberNoRound(assetsOperationSummary?.monthly_due_amount || 0, 6, 0)}`,
       icon: (
         <div className="size-10 fcc rounded-full bg-#00E6FF33">
           <div className="i-ic:baseline-attach-money text-4 text-#68e2fb"></div>
         </div>
       )
-    },
-    {
+    }, {
       title: 'assete.assetOperatingStatus.pendingProperties',
-      num: 5,
+      num: assetsOperationSummary?.pending_properties || 0,
       icon: (
         <div className="size-10 fcc rounded-full bg-#B987FA33">
           <img className="h-4" src={new URL('@/assets/icon/assete/hourglass.png', import.meta.url).href} alt="" />
         </div>
       )
-    },
-    {
+    }, {
       title: 'assete.assetOperatingStatus.defaultAssets',
-      num: 2,
+      num: assetsOperationSummary?.default_properties || 0,
       icon: (
         <div className="size-10 fcc rounded-full bg-#CD647833">
           <div className="i-si:warning-fill text-4 text-#c26c7a"></div>
         </div>
       )
-    }
-  ])
+    }]
+  }, [assetsOperationSummary])
 
   const [asseteErrorDialogVisible, setAsseteErrorDialogVisible] = useState(false)
   const [payRentDialogVisible, setPayRentDialogVisible] = useState(false)
   const [defaultDetailsDialogVisible, setDefaultDetailsDialogVisible] = useState(false)
+  const [searchText, setSearchText] = useState('')
 
   useEffect(() => {
     return () => {
@@ -131,14 +154,20 @@ function RouteComponent() {
         <div className="fyc justify-between p-4">
           <div className="text-lg font-bold">{t('assete.assetOnChainDetails')}</div>
           <Input
-            className="h-9.5 w-64 [&>input]:h-full max-md:w-50%"
+            className="w-64 max-md:w-50% [&>input]:!h-6"
             placeholder={t('assete.searchAsset')}
             prefix={
               <div className="i-gg:search text-4 text-#E5E7EB"></div>
             }
+            onKeyUp={(e) => {
+              // 按下回车键
+              if (e.key === 'Enter') {
+                setSearchText(e.currentTarget.value)
+              }
+            }}
           />
         </div>
-        <AssetsTable openErrorDialog={() => setAsseteErrorDialogVisible(true)} />
+        <AssetsTable openErrorDialog={() => setAsseteErrorDialogVisible(true)} searchText={searchText} />
       </div>
       <div className="mt-8">
         <div className="text-2xl font-600">{t('assete.assetOperatingStatusTitle')}</div>
@@ -177,117 +206,76 @@ function RouteComponent() {
 }
 
 // 资产上链明细
-function AssetsTable({ openErrorDialog }: { openErrorDialog: (message: any) => void }) {
-  const { t } = useTranslation()
-  const data = [
-    {
-      assetInfo: {
-        img: (new URL('@/assets/test/img.png', import.meta.url).href),
-        name: '滨江壹号 A栋',
-        id: 'PROP-2023-001'
-      },
-      price: 20203.94,
-      type: 0,
-      updateTime: '2023-05-12 09:45',
-      status: 0,
-      processor: '上海评估所',
-      id: 0
-    },
-    {
-      assetInfo: {
-        img: (new URL('@/assets/test/img.png', import.meta.url).href),
-        name: '滨江壹号 A栋',
-        id: 'PROP-2023-001'
-      },
-      price: 20203.94,
-      type: 1,
-      updateTime: '2023-05-12 09:45',
-      status: 1,
-      processor: '上海评估所',
-      id: 1
-    },
-    {
-      assetInfo: {
-        img: (new URL('@/assets/test/img.png', import.meta.url).href),
-        name: '滨江壹号 A栋',
-        id: 'PROP-2023-001'
-      },
-      price: 20203.94,
-      type: 2,
-      updateTime: '2023-05-12 09:45',
-      status: 2,
-      processor: '上海评估所',
-      id: 2
-    },
-    {
-      assetInfo: {
-        img: (new URL('@/assets/test/img.png', import.meta.url).href),
-        name: '滨江壹号 A栋',
-        id: 'PROP-2023-001'
-      },
-      price: 20203.94,
-      type: 3,
-      updateTime: '2023-05-12 09:45',
-      status: 3,
-      processor: '上海评估所',
-      id: 3
-    }
-  ]
+function AssetsTable({ openErrorDialog, searchText }: {
+  openErrorDialog: (message: any) => void
+  searchText: string
+}) {
+  const { t, i18n } = useTranslation()
+  const [pageInfo, setPageInfo] = useState({ page: 1, pageSize: 10 })
 
-  const dataTypeContent = (type: number) => {
-    switch (type) {
-      case 0:
-        return t('assete.assetType.residential')
-      case 1:
-        return t('assete.assetType.commercial')
-      case 2:
-        return t('assete.assetType.complex')
-      default:
-        return t('assete.assetType.unknown')
+  const { data, isFetching: isDataLoading } = useQuery({
+    queryKey: ['getSubmissionList', pageInfo, searchText],
+    queryFn: async () => {
+      const res = await assetsApi.getSubmissionList({
+        ...pageInfo,
+        keyword: searchText
+      })
+      return res.data
     }
+  })
+
+  const { data: assetType } = useQuery({
+    queryKey: ['getAssetType'],
+    queryFn: async () => {
+      const res = await assetsApi.getAssetType()
+      return res.data
+    }
+  })
+
+  function findAssetType(type: number) {
+    return assetType?.find(item => item.id === type) || null
   }
-  const dataStatusContent = (status: number) => {
+  const dataStatusContent = (status: number, text: string) => {
     let data = {} as { className: string, text: string }
-    switch (status) {
-      case 0:
-        data = { className: 'bg-#00FF8733 text-#00FF85', text: t('assete.assetStatus.lawyerConfirming') } // 律师确认中
-        break
-      case 1:
-        data = { className: 'bg-#2E2F1F text-#FFDD00', text: t('assete.assetStatus.pendingEvaluation') } // 待评估
-        break
-      case 2:
-        data = { className: 'bg-#CD647833 text-#CF6679', text: t('assete.assetStatus.rejected') } // 驳回
-        break
-      default:
-        data = { className: 'bg-#00FF8733 text-#00FF85', text: t('assete.assetStatus.onChainSuccess') } // 已上链
+    if (status < 2) {
+      data = { className: 'bg-#00FF8733 text-#00FF85', text: t('assete.assetStatus.lawyerConfirming') } // 律师确认中
+    }
+    else if ([2, 5].includes(status)) {
+      data = { className: 'bg-#CD647833 text-#CF6679', text: t('assete.assetStatus.rejected') } // 驳回
+    }
+    else if ([4, 7, 8].includes(status)) {
+      data = { className: 'bg-#2E2F1F text-#FFDD00', text: t('assete.assetStatus.pendingEvaluation') } // 待评估
+    }
+    else {
+      data = { className: 'bg-#00FF8733 text-#00FF85', text: t('assete.assetStatus.onChainSuccess') } // 已上链
     }
 
     return (
       <div className={cn(data.className, 'rounded-9999px px-2 py-1 text-xs font-400 w-fit')}>
-        {data.text}
+        {text}
       </div>
     )
   }
 
-  const columns: ColumnsType<typeof data[0]> = [
+  const columns: ColumnsType<SubmissionData> = [
     {
       title: t('assete.table.assetName'),
-      dataIndex: 'assetInfo',
-      key: 'assetInfo',
-      render: data => (
+      dataIndex: 'asset_name',
+      key: 'asset_name',
+      render: (_, record) => (
         <div className="fcc gap-3">
-          <img className="size-10 rounded-6px object-cover" src={data.img} alt="" />
+          <img className="size-10 rounded-6px object-cover" src={joinImagePath(record.asset_image[0])} alt="" />
           <div>
-            <div className="text-sm font-500">{data.name}</div>
-            <div className="text-xs text-#9CA3AF">{data.id}</div>
+            <div className="text-sm font-500">{record.asset_name}</div>
+            <div className="text-xs text-#9CA3AF">{record.code}</div>
           </div>
         </div>
       )
     },
     {
       title: t('assete.table.valuation'),
-      dataIndex: 'price',
-      key: 'price',
+      dataIndex: 'valuation',
+      key: 'valuation',
       render: data => (
         <div className="text-sm text-#D1D5DB">
           $
@@ -297,21 +285,31 @@ function AssetsTable({ openErrorDialog }: { openErrorDialog: (message: any) => v
     },
     {
       title: t('assete.table.assetType'),
-      dataIndex: 'type',
-      key: 'type',
-      render: data => <div className="text-sm text-#D1D5DB">{dataTypeContent(data)}</div>
+      dataIndex: 'asset_type',
+      key: 'asset_type',
+      render: data => (
+        <div className="text-sm text-#D1D5DB">
+          {
+            i18n.language === 'zh'
+              ? findAssetType(data)?.name_zh_cn
+              : i18n.language === 'en'
+                ? findAssetType(data)?.name_en
+                : findAssetType(data)?.name_ja
+          }
+        </div>
+      )
     },
     {
       title: t('assete.table.updateTime'),
-      dataIndex: 'updateTime',
-      key: 'updateTime',
+      dataIndex: 'update_time',
+      key: 'update_time',
       render: data => <div className="text-sm text-#D1D5DB">{dayjs(data).format('YYYY-MM-DD HH:mm')}</div>
     },
     {
       title: t('assete.table.status'),
       dataIndex: 'status',
       key: 'status',
-      render: data => <div className="text-sm text-#D1D5DB">{dataStatusContent(data as number)}</div>
+      render: (data, record) => <div className="text-sm text-#D1D5DB">{dataStatusContent(data, record.status_label)}</div>
     },
     {
       title: t('assete.table.processor'),
@@ -335,7 +333,19 @@ function AssetsTable({ openErrorDialog }: { openErrorDialog: (message: any) => v
   ]
   return (
     // 设置表格背景
-    <CommonTable data={data} columns={columns} />
+    <CommonTable
+      data={data?.list || []}
+      tableProps={{ loading: isDataLoading }}
+      columns={columns}
+      pagination={{
+        pageSize: pageInfo.pageSize,
+        total: data?.count || 0,
+        current: pageInfo.page,
+        onChange: (page, pageSize) => {
+          setPageInfo(prev => ({ ...prev, page, pageSize }))
+        }
+      }}
+    />
   )
 }
 
@@ -345,76 +355,18 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
   openDefaultDetailsDialog: (record: any) => void
 }) {
   const { t } = useTranslation()
-  const data = [
-    {
-      assetInfo: {
-        img: (new URL('@/assets/test/img.png', import.meta.url).href),
-        name: '滨江壹号 A栋',
-        id: 'PROP-2023-001'
-      },
-      tenant: {
-        name: '张三',
-        startDate: '2023-05-12',
-        endDate: '2026-05-12'
-      },
-      price: 20203.94,
-      type: 0,
-      nextPayTime: '2025-05-12',
-      status: 0,
-      id: 0
-    },
-    {
-      assetInfo: {
-        img: (new URL('@/assets/test/img.png', import.meta.url).href),
-        name: '滨江壹号 A栋',
-        id: 'PROP-2023-001'
-      },
-      tenant: {
-        name: '张三',
-        startDate: '2023-05-12',
-        endDate: '2026-05-12'
-      },
-      price: 20203.94,
-      type: 0,
-      nextPayTime: '2025-05-12',
-      status: 1,
-      id: 0
-    },
-    {
-      assetInfo: {
-        img: (new URL('@/assets/test/img.png', import.meta.url).href),
-        name: '滨江壹号 A栋',
-        id: 'PROP-2023-001'
-      },
-      tenant: {
-        name: '张三',
-        startDate: '2023-05-12',
-        endDate: '2026-05-12'
-      },
-      price: 20203.94,
-      type: 0,
-      nextPayTime: '2025-05-12',
-      status: 2,
-      id: 0
-    },
-    {
-      assetInfo: {
-        img: (new URL('@/assets/test/img.png', import.meta.url).href),
-        name: '滨江壹号 A栋',
-        id: 'PROP-2023-001'
-      },
-      tenant: {
-        name: '张三',
-        startDate: '2023-05-12',
-        endDate: '2026-05-12'
-      },
-      price: 20203.94,
-      type: 0,
-      nextPayTime: '2025-05-12',
-      status: 1,
-      id: 0
+
+  const [pageInfo, setPageInfo] = useState({ page: 1, pageSize: 10 })
+
+  const { data, isFetching: isDataLoading } = useQuery({
+    queryKey: ['getAssetsOperationList', pageInfo],
+    queryFn: async () => {
+      const res = await assetsApi.getAssetsOperationList({
+        ...pageInfo
+      })
+      return res.data
     }
-  ]
+  })
 
   const dataTypeContent = (status: number) => {
     switch (status) {
@@ -424,16 +376,16 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
         return t('assete.operatingStatus.payRent')
     }
   }
-  const dataStatusContent = (status: number) => {
+  const dataStatusContent = (status: number, text: string) => {
     let data = {} as { className: string, text: string }
     switch (status) {
-      case 0:
+      case 1:
         data = { className: 'bg-#00FF8733 text-#00FF85', text: t('assete.operatingStatus.normal') } // 正常
         break
-      case 1:
+      case 2:
         data = { className: 'bg-#B987FA33 text-#BB86FC', text: t('assete.operatingStatus.pending') } // 待缴
         break
-      case 2:
+      case 3:
         data = { className: 'bg-#CD647833 text-#CF6679', text: t('assete.operatingStatus.default') } // 违约
         break
       default:
@@ -442,23 +394,23 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
 
     return (
       <div className={cn(data.className, 'rounded-9999px px-2 py-1 text-xs font-400 w-fit')}>
-        {data.text}
+        {text}
       </div>
     )
   }
   const [propertyOperatingStatusDetailsDialogVisible, setPropertyOperatingStatusDetailsDialogVisible] = useState(false)
 
-  const columns: ColumnsType<typeof data[0]> = [
+  const columns: ColumnsType<AssetsOperationData> = [
     {
       title: t('assete.operatingTable.assetName'),
       dataIndex: 'assetInfo',
       key: 'assetInfo',
-      render: data => (
+      render: (_, record) => (
         <div className="fcc gap-3">
-          <img className="size-10 rounded-6px object-cover" src={data.img} alt="" />
+          <img className="size-10 rounded-6px object-cover" src={joinImagePath(record?.image_urls || '')} alt="" />
           <div>
-            <div className="text-sm font-500">{data.name}</div>
-            <div className="text-xs text-#9CA3AF">{data.id}</div>
+            <div className="text-sm font-500">{record.name}</div>
+            <div className="text-xs text-#9CA3AF">{record.code}</div>
           </div>
         </div>
       )
@@ -484,35 +436,35 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
     },
     {
       title: t('assete.operatingTable.monthlyRent'),
-      dataIndex: 'price',
-      key: 'price',
+      dataIndex: 'monthly_rent',
+      key: 'monthly_rent',
       render: data => (
         <div className="text-sm text-#D1D5DB">
           $
-          {formatNumberNoRound(data, 6, 0)}
+          {formatNumberNoRound(data || 0, 6, 0)}
         </div>
       )
     },
     {
       title: t('assete.operatingTable.paymentStatus'),
-      dataIndex: 'status',
-      key: 'status',
-      render: data => <div className="text-sm text-#D1D5DB">{dataStatusContent(data)}</div>
+      dataIndex: 'rent_status',
+      key: 'rent_status',
+      render: data => <div className="text-sm text-#D1D5DB">{dataStatusContent(data.key, data.label)}</div>
     },
     {
       title: t('assete.operatingTable.nextPaymentDate'),
-      dataIndex: 'nextPayTime',
-      key: 'nextPayTime',
+      dataIndex: 'next_rent_date',
+      key: 'next_rent_date',
       render: (time, content) => (
         <div className="fyc gap-1 text-sm text-#D1D5DB">
           {dayjs(time).format('YYYY-MM-DD HH:mm')}
           {
-            content.status > 1 && (
-              <div className={cn('text-xs ', content.status === 2 ? 'text-#CF6679' : 'text-#FACC15')}>
+            content.status >= 2 && (
+              <div className={cn('text-xs ', content.status === 3 ? 'text-#CF6679' : 'text-#FACC15')}>
                 (
                 {t('assete.operatingTable.overdue')}
                 {' '}
-                {Math.round(100) + 1}
+                {dayjs(time).diff(dayjs(), 'day')}
                 {' '}
                 {t('assete.operatingTable.days')}
                 )
@@ -524,7 +476,6 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
     },
     {
       title: t('assete.operatingTable.action'),
-      dataIndex: 'type',
       key: 'type',
       render: (_, content) => (
         <div className="fyc gap-4">
@@ -535,9 +486,9 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
             }}
             className={cn('text-sm text-#D1D5DB', content.status !== 0 && 'clickable')}
           >
-            {dataTypeContent(content.status)}
+            {dataTypeContent(content.status >= 2 ? 1 : 0)}
           </div>
-          {content.status === 2 && <div onClick={() => openDefaultDetailsDialog(content)} className="text-sm text-#CF6679 clickable">{t('assete.operatingTable.defaultDetails')}</div>}
+          {content.status === 3 && <div onClick={() => openDefaultDetailsDialog(content)} className="text-sm text-#CF6679 clickable">{t('assete.operatingTable.defaultDetails')}</div>}
           <div className="clickable" onClick={() => setPropertyOperatingStatusDetailsDialogVisible(true)}>{t('assete.table.view')}</div>
         </div>
       )
@@ -546,7 +497,19 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
 
   return (
     <div>
-      <CommonTable data={data} columns={columns} />
+      <CommonTable
+        data={data?.list}
+        columns={columns}
+        tableProps={{ loading: isDataLoading }}
+        pagination={{
+          pageSize: pageInfo.pageSize,
+          total: data?.count || 0,
+          current: pageInfo.page,
+          onChange: (page, pageSize) => {
+            setPageInfo(prev => ({ ...prev, page, pageSize }))
+          }
+        }}
+      />
       <PropertyOperatingStatusDetailsDialog visible={propertyOperatingStatusDetailsDialogVisible} setVisible={setPropertyOperatingStatusDetailsDialogVisible} />
     </div>
   )

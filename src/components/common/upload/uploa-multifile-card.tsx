@@ -111,7 +111,7 @@ function UploadMultifileCard({
                     <div className="i-weui:eyes-on-outlined size-6"></div>
                   </div>
                   <div onClick={() => removeFile?.(index)} className="cursor-pointer clickable">
-                    <div className="i-material-symbols:delete-outline size-6 bg-#575757"></div>
+                    <div className="i-material-symbols:delete-outline size-6 bg-white"></div>
                   </div>
                 </div>
               </div>
@@ -128,16 +128,18 @@ function UploadMultifileCard({
           >
             {/* <img className="max-h-128 w-full" src={imageList[0]} alt="" /> */}
           </Image.PreviewGroup>
-          <div className="h-full">
-            {fileUrl.length < maxLength
-              && (
+          {fileUrl.length < maxLength
+            && (
+              <div className="h-full">
+
                 <Spin spinning={loading}>
                   <UploadIcon className="max-md:!w-full" style={{ width, height }} icon={icon} iconClass={iconClass} title={title} subTitle={label} beforeUpload={beforeUpload}>
                     {children}
                   </UploadIcon>
                 </Spin>
-              )}
-          </div>
+
+              </div>
+            )}
         </div>
       </Upload>
     </div>

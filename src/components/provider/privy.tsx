@@ -32,6 +32,7 @@ export const AppPrivyProvider: FC = ({ children }) => {
         defaultChain: goChain,
         appearance: {
           // loginMessage:'hello word'
+          showWalletLoginFirst: false,
           landingHeader: t('privy.login_header')
         }
       }}
