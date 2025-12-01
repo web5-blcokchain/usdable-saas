@@ -1,11 +1,12 @@
 import type { FormInstance } from 'antd'
 import assetsApi from '@/api/assetsApi'
+import { getLocation } from '@/api/common'
 import { useQuery } from '@tanstack/react-query'
 import { Button, Form, Input, InputNumber, Select } from 'antd'
 import { useWatch } from 'antd/es/form/Form'
 import { useTranslation } from 'react-i18next'
 
-export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, onFinish: () => void }) {
+export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, onFinish: (data: any) => void }) {
   const { t, i18n } = useTranslation()
 
   // 获取资产类型数据
@@ -30,11 +31,13 @@ export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, on
           ? item.name_zh_cn
           : (i18n.language === 'en' ? item.name_en : item.name_ja),
         content: item.description,
-        status: item.status
+        status: item.status,
+        id: item.id
       }
     }) || []
   }, [assetTypeData])
 
+  // 获取资产房屋类型数据
   const { data: assetHouseTypeData } = useQuery({
     queryKey: ['getAssetHouseType'],
     queryFn: async () => {
@@ -49,6 +52,73 @@ export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, on
     }
   })
 
+  const [selectPid, setSelectPid] = useState({
+    country: 0,
+    selectedLocation: 0
+  })
+  const [locationData, setLocationData] = useState({
+    country: [] as LocationData[],
+    province: [] as LocationData[]
+  })
+
+  interface LocationData {
+    value: number
+    label: string
+  }
+  // 获取地区数据
+  const { isFetching: locationDataLoading } = useQuery({
+    queryKey: ['getLocation', selectPid],
+    queryFn: async () => {
+      const data = await getLocation({
+        level: selectPid.selectedLocation + 2,
+        parent_id: selectPid.selectedLocation === 1
+          ? selectPid.country
+          : undefined
+      })
+      // 处理数据,
+      const newData = data?.data?.map(item => ({
+        value: item.id,
+        label: item.name
+      })) || [] as LocationData[]
+
+      setLocationData((pre) => {
+        if (selectPid.selectedLocation === 0) {
+          return {
+            ...pre,
+            country: newData
+          }
+        }
+        else {
+          return {
+            ...pre,
+            province: newData
+          }
+        }
+      })
+      return data.data
+    }
+  })
+
+  const provinceData = useWatch('province', form)
+  // 修改地区
+  const changeCity = (val: number, index: number) => {
+    if (index === 0) {
+      setSelectPid(pre => ({
+        ...pre,
+        country: val,
+        selectedLocation: 1
+      }))
+      !provinceData && form.setFieldValue('province', '')
+      form.setFieldValue('city', '')
+    }
+  }
+
+  // 当读取草稿时候，获取城市列表
+  useEffect(() => {
+    if (provinceData)
+      changeCity(provinceData, 1)
+  }, [provinceData])
+
   const assetType = useWatch('asset_type_id', form)
   const back = () => {
     window.history.back()
@@ -59,7 +129,7 @@ export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, on
       return
     for (let i = 0; i < assetTypeData?.length; i++) {
       if (assetTypeData[i].status === 1) {
-        form.setFieldsValue({ asset_type_id: i })
+        form.setFieldsValue({ asset_type_id: assetTypeData[i].id })
         break
       }
     }
@@ -80,10 +150,10 @@ export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, on
                 assetTypeList.map((item, index) => (
                   <div
                     key={index}
-                    className={cn(' fccc b-1 b-solid py-6 px-4 rounded-2 relative', assetType === index ? 'b-#00E5FF' : ' b-#374151', item.status === 1 ? 'clickable' : '  cursor-not-allowed')}
+                    className={cn(' fccc b-1 b-solid py-6 px-4 rounded-2 relative', assetType === item.id ? 'b-#00E5FF' : ' b-#374151', item.status === 1 ? 'clickable' : '  cursor-not-allowed')}
                     onClick={() => {
                       if (item.status === 1)
-                        form.setFieldsValue({ assetType: index })
+                        form.setFieldsValue({ asset_type_id: item.id })
                     }}
                   >
                     <div className="size-16 fcc rounded-full bg-#0D1117">
@@ -93,7 +163,7 @@ export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, on
                     <div className="mt-2 text-center text-sm text-#9CA3AF">{item.content}</div>
                     <div className={cn(
                       'mt-4 px-3 py-1.5 rounded-9999px b-1 b-solid b-#00E5FF4D bg-#00E6FF33 text-xs fcc gap-1.5 transition-all-300',
-                      assetType === index ? 'opacity-100' : ' opacity-0'
+                      assetType === item.id ? 'opacity-100' : ' opacity-0'
                     )}
                     >
                       <img className="h-3" src={(new URL('@/assets/images/register/success.png', import.meta.url).href)} alt="" />
@@ -128,10 +198,10 @@ export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, on
             </Form.Item>
             {/* 建筑面积 */}
             <Form.Item name="area" label={t('assete.addAsset.buildingArea')} required rules={[{ required: true, message: t('assete.addAsset.buildingAreaPlaceholder') }]}>
-              <InputNumber controls={false} placeholder={t('assete.addAsset.buildingAreaPlaceholder')} />
+              <InputNumber min={1} controls={false} placeholder={t('assete.addAsset.buildingAreaPlaceholder')} />
             </Form.Item>
             {/* 资产地址 */}
-            <Form.Item name="area" label={t('assete.addAsset.assetAddress')} required rules={[{ required: true, message: t('assete.addAsset.assetAddressPlaceholder') }]}>
+            <Form.Item name="address" label={t('assete.addAsset.assetAddress')} required rules={[{ required: true, message: t('assete.addAsset.assetAddressPlaceholder') }]}>
               <Input placeholder={t('assete.addAsset.assetAddressPlaceholder')} />
             </Form.Item>
             {/* 建筑年限 */}
@@ -144,7 +214,7 @@ export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, on
             </Form.Item> */}
             {/* 卧室数量 */}
             <Form.Item name="bedrooms" label={t('assete.addAsset.bedroomCount')} required rules={[{ required: true, message: t('assete.addAsset.bedroomCountPlaceholder') }]}>
-              <InputNumber controls={false} placeholder={t('assete.addAsset.bedroomCountPlaceholder')} />
+              <InputNumber min={1} controls={false} placeholder={t('assete.addAsset.bedroomCountPlaceholder')} />
             </Form.Item>
             {/* 缴租日期 */}
             <Form.Item name="rent_day" label={t('assete.addAsset.rentDate')} required rules={[{ required: true, message: t('assete.addAsset.rentDatePlaceholder') }]}>
@@ -155,48 +225,58 @@ export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, on
             </Form.Item>
             {/* 链ID */}
             <Form.Item name="chain_id" label={t('assete.addAsset.chainId')} required rules={[{ required: true, message: t('assete.addAsset.chainIdPlaceholder') }]}>
-              <Input placeholder={t('assete.addAsset.chainIdPlaceholder')} />
+              <InputNumber min={1} controls={false} placeholder={t('assete.addAsset.chainIdPlaceholder')} />
             </Form.Item>
             {/* 月租金 */}
             <Form.Item name="monthly_rent" label={t('assete.addAsset.monthlyRent')}>
-              <InputNumber controls={false} placeholder={t('assete.addAsset.monthlyRentPlaceholder')} />
+              <InputNumber min={1} controls={false} placeholder={t('assete.addAsset.monthlyRentPlaceholder')} />
             </Form.Item>
             {/* 预计年回报率 */}
             <Form.Item name="expected_annual_return" label={t('assete.addAsset.expectedAnnualReturn')}>
-              <InputNumber controls={false} placeholder={t('assete.addAsset.expectedAnnualReturnPlaceholder')} />
+              <InputNumber min={1} controls={false} placeholder={t('assete.addAsset.expectedAnnualReturnPlaceholder')} />
             </Form.Item>
             {/* 预计年化收益下限 */}
             <Form.Item name="annual_return_min" label={t('assete.addAsset.expectedAnnualReturnLower')}>
-              <InputNumber controls={false} placeholder={t('assete.addAsset.expectedAnnualReturnLowerPlaceholder')} />
+              <InputNumber min={1} controls={false} placeholder={t('assete.addAsset.expectedAnnualReturnLowerPlaceholder')} />
             </Form.Item>
             {/* 预计年化收益上限 */}
-            <Form.Item name="assetYearannual_return_maxRentUpper" label={t('assete.addAsset.expectedAnnualReturnUpper')}>
-              <InputNumber controls={false} placeholder={t('assete.addAsset.expectedAnnualReturnUpperPlaceholder')} />
+            <Form.Item name="annual_return_max" label={t('assete.addAsset.expectedAnnualReturnUpper')}>
+              <InputNumber min={1} controls={false} placeholder={t('assete.addAsset.expectedAnnualReturnUpperPlaceholder')} />
             </Form.Item>
             {/* 经度 */}
             <Form.Item name="longitude" label={t('assete.addAsset.longitude')}>
-              <InputNumber controls={false} placeholder={t('assete.addAsset.longitudePlaceholder')} />
+              <InputNumber min={-180} max={180} controls={false} placeholder={t('assete.addAsset.longitudePlaceholder')} />
             </Form.Item>
             {/* 纬度 */}
             <Form.Item name="latitude" label={t('assete.addAsset.latitude')}>
-              <InputNumber controls={false} placeholder={t('assete.addAsset.latitudePlaceholder')} />
+              <InputNumber min={-90} max={90} controls={false} placeholder={t('assete.addAsset.latitudePlaceholder')} />
             </Form.Item>
             {/* 邮编 */}
             <Form.Item name="postcode" required label={t('assete.addAsset.zipCode')} rules={[{ required: true, message: t('assete.addAsset.zipCodePlaceholder') }]}>
-              <InputNumber controls={false} placeholder={t('assete.addAsset.zipCodePlaceholder')} />
+              <InputNumber min={1} controls={false} placeholder={t('assete.addAsset.zipCodePlaceholder')} />
             </Form.Item>
             {/* 国家编码 */}
-            <Form.Item name="country_id" required label={t('assete.addAsset.countryCode')} rules={[{ required: true, message: t('assete.addAsset.countryCodePlaceholder') }]}>
-              <InputNumber controls={false} placeholder={t('assete.addAsset.countryCodePlaceholder')} />
+            <Form.Item name="country_id" required label={t('assete.addAsset.countryCode')} rules={[{ required: true, message: t('register.evaluator.selectCountryPlaceholder') }]}>
+              <Select
+                placeholder={t('register.evaluator.country')}
+                loading={locationDataLoading && selectPid.selectedLocation === 0}
+                onChange={val => changeCity(val, 0)}
+                options={locationData.country}
+              />
             </Form.Item>
             {/* 城市编码 */}
-            <Form.Item name="city" required label={t('assete.addAsset.cityCode')} rules={[{ required: true, message: t('assete.addAsset.cityCodePlaceholder') }]}>
-              <InputNumber controls={false} placeholder={t('assete.addAsset.cityCodePlaceholder')} />
+            <Form.Item name="city" required label={t('assete.addAsset.cityCode')} rules={[{ required: true, message: t('register.evaluator.selectProvincePlaceholder') }]}>
+              <Select
+                placeholder={t('register.evaluator.province')}
+                loading={locationDataLoading && selectPid.selectedLocation === 1}
+                onChange={val => changeCity(val, 1)}
+                options={locationData.province}
+              />
             </Form.Item>
           </div>
           {/* 房产描述 */}
           <Form.Item name="property_description" label={t('assete.addAsset.propertyDescription')} required rules={[{ required: true, message: t('assete.addAsset.propertyDescriptionPlaceholder') }]}>
-            <Input.TextArea placeholder={t('assete.addAsset.propertyDescriptionPlaceholder')} rows={3} />
+            <Input.TextArea placeholder={t('assete.addAsset.propertyDescriptionPlaceholder')} autoSize={{ minRows: 6, maxRows: 6 }} />
           </Form.Item>
           {/* 位置描述 */}
           <Form.Item name="location" label={t('assete.addAsset.locationDescription')}>

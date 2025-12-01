@@ -3,8 +3,8 @@ import type { ColumnsType } from 'antd/es/table'
 import assetsApi from '@/api/assetsApi'
 import { CommonTable } from '@/components/common/common-table'
 import { CommonDialog } from '@/components/common/dialog/common'
+import { ASSET_STATUS } from '@/enum/asset'
 import { formatNumberNoRound } from '@/utils/number'
-import { joinImagePath } from '@/utils/url'
 import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { Button, Input, Modal } from 'antd'
@@ -264,7 +264,7 @@ function AssetsTable({ openErrorDialog, searchText }: {
       key: 'asset_name',
       render: (_, record) => (
         <div className="fcc gap-3">
-          <img className="size-10 rounded-6px object-cover" src={joinImagePath(record.asset_image[0])} alt="" />
+          <img className="size-10 rounded-6px object-cover" src={record.asset_image[0]} alt="" />
           <div>
             <div className="text-sm font-500">{record.asset_name}</div>
             <div className="text-xs text-#9CA3AF">{record.code}</div>
@@ -326,7 +326,7 @@ function AssetsTable({ openErrorDialog, searchText }: {
           <Link to="/assete/info/$id" params={{ id: record.id.toString() }}>
             <div className="text-sm text-#D1D5DB clickable">{t('assete.table.view')}</div>
           </Link>
-          {record.status === 2 && <div onClick={() => openErrorDialog(record)} className="text-sm text-#CF6679 clickable">{t('assete.rejectedReason')}</div>}
+          {record.status === ASSET_STATUS.LAWYER_REJECTED && <div onClick={() => openErrorDialog(record)} className="text-sm text-#CF6679 clickable">{t('assete.rejectedReason')}</div>}
         </div>
       )
     }
@@ -407,7 +407,7 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
       key: 'assetInfo',
       render: (_, record) => (
         <div className="fcc gap-3">
-          <img className="size-10 rounded-6px object-cover" src={joinImagePath(record?.image_urls || '')} alt="" />
+          <img className="size-10 rounded-6px object-cover" src={record?.image_urls || ''} alt="" />
           <div>
             <div className="text-sm font-500">{record.name}</div>
             <div className="text-xs text-#9CA3AF">{record.code}</div>
@@ -459,7 +459,7 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
         <div className="fyc gap-1 text-sm text-#D1D5DB">
           {dayjs(time).format('YYYY-MM-DD HH:mm')}
           {
-            content.status >= 2 && (
+            content.status >= ASSET_STATUS.LAWYER_REJECTED && (
               <div className={cn('text-xs ', content.status === 3 ? 'text-#CF6679' : 'text-#FACC15')}>
                 (
                 {t('assete.operatingTable.overdue')}

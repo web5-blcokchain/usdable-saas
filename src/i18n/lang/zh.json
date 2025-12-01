@@ -24,7 +24,19 @@
     "confirm": "确定",
     "submitError": "提交失败",
     "confirmOnChain": "确认上链",
-    "year": "年"
+    "year": "年",
+    "inputPlaceholder": "请输入",
+    "identity": {
+      "assetParty": "资产方 {{name}}",
+      "assetPartyContent": "资产方",
+      "lawyer": "{{name}}律师",
+      "lawyerContent": "律师",
+      "evaluator": "评估方 {{name}}",
+      "evaluatorContent": "评估方",
+      "platformAdmin": "平台管理员 {{name}}",
+      "platformAdminContent": "平台管理员"
+    },
+    "noContent": "暂无内容"
   },
   "header": {
     "login": "登录",
@@ -483,10 +495,28 @@
       "dragFilesHere": "拖拽文件到此处",
       "selectFiles": "选择文件",
       "pendingSupplementFiles": "待补充文件",
+      "pendingAuditFiles": "待审核文件",
       "reUpload": "重新上传",
       "submitForReaudit": "提交复审",
       "sampleAddress": "上海市浦东新区张江高科技园区科苑路88号",
-      "sampleProperty": "上海花家地"
+      "sampleProperty": "上海花家地",
+      "assetBasicInfo": "资产基础信息",
+      "auditRemark": "审核备注",
+      "auditProgress": "审核进度",
+      "progress": {
+        "0": {
+          "title": "资料提交成功",
+          "description": "您已成功提交资产确权申请资料"
+        },
+        "1": {
+          "title": "律师审核完成",
+          "description": "资产确权{name}已完成审核"
+        },
+        "2": {
+          "title": "资料审核完成",
+          "description": "资产审核已完成审核"
+        }
+      }
     },
     "payRent": {
       "title": "缴纳房租",
@@ -718,7 +748,6 @@
       "pleaseAgreePlatformRegistrationServiceAgreement": "请同意平台注册服务协议",
       "enterEvaluationTaskCenter": "进入评估任务中心",
       "enterLawyerTaskCenter": "进入律师任务中心"
-
     },
     "evaluator": {
       "title": "评估机构注册",

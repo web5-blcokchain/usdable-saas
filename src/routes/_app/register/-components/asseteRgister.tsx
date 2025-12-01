@@ -4,6 +4,8 @@ import { uploadFile } from '@/api/common'
 import componyIcon from '@/assets/images/compony-green.png'
 import userIcon from '@/assets/images/user.png'
 import UploadMultifileCard from '@/components/common/upload/uploa-multifile-card'
+import { USER_AGREE } from '@/enum/common'
+import { ASSET_TYPE, USER_AUDIT_STATUS } from '@/enum/user'
 import { useUserStore } from '@/stores/user'
 import { envConfig } from '@/utils/envConfig'
 import { getToken } from '@/utils/user'
@@ -39,7 +41,7 @@ export function AsseteRgister({ back }: { back: () => void }) {
   const { mutateAsync: userResgiter, isPending: isLoading } = useMutation({
     mutationKey: ['userRegitser'],
     mutationFn: async (values: UserRegisterModel) => {
-      return userData?.user?.audit_status !== 2 ? apiMyInfoApi.regitser(values) : apiMyInfoApi.resubmitRegister(values)
+      return userData?.user?.audit_status !== USER_AUDIT_STATUS.REJECT ? apiMyInfoApi.regitser(values) : apiMyInfoApi.resubmitRegister(values)
     }
   })
 
@@ -79,8 +81,8 @@ export function AsseteRgister({ back }: { back: () => void }) {
       id_card_front_url: `https:${idCardFrontUrl}`,
       type: '3',
       token: getToken() || '',
-      agree_asset_compliance: '1',
-      agree_aml_statement: '1'
+      agree_asset_compliance: USER_AGREE.YES,
+      agree_aml_statement: USER_AGREE.YES
     }
     userResgiter(sumbitData).then((res) => {
       if (res.code === 1) {
@@ -117,16 +119,16 @@ export function AsseteRgister({ back }: { back: () => void }) {
       <div className="text-12 font-600 leading-18 max-md:text-3xl">{t('register.asset.title')}</div>
       <div className="mt-10 w-full b-2 b-#31363c rounded-lg b-solid bg-#161B2199 p-12 max-md:p-4">
         <div className="text-lg font-600">{t('register.asset.accountType')}</div>
-        <Form initialValues={{ p_type: 1 }} form={form} layout="vertical" className="" onFinish={onFinish} onFinishFailed={onFinishFailed}>
+        <Form initialValues={{ p_type: ASSET_TYPE.PERSON }} form={form} layout="vertical" className="" onFinish={onFinish} onFinishFailed={onFinishFailed}>
           {/* 账户类型 1为个人  2为企业 */}
           <Form.Item required name="p_type">
             <Radio.Group className="mt-4 w-full flex gap-x-6 max-md:grid max-md:grid-cols-1 max-md:gap-6">
               {
-                [1, 2].map(item => (
+                [ASSET_TYPE.PERSON, ASSET_TYPE.COMPANY].map(item => (
                   <div key={item} onClick={() => form.setFieldValue('p_type', item)} className="flex flex-1 items-start justify-between gap-4 b-1 b-#374151 rounded-2 b-solid px-5 py-6 clickable">
                     <div className="fcc flex-1 gap-4">
                       <div className="size-12 fcc b-1 b-#374151 rounded-2 b-solid bg-#0D1117">
-                        <img className="h-7" src={item === 0 ? userIcon : componyIcon} alt="" />
+                        <img className="h-7" src={item === ASSET_TYPE.PERSON ? userIcon : componyIcon} alt="" />
                       </div>
                       <div className="leading-full h-full w-full flex-1">
                         <div className="text-lg font-500">

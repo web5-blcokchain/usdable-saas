@@ -1,6 +1,7 @@
 import balanceIcon from '@/assets/images/balance.png'
 import componyIcon from '@/assets/images/compony.png'
 import homeIcon from '@/assets/images/home.png'
+import { USER_AUDIT_STATUS, USER_TYPE } from '@/enum/user'
 import { useUserStore } from '@/stores/user'
 import { screenToTop } from '@/utils'
 import { usePrivy } from '@privy-io/react-auth'
@@ -90,55 +91,60 @@ function RouteComponent() {
   })
 
   useEffect(() => {
-    if (userData && userData?.user?.audit_status === 2) {
-      setSelectStatus(0)
-      // 弹出间隔不能少于5s
-      if (Date.now() - lastDialog > 5000) {
-        setIsSuccess(true)
+    if (authenticated) {
+      if (!userData?.user?.id) { // 用户未登录
+        setIsSuccess(false)
       }
-      setRegisterStatus(2)
-      setLastDialog(Date.now())
-      setErrorMessage(userData.user?.review_remark)
-    }
-    else if (userData && userData?.user?.audit_status === 1) {
-      if (Date.now() - lastDialog > 5000) {
-        setIsSuccess(true)
+      else if (userData && userData?.user?.audit_status === USER_AUDIT_STATUS.REJECT) {
+        setSelectStatus(0)
+        // 弹出间隔不能少于5s
+        if (Date.now() - lastDialog > 5000) {
+          setIsSuccess(true)
+        }
+        setRegisterStatus(2)
+        setLastDialog(Date.now())
+        setErrorMessage(userData.user?.review_remark)
       }
+      else if (userData && userData?.user?.audit_status === USER_AUDIT_STATUS.PASS) {
+        if (Date.now() - lastDialog > 5000) {
+          setIsSuccess(true)
+        }
 
-      // 根据用户类型设置按钮文本和点击事件
-      let buttonConfig
-      switch (userData.user?.type) {
-        case 3:
-          buttonConfig = {
-            text: t('register.asset.enterAssetCenter'),
-            onClick: () => {
-              navigate({ to: '/assete' })
+        // 根据用户类型设置按钮文本和点击事件
+        let buttonConfig
+        switch (userData.user?.type) {
+          case USER_TYPE.ASSET:
+            buttonConfig = {
+              text: t('register.asset.enterAssetCenter'),
+              onClick: () => {
+                navigate({ to: '/assete' })
+              }
             }
-          }
-          break
-        case 4:
-          buttonConfig = {
-            text: t('register.asset.enterEvaluationTaskCenter'),
-            onClick: () => {
-              navigate({ to: '/evaluation' })
+            break
+          case USER_TYPE.ASSESS:
+            buttonConfig = {
+              text: t('register.asset.enterEvaluationTaskCenter'),
+              onClick: () => {
+                navigate({ to: '/evaluation' })
+              }
             }
-          }
-          break
-        default:
-          buttonConfig = {
-            text: t('register.asset.enterLawyerTaskCenter'),
-            onClick: () => {
-              navigate({ to: '/lawyerWorkbench' })
+            break
+          default:
+            buttonConfig = {
+              text: t('register.asset.enterLawyerTaskCenter'),
+              onClick: () => {
+                navigate({ to: '/lawyerWorkbench' })
+              }
             }
-          }
-      }
+        }
 
-      setDialogButton(buttonConfig)
-      setRegisterStatus(1)
-      setLastDialog(Date.now())
-      setErrorMessage(userData.user?.review_remark)
+        setDialogButton(buttonConfig)
+        setRegisterStatus(1)
+        setLastDialog(Date.now())
+        setErrorMessage(userData.user?.review_remark)
+      }
     }
-  }, [userData, t, navigate])
+  }, [userData, t, navigate, authenticated])
 
   useEffect(() => {
     screenToTop()
@@ -148,12 +154,12 @@ function RouteComponent() {
   const selectComponent = useMemo(() => {
     let status = selectStatus
     // 如果未登录则返回表单首页
-    if ((!authenticated || !userData?.user?.id) && selectStatus > 0 && lastStatus !== status) {
+    if ((!authenticated) && selectStatus > 0 && lastStatus !== status) {
       toast.error(t('login.pleaseLogin'))
       setSelectStatus(0)
       status = 0
     }
-    else if (userData?.user?.audit_status === 1 && selectStatus > 0 && lastStatus !== status) {
+    else if (userData?.user?.audit_status === USER_AUDIT_STATUS.PASS && selectStatus > 0 && lastStatus !== status) {
       toast.info(t('login.userRegistered'))
       setSelectStatus(0)
       status = 0

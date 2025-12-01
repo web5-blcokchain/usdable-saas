@@ -24,7 +24,19 @@
     "confirm": "確認",
     "submitError": "提出に失敗しました",
     "confirmOnChain": "ブロックチェーンに確認",
-    "year": "ねんです"
+    "year": "ねんです",
+    "inputPlaceholder": "入力してください",
+    "identity": {
+      "assetParty": "資産方 {{name}}",
+      "assetPartyContent": "資産方",
+      "lawyer": "{{name}}弁護士",
+      "lawyerContent": "弁護士",
+      "evaluator": "評価者 {{name}}",
+      "evaluatorContent": "評価者",
+      "platformAdmin": "プラットフォーム管理人の {{name}} さんです",
+      "platformAdminContent": "プラットフォーム管理人"
+    },
+    "noContent": "内容がありません"
   },
   "header": {
     "login": "ログイン",
@@ -483,8 +495,12 @@
       "dragFilesHere": "ファイルをここにドラッグ",
       "selectFiles": "ファイルを選択",
       "pendingSupplementFiles": "追加提出待ちのファイル",
+      "pendingAuditFiles": "待審査ファイル",
       "reUpload": "再アップロード",
-      "submitForReaudit": "再審査を提出"
+      "submitForReaudit": "再審査を提出",
+      "assetBasicInfo": "資産基本情報",
+      "auditRemark": "審査備考",
+      "auditProgress": "審査進捗"
     },
     "payRent": {
       "title": "家賃の支払い",

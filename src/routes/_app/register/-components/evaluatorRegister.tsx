@@ -8,6 +8,8 @@ import fileIcon from '@/assets/images/register/file.png'
 import userCardIcon from '@/assets/images/register/userCard.png'
 import signIcom from '@/assets/images/register/userSign.png'
 import UploadMultifileCard from '@/components/common/upload/uploa-multifile-card'
+import { USER_AGREE } from '@/enum/common'
+import { USER_AUDIT_STATUS } from '@/enum/user'
 import { useUserStore } from '@/stores/user'
 import { screenToTop } from '@/utils'
 import { envConfig } from '@/utils/envConfig'
@@ -50,7 +52,7 @@ export function EvaluatorRegister({ back }: { back: () => void }) {
   const { mutateAsync: userResgiter } = useMutation({
     mutationKey: ['userRegitser'],
     mutationFn: async (values: UserRegisterModel) => {
-      return userData?.user?.audit_status !== 2 ? apiMyInfoApi.regitser(values) : apiMyInfoApi.resubmitRegister(values)
+      return userData?.user?.audit_status !== USER_AUDIT_STATUS.REJECT ? apiMyInfoApi.regitser(values) : apiMyInfoApi.resubmitRegister(values)
     }
   })
 
@@ -94,8 +96,8 @@ export function EvaluatorRegister({ back }: { back: () => void }) {
       case 1: {
         const data = {
           ...values,
-          agree_aml_statement: values.agree_aml_statement ? 1 : 0,
-          service_agreement_status: values.service_agreement_status ? 1 : 0
+          agree_aml_statement: values.agree_aml_statement ? USER_AGREE.YES : USER_AGREE.NO,
+          service_agreement_status: values.service_agreement_status ? USER_AGREE.YES : USER_AGREE.NO
         }
         await onFinish({
           ...sumbitData,
@@ -201,7 +203,6 @@ function FirstStep({ form, back, onFinish, className }: {
         value: item.id,
         label: item.name
       })) || [] as LocationData[]
-      console.log(newData)
 
       setLocationData((pre) => {
         if (selectPid.selectedLocation === 0) {

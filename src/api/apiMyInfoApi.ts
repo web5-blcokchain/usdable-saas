@@ -1,3 +1,5 @@
+import type { USER_AGREE } from '@/enum/common'
+import type { ASSET_TYPE, USER_AUDIT_STATUS, USER_TYPE } from '@/enum/user'
 import type { AccountType } from '@/enums/create-account.ts'
 import apiClient from './client'
 
@@ -76,11 +78,11 @@ interface User {
   /**
    * 是否同意《反洗钱承诺书》 1=是 0=否
    */
-  agree_aml_statement: number
+  agree_aml_statement: USER_AGREE
   /**
    * 是否同意《资产上链合规声明》 1=是 0=否
    */
-  agree_asset_compliance: number
+  agree_asset_compliance: USER_AGREE
   /**
    * 审核日期
    */
@@ -88,7 +90,7 @@ interface User {
   /**
    * 审核状态 0为未审核 1为已审核
    */
-  audit_status: number
+  audit_status: USER_AUDIT_STATUS
   /**
    * 头像
    */
@@ -151,7 +153,7 @@ interface User {
   /**
    * 资产方类型 1为个人 2为企业
    */
-  p_type: number
+  p_type: ASSET_TYPE
   password: string
   /**
    * 律所执业许可证号
@@ -172,7 +174,7 @@ interface User {
   /**
    * 3资产方 4 评估方 5 律师方
    */
-  type: number
+  type: USER_TYPE
   update_time: number
   /**
    * 统一社会信用代码
@@ -198,19 +200,19 @@ export interface UserRegisterModel {
   /**
    * 是否同意《反洗钱承诺书》 1=是 0=否 （type=3 必填）
    */
-  agree_aml_statement?: string
+  agree_aml_statement?: USER_AGREE
   /**
    * 是否同意《资产上链合规声明》 1=是 0=否（type=3 必填）
    */
-  agree_asset_compliance?: string
+  agree_asset_compliance?: USER_AGREE
   /**
    * 合规承诺 1=同意，0=不同意（type=5 必填）
    */
-  agree_compliance_promise?: string
+  agree_compliance_promise?: USER_AGREE
   /**
    * 平台注册服务协议  1=同意，0=不同意（type=5 必填）
    */
-  agree_service_terms?: string
+  agree_service_terms?: USER_AGREE
   /**
    * 反洗钱合规声明文件（type=4 必填）
    */
@@ -310,7 +312,7 @@ export interface UserRegisterModel {
   /**
    * 资产方类型  1为个人  2为企业 （type=3 必填）
    */
-  p_type?: string
+  p_type?: ASSET_TYPE
   /**
    * 律所执业许可证号（type=5 必填）
    */
@@ -326,7 +328,7 @@ export interface UserRegisterModel {
   /**
    * 是否已签署平台服务协议 0为否 1为是（type=4 必填）
    */
-  service_agreement_status?: string
+  service_agreement_status?: USER_AGREE
   /**
    * 专业领域（type=5 必填）
    */
@@ -338,7 +340,7 @@ export interface UserRegisterModel {
   /**
    * 类型 3资产方 4 评估方 5 律师方
    */
-  type?: string
+  type?: USER_TYPE
   /**
    * 社会统一信用代码（type=3/4 必填）
    */

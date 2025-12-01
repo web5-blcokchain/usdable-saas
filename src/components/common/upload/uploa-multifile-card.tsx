@@ -27,7 +27,8 @@ function UploadMultifileCard({
   removeFile,
   loading = false,
   children,
-  multiple = true
+  multiple = true,
+  isMultipleFiles = false
 }: {
   fileType: string
   fileUrl: string[]
@@ -44,6 +45,7 @@ function UploadMultifileCard({
   loading?: boolean
   children?: React.ReactNode
   multiple?: boolean
+  isMultipleFiles?: boolean
 }) {
   const toFileUrl = (file: string) => {
     window.open(file, '_blank')
@@ -66,55 +68,56 @@ function UploadMultifileCard({
         }}
         disabled={!beforeUpload}
         accept={fileType}
-        multiple={multiple}
+        multiple={multiple === undefined ? true : multiple}
       >
         <div className={cn('flex gap-3 max-lg:flex-col', className)}>
           {fileUrl.map((item, index) => {
             return (
-              <div
-                key={`${item}-${index}`}
-                className="relative fcc [&>div]:h-full max-md:w-full [&>.remove-child]:hover:opacity-100"
-                onClick={(e) => {
-                  e.stopPropagation()
-                }}
-              >
-                <FilePreview
-                  style={{ width, height }}
-                  src={item}
-                  className="max-md:!w-full"
-                  imageContainerClass="rounded-lg of-hidden h-full"
-                  fileType={urlTofileType(item)}
-                  imageClass="h-full  aspect-[none] "
-                  onImageClick={(_file, _index) => {
-                    if (urlTofileType(item) === UploadFileType.Image) {
-                      // e.stopPropagation()
-                    }
-                    else {
-                      toFileUrl(item)
-                    }
+              !isMultipleFiles && (
+                <div
+                  key={item}
+                  className="relative fcc [&>div]:h-full max-md:w-full [&>.remove-child]:hover:opacity-100"
+                  onClick={(e) => {
+                    e.stopPropagation()
                   }}
-                />
-
-                <div className="remove-child absolute left-0 top-0 h-full w-full fcc gap-3 bg-black/50 opacity-0 transition-opacity duration-200">
-                  <div
-                    onClick={() => {
+                >
+                  <FilePreview
+                    style={{ width, height }}
+                    src={item}
+                    className="max-md:!w-full"
+                    imageContainerClass="rounded-lg of-hidden h-full"
+                    fileType={urlTofileType(item)}
+                    imageClass="h-full  aspect-[none] "
+                    onImageClick={(_file, _index) => {
                       if (urlTofileType(item) === UploadFileType.Image) {
-                        setImageList([item])
-                        setPreviewVisible(true)
+                      // e.stopPropagation()
                       }
                       else {
                         toFileUrl(item)
                       }
                     }}
-                    className="cursor-pointer clickable"
-                  >
-                    <div className="i-weui:eyes-on-outlined size-6"></div>
-                  </div>
-                  <div onClick={() => removeFile?.(index)} className="cursor-pointer clickable">
-                    <div className="i-material-symbols:delete-outline size-6 bg-white"></div>
+                  />
+                  <div className="remove-child absolute left-0 top-0 h-full w-full fcc gap-3 bg-black/50 opacity-0 transition-opacity duration-200">
+                    <div
+                      onClick={() => {
+                        if (urlTofileType(item) === UploadFileType.Image) {
+                          setImageList([item])
+                          setPreviewVisible(true)
+                        }
+                        else {
+                          toFileUrl(item)
+                        }
+                      }}
+                      className="cursor-pointer clickable"
+                    >
+                      <div className="i-weui:eyes-on-outlined size-6"></div>
+                    </div>
+                    <div onClick={() => removeFile?.(index)} className="cursor-pointer clickable">
+                      <div className="i-material-symbols:delete-outline size-6 bg-white"></div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )
             )
           })}
           <Image.PreviewGroup
@@ -128,7 +131,7 @@ function UploadMultifileCard({
           >
             {/* <img className="max-h-128 w-full" src={imageList[0]} alt="" /> */}
           </Image.PreviewGroup>
-          {fileUrl.length < maxLength
+          {(fileUrl.length < maxLength || isMultipleFiles)
             && (
               <div className="h-full">
 

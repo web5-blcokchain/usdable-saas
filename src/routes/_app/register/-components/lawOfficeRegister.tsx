@@ -5,6 +5,8 @@ import companyIcom from '@/assets/images/compony.png'
 import fileIcon from '@/assets/images/register/file-blue.png'
 import lawyerIcon from '@/assets/images/register/lawyer.png'
 import UploadMultifileCard from '@/components/common/upload/uploa-multifile-card'
+import { USER_AGREE } from '@/enum/common'
+import { USER_AUDIT_STATUS } from '@/enum/user'
 import { useUserStore } from '@/stores/user'
 import { envConfig } from '@/utils/envConfig'
 import { getToken } from '@/utils/user'
@@ -78,7 +80,7 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
     mutationKey: ['userRegitser'],
     mutationFn: async (values: UserRegisterModel) => {
       // 判断用户是否是被拒后，再次申请
-      return userData?.user?.audit_status !== 2 ? apiMyInfoApi.regitser(values) : apiMyInfoApi.resubmitRegister(values)
+      return userData?.user?.audit_status !== USER_AUDIT_STATUS.REJECT ? apiMyInfoApi.regitser(values) : apiMyInfoApi.resubmitRegister(values)
     }
   })
 
@@ -88,10 +90,10 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
       ...values,
       type: '5',
       token: getToken() || '',
-      agree_compliance_promise: values.agree_compliance_promise ? '1' : '0',
-      agree_asset_compliance: values.agree_asset_compliance ? '1' : '0',
-      agree_aml_statement: values.agree_aml_statement ? '1' : '0',
-      agree_service_terms: values.agree_service_terms ? '1' : '0'
+      agree_compliance_promise: values.agree_compliance_promise ? USER_AGREE.YES : USER_AGREE.NO,
+      agree_asset_compliance: values.agree_asset_compliance ? USER_AGREE.YES : USER_AGREE.NO,
+      agree_aml_statement: values.agree_aml_statement ? USER_AGREE.YES : USER_AGREE.NO,
+      agree_service_terms: values.agree_service_terms ? USER_AGREE.YES : USER_AGREE.NO
     }
 
     await userResgiter({

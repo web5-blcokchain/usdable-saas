@@ -3,6 +3,7 @@ import apiMyInfoApi from '@/api/apiMyInfoApi'
 import logo from '@/assets/images/logo.png'
 import { LoginDialog } from '@/components/dialog/login'
 import { USER_INFO_KEY } from '@/constants/user'
+import { USER_AUDIT_STATUS } from '@/enum/user'
 import { UserCode } from '@/enums/user'
 import { eventBus } from '@/hooks/EventBus'
 import { useUserStore } from '@/stores/user'
@@ -74,7 +75,7 @@ export default function MainHeader() {
       }
       // 判断用户是否注册
       const hasError = errorList.some(item => item.message === t('login.register_message') && item.time > Date.now() - 5000)
-      if ((res?.code !== 1 || res.data?.user?.audit_status === 2) && !hasError) {
+      if ((res?.code !== 1 || res.data?.user?.audit_status === USER_AUDIT_STATUS.REJECT) && !hasError) {
         toast.warning(t('login.register_message'))
         navigate({ to: '/register' })
       }
@@ -181,17 +182,21 @@ export default function MainHeader() {
       }
     }
     catch (error) {
-      console.log(error)
+      console.log('获取token失败', error)
       // 重新获取token失败，重新登录
       handleLogout()
     }
   }
   useEffect(() => {
-    // 定时监测，刷新token (5分钟)
-    const interval = setInterval(checkToken, 5000 * 60)
+    // 定时监测，刷新token (10分钟)
+    let interval = setInterval(checkToken, 1000 * 60 * 10)
     const visibilitychange = () => {
       if (document.visibilityState === 'visible') {
         checkToken()
+        interval = setInterval(checkToken, 5000 * 60)
+      }
+      else {
+        clearInterval(interval)
       }
     }
     // 全局事件总线监听token失效
@@ -218,7 +223,7 @@ export default function MainHeader() {
           {
             !userData?.user?.id
               ? (
-                  <LoginButton isLoading={isLoading} setOpenLoginDialog={setOpenLoginDialog} />
+                  (!authenticated && <LoginButton isLoading={isLoading} setOpenLoginDialog={setOpenLoginDialog} />)
                 )
               : (
                   <div className="fyc">

@@ -43,7 +43,6 @@ export function formatTimeDiff(time: string | number | Date, t?: any): string {
   if (diffDays < 30) {
     return `${diffDays} ${t ? (t('common.day') + t('common.timeAgo')) : '天前提交'}`
   }
-  console.log('diffMonths', diffMonths)
 
   // 月份计算
   if (diffMonths < 10) {

@@ -1,3 +1,5 @@
+import type { ASSET_AUDIT_SUBMISSION_STATUS, ASSET_AUDITOR_ROLE, ASSET_STATUS, ASSET_SUBMISSION_STATUS, RISK_STATUS, SALE_STATUS } from '@/enum/asset'
+import type { INPUT_FORMAT_TYPE, INPUT_UI_TYPE, IS_REQUIRED, REVIEW_STATUS } from '@/enum/common'
 import type { DataListResponse } from './responseData'
 import apiClient from './client'
 
@@ -89,7 +91,7 @@ export interface SubmissionData {
 状态 审核状态 -1草稿 0待审核 1律师已确认 2为审核驳回\r\n3 律师已审核
  4评估方已认领 5 评估方已驳回 6 评估方已评估7：律师已认领线下 8律师线下上传材料 9资产已上链
    */
-  status: number
+  status: ASSET_STATUS
   /**
    * 状态说明
    */
@@ -196,7 +198,7 @@ export interface AssetsOperationData {
   /**
    * 风险 1为正常 2为宽限期 3为升级逾期 4 违约理赔期 5保险理赔 6 清算 7拍卖成功 8拍卖失败
    */
-  property_status: number
+  property_status: RISK_STATUS
   /**
    * 房产类型
    */
@@ -222,7 +224,7 @@ export interface AssetsOperationData {
   /**
    * 状态 0待审核 1律师已确认 2为审核驳回\r\n3 律师已审核  4评估方已认领 5 评估方已驳回 6 评估方已评估 7律师已认领线下   8律师线下上传材料 9 资产已上链
    */
-  submission_status: number
+  submission_status: ASSET_STATUS
   token_name: string
   token_symbol: string
   total_money: number
@@ -248,11 +250,24 @@ export interface SubmitAssetInfo {
   /**
    * 需要上传的文件以及字段
    */
-  files: File[]
+  files: {
+    /**
+     * 文件需要添加的字段
+     */
+    fields?: Fields
+    /**
+     * 文件地址
+     */
+    file_urls: string[]
+    /**
+     * 文件Id
+     */
+    template_file_id: number
+  }[]
   /**
    * 状态 提交审核 不传为保存草稿
    */
-  status: string
+  status?: number
   /**
    * 资产id 编辑的时候用到
    */
@@ -261,7 +276,6 @@ export interface SubmitAssetInfo {
    * 模板id
    */
   template_id: number
-  [property: string]: any
 }
 
 /**
@@ -275,15 +289,15 @@ export interface BasicInfo {
   /**
    * 年化收益上限
    */
-  annual_return_max: string
+  annual_return_max: number
   /**
    * 年化收益下线
    */
-  annual_return_min: string
+  annual_return_min: number
   /**
    * 面积
    */
-  area: string
+  area: number
   /**
    * 房间数量
    */
@@ -295,7 +309,7 @@ export interface BasicInfo {
   /**
    * 城市id
    */
-  city: string
+  city: number
   /**
    * 预期年回报率（百分比）
    */
@@ -307,7 +321,7 @@ export interface BasicInfo {
   /**
    * 纬度
    */
-  latitude: string
+  latitude: number
   /**
    * 位置描述
    */
@@ -315,7 +329,7 @@ export interface BasicInfo {
   /**
    * 经度
    */
-  longitude: string
+  longitude: number
   /**
    * 月租
    */
@@ -335,7 +349,7 @@ export interface BasicInfo {
   /**
    * 类型id
    */
-  property_type: string
+  property_type: number
   /**
    * 缴纳房租日
    */
@@ -344,16 +358,15 @@ export interface BasicInfo {
 
 export interface File {
   /**
-   * 文件需要添加的字段
+   * 提交的文件字段信息
    */
-  fields?: Fields
+  fields: Field[]
+  file_info: FileInfo
   /**
-   * 文件地址
+   * 已提交的文件信息
    */
-  file_urls: string[]
-  /**
-   * 文件Id
-   */
+  file_urls: FileUrls
+  id: number
   template_file_id: number
 }
 
@@ -364,6 +377,7 @@ export interface Fields {
   file_code: string
   file_date: string
 }
+
 /**
  * 房产类型
  */
@@ -377,6 +391,513 @@ export interface HouseType {
    * 房产类型名称
    */
   name: string
+}
+// ---------资产信息
+/**
+ * 资产信息
+ */
+export interface AssetInfo {
+  /**
+   * 审核日志信息
+   */
+  audit_logs: AuditLog[]
+  /**
+   * 资产文件信息
+   */
+  files: AssetFile[]
+  /**
+   * 资产基础信息
+   */
+  properties: Properties
+  /**
+   * 提交资产模版信息
+   */
+  submission: Submission
+  /**
+   * 模板文件相关信息
+   */
+  template_files: TemplateFile[]
+}
+
+/**
+ * 文件上传模板信息
+ */
+export interface AssetFileTemplates {
+  /**
+   * 类型id
+   */
+  asset_type_id?: number
+  /**
+   * 编码
+   */
+  code?: string
+  /**
+   * 国家id
+   */
+  country_id?: number
+  create_date?: number
+  /**
+   * 多语言Json
+   */
+  i18n_labels_json?: null
+  /**
+   * 模板id
+   */
+  id?: number
+  /**
+   * 模板名称
+   */
+  name?: string
+  /**
+   * 备注
+   */
+  notes?: string
+  parent_template_id?: null
+  /**
+   * 状态
+   */
+  status?: number
+  /**
+   * 需要上传的文件
+   */
+  template_files?: TemplateFile[]
+  update_date?: number
+  /**
+   * 创建人id
+   */
+  user_id?: number
+}
+
+export interface TemplateFile {
+  create_date: number
+  /**
+   * 描述
+   */
+  description: string
+  /**
+   * 名称
+   */
+  display_name: string
+  /**
+   * 文件里面需要提交的字段信息
+   */
+  fields: Field[]
+  /**
+   * 提交文件的参数键值
+   */
+  file_code: string
+  i18n_labels_json: null
+  /**
+   * 文件id
+   */
+  id: number
+  /**
+   * 是否必填 1为是 0为否
+   */
+  is_required: IS_REQUIRED
+  metadata_json: null
+  /**
+   * 排序
+   */
+  order_index: number
+  /**
+   * 模板id
+   */
+  template_id: number
+  update_date: number
+}
+
+export interface Field {
+  create_date: number
+  /**
+   *
+   * 输入值的格式类型'STRING','TEXT','INT','DECIMAL','DATE','DATETIME','BOOL','ENUM','MULTI_ENUM','FILE','ADDRESS','JSON'
+   */
+  data_type: INPUT_FORMAT_TYPE
+  /**
+   * 默认值
+   */
+  default_value: string
+  /**
+   * 字段键
+   */
+  field_key: string
+  /**
+   * 提示文字
+   */
+  help_text: string
+  /**
+   * 多语言标签和提示
+   */
+  i18n_labels_json: null
+  /**
+   * id
+   */
+  id: number
+  /**
+   * 显示的名称
+   */
+  label: string
+  /**
+   * 下拉/单选选项 JSON 数组
+   */
+  options_json: null
+  /**
+   * 排序
+   */
+  order_index: number
+  /**
+   * 输入占位符
+   */
+  placeholder: string
+  /**
+   * 是否必填 1为是 0为否
+   */
+  required: IS_REQUIRED
+  /**
+   * 文件id
+   */
+  template_file_id: number
+  /**
+   * 输入ui的类型
+   * 'INPUT','TEXTAREA','NUMBER','DATEPICKER','CHECKBOX','RADIO','SELECT','MULTISELECT','UPLOAD'
+   */
+  ui_control: INPUT_UI_TYPE
+  update_date: number
+  /**
+   * 验证规则，如正则、最小值、最大值
+   */
+  validation_json: null
+}
+
+export interface AuditLog {
+  /**
+   * 提交ID
+   */
+  audit_step: number
+  /**
+   * 审核时间
+   */
+  audit_time: number
+  /**
+   * 审核步骤：0:资料提交 1：律师认领 2：律师驳回 3：律师审核通过 4：评估方认领 5 ：评估方驳回 6：评估方审核通过 7：律师线下提交资料成功 8：资产上链成功
+   */
+  auditor_id: ASSET_AUDIT_SUBMISSION_STATUS
+  /**
+   * 审核人姓名
+   */
+  auditor_name: null
+  /**
+   * 审核人角色 1为资产方 2为 律师 3为评估 4为平台管理员
+   */
+  auditor_role: ASSET_AUDITOR_ROLE
+  /**
+   * 创建日期
+   */
+  create_date: number
+  id: number
+  /**
+   * 驳回原因（如果驳回）
+   */
+  reject_reason: null
+  /**
+   * 备注
+   */
+  remark: string
+  /**
+   * 审核状态：0=待审核，1=审核通过，2=审核驳回，-1=已撤回
+   */
+  status: REVIEW_STATUS
+  submission_id: number
+  /**
+   * 更新日期
+   */
+  update_date: number
+}
+
+export interface AssetFile extends File {
+  file_info: FileInfo
+  id: number
+}
+
+export interface Field {
+  /**
+   * 模板文件字段相关信息
+   */
+  definition: Definition
+  /**
+   * 字段的key
+   */
+  field_key: string
+  /**
+   * 提交的文件信息id
+   */
+  submission_file_id: number
+  /**
+   * 模板文件字段id
+   */
+  template_file_field_id: number
+  /**
+   * 字段的字
+   */
+  value: string
+}
+
+/**
+ * 模板文件字段相关信息
+ */
+export interface Definition {
+  create_date: number
+  data_type: string
+  default_value: string
+  field_key: string
+  help_text: string
+  i18n_labels_json: null
+  id: number
+  label: string
+  options_json: null
+  order_index: number
+  placeholder: string
+  required: number
+  template_file_id: number
+  ui_control: string
+  update_date: number
+  validation_json: null
+}
+
+export interface FileInfo {
+  create_date: number
+  description: string
+  display_name: string
+  file_code: string
+  i18n_labels_json: null
+  id: number
+  is_required: number
+  metadata_json: null
+  order_index: number
+  template_id: number
+  update_date: number
+}
+
+/**
+ * 已提交的文件信息
+ */
+export interface FileUrls {
+  /**
+   * 文件链接
+   */
+  fileUrls: string[]
+  /**
+   * 驳回意见
+   */
+  remake: string
+  /**
+   * 状态 0为待审核 1为已审核 2为审核驳回
+   */
+  status: REVIEW_STATUS
+}
+
+/**
+ * 资产基础信息
+ */
+export interface Properties {
+  /**
+   * 激活日期
+   */
+  activate_date: number
+  /**
+   * 激活哈希
+   */
+  activate_hash: string
+  /**
+   * 地址
+   */
+  address: string
+  /**
+   * 年化收益上限
+   */
+  annual_return_max: string
+  /**
+   * 年化收益下限
+   */
+  annual_return_min: string
+  /**
+   * 估值
+   */
+  appraisement: string
+  /**
+   * 面积
+   */
+  area: string
+  /**
+   * 房间
+   */
+  bedrooms: number
+  /**
+   * 违约天数
+   */
+  breaking_contract_number: number
+  /**
+   * 资本增值
+   */
+  capital_appreciation: null
+  /**
+   * 链id
+   */
+  chain_id: number
+  /**
+   * 城市
+   */
+  city: string
+  contact: string
+  /**
+   * 资产合约地址
+   */
+  contract_address: string
+  create_user: number
+  created_date: number
+  /**
+   * 国家id
+   */
+  district: string
+  equity: string
+  /**
+   * 预期年回报率
+   */
+  expected_annual_return: string
+  governance_reserved_tokens: number
+  /**
+   * 房屋年限
+   */
+  house_life: number
+  /**
+   * 资产id
+   */
+  id: number
+  /**
+   * 资产图片
+   */
+  image_urls: null
+  /**
+   * 初始份额
+   */
+  Inception_number: number
+  /**
+   * 纬度
+   */
+  latitude: string
+  /**
+   * 位置描述
+   */
+  location: string
+  /**
+   * 经度
+   */
+  longitude: string
+  /**
+   * 销售状态 0为未销售 1为销售中 2为售罄 3为已退出
+   */
+  market_status: SALE_STATUS
+  /**
+   * 月租
+   */
+  monthly_rent: string
+  /**
+   * 资产名称
+   */
+  name: string
+  /**
+   * 份额
+   */
+  number: number
+  old_token_name: string
+  payout_token_address: string
+  /**
+   * 邮编
+   */
+  postcode: string
+  /**
+   * 单价
+   */
+  price: null
+  properties_user: number
+  /**
+   * 房产描述
+   */
+  property_description: string
+  /**
+   * 资产状态 1为正常 2为宽限期 3为升级逾期 4 违约理赔期 5保险理赔 6 清算 7拍卖成功 8拍卖失败
+   */
+  property_status: RISK_STATUS
+  /**
+   * 房产类型
+   */
+  property_type: string
+  /**
+   * 交租日期
+   */
+  rent_day: number
+  /**
+   * 包含的租金回报率
+   */
+  rental_yield: null
+  status: number
+  token_name: string
+  token_symbol: string
+  /**
+   * 交易哈西
+   */
+  tx_hash: string
+  updated_date: number
+  valuation_report: string
+}
+
+/**
+ * 提交资产模版信息
+ */
+export interface Submission {
+  /**
+   * 资产类型id
+   */
+  asset_type_id: number
+  /**
+   * 资产编码
+   */
+  code: string
+  /**
+   * 国家id
+   */
+  country_id: number
+  create_date: number
+  /**
+   * 资产模板id
+   */
+  id: number
+  /**
+   * 资产id
+   */
+  properties_id: number
+  /**
+   * 驳回信息
+   */
+  review_remark: null
+  /**
+   * 状态 -1为草稿  0为待审核 1为审核通过 2为审核驳回
+   */
+  status: ASSET_SUBMISSION_STATUS
+  /**
+   * 模板Id
+   */
+  template_id: number
+  update_date: number
+  /**
+   * 用户id
+   */
+  user_id: number
+  /**
+   * 所有权
+   */
+  assets_user_name: string
 }
 
 export default {
@@ -431,17 +952,10 @@ export default {
    * @param data 资产信息
    * @returns
    */
-  saveAssetInfo(data: BasicInfo) {
+  saveAssetInfo(data: SubmitAssetInfo) {
     return apiClient.post<{
-      /**
-       * 编码
-       */
-      code: string
-      id: number
-      /**
-       * 房产类型名称
-       */
-      name: string
+      properties_id: number
+      submission_id: string
     }>('/api/assets/saveAssetInfo', data)
   },
   /**
@@ -450,5 +964,22 @@ export default {
    */
   getAssetHouseType() {
     return apiClient.post<HouseType[]>('/api/assets/pType')
+  },
+  /**
+   * 资产需要上传文件信息
+   * @returns 上传的文件信息
+   */
+  getAssetTemplates(asset_type_id: number[]) {
+    return apiClient.post<{
+      list: AssetFileTemplates
+    }>('/api/assets/templates', { asset_type_id })
+  },
+  /**
+   * 获取资产信息
+   * @param submission_id 资产id
+   * @returns
+   */
+  getAssetInfo(submission_id: string) {
+    return apiClient.post<AssetInfo>('/api/assets/submissionDetail', { submission_id })
   }
 }

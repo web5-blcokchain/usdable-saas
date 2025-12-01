@@ -24,7 +24,19 @@
     "confirm": "Confirm",
     "submitError": "Submission failed",
     "confirmOnChain": "Confirm On Chain",
-    "year": "Year"
+    "year": "Year",
+    "inputPlaceholder": "Please input",
+    "identity": {
+      "assetParty": "Asset Party {{name}}",
+      "assetPartyContent": "Asset Party",
+      "lawyer": "{{name}} Lawyer",
+      "lawyerContent": "Lawyer",
+      "evaluator": "Evaluator {{name}}",
+      "evaluatorContent": "Evaluator",
+      "platformAdmin": "Platform Admin {{name}}",
+      "platformAdminContent": "Platform Admin"
+    },
+    "noContent": "No Content"
 
   },
   "header": {
@@ -484,8 +496,12 @@
       "dragFilesHere": "Drag files here",
       "selectFiles": "Select Files",
       "pendingSupplementFiles": "Pending Supplement Files",
+      "pendingAuditFiles": "Pending Audit Files",
       "reUpload": "Re-upload",
-      "submitForReaudit": "Submit for Re-audit"
+      "submitForReaudit": "Submit for Re-audit",
+      "assetBasicInfo": "Asset Basic Information",
+      "auditRemark": "Audit Remarks",
+      "auditProgress": "Audit Progress"
     },
     "payRent": {
       "title": "Pay Rent",

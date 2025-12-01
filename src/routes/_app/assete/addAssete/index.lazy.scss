@@ -2,11 +2,15 @@
   .ant-input-number {
     width: 100%;
   }
-  input,.ant-select {
+  input,
+  .ant-select {
     @apply h-12.5 bg-#1E2328 b-#374151 w-full;
   }
-  .ant-select-selector,textarea{
-    background:  transparent;
+  .ant-select-selector {
+    background: transparent;
+  }
+  textarea {
+    @apply bg-#1E2328;
   }
 }
 
@@ -20,11 +24,11 @@
   margin-bottom: 1rem;
 }
 
-.ant-upload-wrapper{
+.ant-upload-wrapper {
   width: 100% !important;
-  .ant-upload{
+  .ant-upload {
     width: 100% !important;
-    >div>div{
+    > div > div {
       width: 100%;
     }
   }
