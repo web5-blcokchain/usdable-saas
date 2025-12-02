@@ -99,7 +99,8 @@ export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, on
     }
   })
 
-  const provinceData = useWatch('province', form)
+  const provinceData = useWatch('city', form)
+  const countryData = useWatch('country_id', form)
   // 修改地区
   const changeCity = (val: number, index: number) => {
     if (index === 0) {
@@ -108,15 +109,15 @@ export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, on
         country: val,
         selectedLocation: 1
       }))
-      !provinceData && form.setFieldValue('province', '')
-      form.setFieldValue('city', '')
+      !countryData && form.setFieldValue('city', '')
     }
   }
 
   // 当读取草稿时候，获取城市列表
   useEffect(() => {
-    if (provinceData)
-      changeCity(provinceData, 1)
+    if (provinceData) {
+      changeCity(countryData, 0)
+    }
   }, [provinceData])
 
   const assetType = useWatch('asset_type_id', form)

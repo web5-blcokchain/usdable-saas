@@ -760,6 +760,7 @@ export function SecondStep({ form, back, onFinish, className }: {
                 </Checkbox>
                 <div className="clickable">{t('register.asset.readAMLTerms')}</div>
               </div>
+              {/* TODO 显示全文 */}
               {/* 最多两行，超出显示... */}
               <div className="[-webkit-box-orient:vertical] [-webkit-line-clamp:2] [display:-webkit-box] mt-3 overflow-hidden text-sm text-#6B7280">
                 {t('register.asset.amlTerms')}

@@ -25,6 +25,7 @@
     "submitError": "提交失败",
     "confirmOnChain": "确认上链",
     "year": "年",
+    "month": "月",
     "inputPlaceholder": "请输入",
     "identity": {
       "assetParty": "资产方 {{name}}",
@@ -36,7 +37,43 @@
       "platformAdmin": "平台管理员 {{name}}",
       "platformAdminContent": "平台管理员"
     },
-    "noContent": "暂无内容"
+    "noContent": "暂无内容",
+    "token_expired": "登录已过期，请重新登录",
+    "assetStatus": {
+      "-1": "草稿",
+      "0": "待审核",
+      "1": "律师已确认",
+      "2": "审核驳回",
+      "3": "律师已审核",
+      "4": "评估方已认领",
+      "5": "评估方已驳回",
+      "6": "评估方已评估",
+      "7": "律师已认领线下",
+      "8": "律师线下上传材料",
+      "9": "资产已上链",
+      "other": "未知"
+    },
+    "assetRentStatus": {
+      "0": "未知",
+      "1": "正常",
+      "2": "待缴纳",
+      "3": "逾期"
+    },
+    "assetPropertyStatus": {
+      "0": "未知",
+      "1": "正常",
+      "2": "宽限期",
+      "3": "升级逾期",
+      "4": "违约理赔期",
+      "5": "保险理赔",
+      "6": "清算",
+      "7": "拍卖成功",
+      "8": "拍卖失败",
+      "other": "未知"
+    },
+    "paySuccess": "支付成功",
+    "copySuccess": "复制成功",
+    "logoutSuccess": "退出登录成功"
   },
   "header": {
     "login": "登录",

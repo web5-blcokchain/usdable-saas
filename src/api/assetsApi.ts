@@ -900,6 +900,28 @@ export interface Submission {
   assets_user_name: string
 }
 
+/**
+ * 资产租金收入
+ */
+export interface SaveRentIncome {
+  /**
+   * 缴纳金额
+   */
+  income_amount?: string
+  /**
+   * 租金月份
+   */
+  income_date?: string
+  /**
+   * 资产提交id
+   */
+  submission_id?: string
+  /**
+   * 交易哈希
+   */
+  tx_hash?: string
+}
+
 export default {
   /**
    * 资产类型
@@ -981,5 +1003,34 @@ export default {
    */
   getAssetInfo(submission_id: string) {
     return apiClient.post<AssetInfo>('/api/assets/submissionDetail', { submission_id })
+  },
+  /**
+   * 保存资产租金收入
+   * @param data 资产租金收入
+   * @returns
+   */
+  saveRentIncome(data: SaveRentIncome) {
+    return apiClient.post<{
+      /**
+       * 违约房产
+       */
+      default_properties: number
+      /**
+       * 本月应缴纳租金
+       */
+      monthly_due_amount: number
+      /**
+       * 正常房产
+       */
+      normal_properties: number
+      /**
+       * 待缴纳房产
+       */
+      pending_properties: number
+      /**
+       * 总房产
+       */
+      total_properties: number
+    }>('/api/assetsinfo/saveRentIncome', data)
   }
 }

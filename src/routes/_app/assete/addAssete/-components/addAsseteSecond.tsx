@@ -317,7 +317,7 @@ export function AddAsseteSecond({ form, onFinish, backStep, saveDraft }: {
                         <div className="grid cols-2 mt-4 gap-6">
                           {
                             item.fields.map((field) => {
-                            // 输入值的格式类型'STRING','TEXT','INT','DECIMAL','DATE','DATETIME','BOOL','ENUM','MULTI_ENUM','FILE','ADDRESS','JSON'
+                              // 输入值的格式类型'STRING','TEXT','INT','DECIMAL','DATE','DATETIME','BOOL','ENUM','MULTI_ENUM','FILE','ADDRESS','JSON'
                               return (
                                 <Form.Item
                                   key={field.field_key + field.data_type}

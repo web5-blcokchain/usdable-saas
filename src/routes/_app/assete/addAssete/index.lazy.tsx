@@ -1,7 +1,8 @@
 import type { SubmitAssetInfo } from '@/api/assetsApi'
 import type { FristFormData } from './-components/formDataType'
 import assetsApi from '@/api/assetsApi'
-import { screenToTop } from '@/utils'
+import { INPUT_FORMAT_TYPE } from '@/enum/common'
+import { extractFirstBraces, screenToTop } from '@/utils'
 import { useMutation } from '@tanstack/react-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useForm } from 'antd/es/form/Form'
@@ -118,16 +119,31 @@ function RouteComponent() {
       firstForm: firstForm.getFieldsValue(),
       secondForm: secondForm.getFieldsValue()
     }))
+    toast.success('保存草稿成功')
   }
 
   useEffect(() => {
     const draft = localStorage.getItem('draft')
-    if (draft) {
+    if (draft && firstForm && secondForm) {
       const draftData = JSON.parse(draft)
-      firstForm.setFieldsValue(draftData.firstForm)
-      secondForm.setFieldsValue(draftData.secondForm)
+      const secondFormData = {} as { [key: string]: any }
+
+      Object.keys(draftData.secondForm).forEach((key: string) => {
+        const data = extractFirstBraces(key)
+        if (Array.isArray(data) && [INPUT_FORMAT_TYPE.DATE, INPUT_FORMAT_TYPE.DATETIME].includes(data[1] as any)) {
+          secondFormData[key] = dayjs(draftData.secondForm[key])
+        }
+        else {
+          secondFormData[key] = draftData.secondForm[key]
+        }
+      })
+
+      console.log(secondForm, secondForm?.setFieldsValue)
+
+      firstForm?.setFieldsValue(draftData.firstForm)
+      secondForm?.setFieldsValue(secondFormData)
     }
-  }, [])
+  }, [firstForm, secondForm])
 
   useEffect(() => {
     screenToTop({

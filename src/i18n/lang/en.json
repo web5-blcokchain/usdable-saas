@@ -25,6 +25,7 @@
     "submitError": "Submission failed",
     "confirmOnChain": "Confirm On Chain",
     "year": "Year",
+    "month": "Month",
     "inputPlaceholder": "Please input",
     "identity": {
       "assetParty": "Asset Party {{name}}",
@@ -36,8 +37,31 @@
       "platformAdmin": "Platform Admin {{name}}",
       "platformAdminContent": "Platform Admin"
     },
-    "noContent": "No Content"
-
+    "noContent": "No Content",
+    "tokenExpired": "Token expired, please login again",
+    "assetStatus": {
+      "-1": "Draft",
+      "0": "Pending Review",
+      "1": "Confirmed by Lawyer",
+      "2": "Review Rejected",
+      "3": "Reviewed by Lawyer",
+      "4": "Claimed by Evaluator",
+      "5": "Rejected by Evaluator",
+      "6": "Evaluated by Evaluator",
+      "7": "Claimed Offline by Lawyer",
+      "8": "Lawyer Uploaded Offline Materials",
+      "9": "Asset Uploaded On-chain",
+      "other": "Unknown"
+    },
+    "assetRentStatus": {
+      "0": "Unknown",
+      "1": "Normal",
+      "2": "Pending Payment",
+      "3": "Overdue"
+    },
+    "paySuccess": "Payment Successful",
+    "copySuccess": "Copy Successful",
+    "logoutSuccess": "Logout Successful"
   },
   "header": {
     "login": "Login",

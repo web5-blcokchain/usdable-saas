@@ -3,7 +3,7 @@ import type { ColumnsType } from 'antd/es/table'
 import assetsApi from '@/api/assetsApi'
 import { CommonTable } from '@/components/common/common-table'
 import { CommonDialog } from '@/components/common/dialog/common'
-import { ASSET_STATUS } from '@/enum/asset'
+import { ASSET_STATUS, RISK_STATUS } from '@/enum/asset'
 import { formatNumberNoRound } from '@/utils/number'
 import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
@@ -33,7 +33,11 @@ function RouteComponent() {
     return [
       {
         title: 'assete.assetStatus.totalOnChain',
-        num: `$${formatNumberNoRound(assetStatistics?.total_on_chain || 0, 6, 0)}`,
+        num: `$${formatNumberNoRound(
+          assetStatistics?.total_on_chain || 0,
+          6,
+          0
+        )}`,
         icon: (
           <div className="size-10 fcc rounded-full bg-#CD647833">
             <div className="i-ic:round-warning text-4 text-#c26c7a"></div>
@@ -45,7 +49,13 @@ function RouteComponent() {
         num: assetStatistics?.total_on_chain || 0,
         icon: (
           <div className="size-10 fcc rounded-full bg-#2E2F1F">
-            <img className="h-4" src={new URL('@/assets/icon/assete/icon-2.png', import.meta.url).href} alt="" />
+            <img
+              className="h-4"
+              src={
+                new URL('@/assets/icon/assete/icon-2.png', import.meta.url).href
+              }
+              alt=""
+            />
           </div>
         )
       },
@@ -80,50 +90,86 @@ function RouteComponent() {
 
   // 资产运营状态
   const assetOperatingStatus = useMemo(() => {
-    return [{
-      title: 'assete.assetOperatingStatus.monthlyRent',
-      num: `$${formatNumberNoRound(assetsOperationSummary?.monthly_due_amount || 0, 6, 0)}`,
-      icon: (
-        <div className="size-10 fcc rounded-full bg-#00E6FF33">
-          <div className="i-ic:baseline-attach-money text-4 text-#68e2fb"></div>
-        </div>
-      )
-    }, {
-      title: 'assete.assetOperatingStatus.pendingProperties',
-      num: assetsOperationSummary?.pending_properties || 0,
-      icon: (
-        <div className="size-10 fcc rounded-full bg-#B987FA33">
-          <img className="h-4" src={new URL('@/assets/icon/assete/hourglass.png', import.meta.url).href} alt="" />
-        </div>
-      )
-    }, {
-      title: 'assete.assetOperatingStatus.defaultAssets',
-      num: assetsOperationSummary?.default_properties || 0,
-      icon: (
-        <div className="size-10 fcc rounded-full bg-#CD647833">
-          <div className="i-si:warning-fill text-4 text-#c26c7a"></div>
-        </div>
-      )
-    }]
+    return [
+      {
+        title: 'assete.assetOperatingStatus.monthlyRent',
+        num: `$${formatNumberNoRound(
+          assetsOperationSummary?.monthly_due_amount || 0,
+          6,
+          0
+        )}`,
+        icon: (
+          <div className="size-10 fcc rounded-full bg-#00E6FF33">
+            <div className="i-ic:baseline-attach-money text-4 text-#68e2fb"></div>
+          </div>
+        )
+      },
+      {
+        title: 'assete.assetOperatingStatus.pendingProperties',
+        num: assetsOperationSummary?.pending_properties || 0,
+        icon: (
+          <div className="size-10 fcc rounded-full bg-#B987FA33">
+            <img
+              className="h-4"
+              src={
+                new URL('@/assets/icon/assete/hourglass.png', import.meta.url)
+                  .href
+              }
+              alt=""
+            />
+          </div>
+        )
+      },
+      {
+        title: 'assete.assetOperatingStatus.defaultAssets',
+        num: assetsOperationSummary?.default_properties || 0,
+        icon: (
+          <div className="size-10 fcc rounded-full bg-#CD647833">
+            <div className="i-si:warning-fill text-4 text-#c26c7a"></div>
+          </div>
+        )
+      }
+    ]
   }, [assetsOperationSummary])
 
-  const [asseteErrorDialogVisible, setAsseteErrorDialogVisible] = useState(false)
-  const [payRentDialogVisible, setPayRentDialogVisible] = useState(false)
-  const [defaultDetailsDialogVisible, setDefaultDetailsDialogVisible] = useState(false)
+  const [asseteErrorDialogVisible, setAsseteErrorDialogVisible] = useState({
+    value: false,
+    data: {} as SubmissionData
+  })
+  const [payRentDialogVisible, setPayRentDialogVisible] = useState({
+    value: false,
+    data: {} as AssetsOperationData
+  }) // 房租缴纳
+  const [defaultDetailsDialogVisible, setDefaultDetailsDialogVisible]
+    = useState({
+      value: false,
+      data: {} as AssetsOperationData
+    })
   const [searchText, setSearchText] = useState('')
 
   useEffect(() => {
     return () => {
-      setPayRentDialogVisible(false)
-      setDefaultDetailsDialogVisible(false)
-      setAsseteErrorDialogVisible(false)
+      setPayRentDialogVisible({
+        value: false,
+        data: {} as AssetsOperationData
+      })
+      setDefaultDetailsDialogVisible({
+        value: false,
+        data: {} as AssetsOperationData
+      })
+      setAsseteErrorDialogVisible({
+        value: false,
+        data: {} as SubmissionData
+      })
     }
   }, [])
 
   return (
     <div className="bg-#000000 px-22 pb-15 pt-8 max-md:px-4">
       <div className="fyc justify-between">
-        <div className="text-2xl font-600">{t('assete.assetOnChainStatus')}</div>
+        <div className="text-2xl font-600">
+          {t('assete.assetOnChainStatus')}
+        </div>
         <Link to="/assete/addAssete">
           <Button className="h-10.5 fcc gap-2 b b-#00E5FF b-solid bg-#00E2FF1A px-4.5 text-#00E5FF">
             <div className="i-tabler:plus text-4 text-#00E5FF"></div>
@@ -133,8 +179,50 @@ function RouteComponent() {
       </div>
       {/* 资产上链状态 */}
       <div className="grid cols-4 mt-6 gap-4 max-md:cols-1">
-        {
-          assetStatus.map(item => (
+        {assetStatus.map(item => (
+          // hover 添加阴影 移动到右上10px
+          <div
+            key={item.title}
+            className="flex justify-between gap-3 rounded-2 bg-#161B22 px-5 py-10 backdrop-blur-4 transition-all-300 hover:translate-[4px,-4px] hover:shadow-2xl"
+          >
+            <div>
+              <div className="text-sm text-#9CA3AF">{t(item.title)}</div>
+              <div className="mt-1 text-7.5 font-bold">{item.num}</div>
+            </div>
+            <div>{item.icon}</div>
+          </div>
+        ))}
+      </div>
+      {/* 资产上链明细 */}
+      <div className="mt-8 rounded-2 bg-#161B22 backdrop-blur-4">
+        <div className="fyc justify-between p-4">
+          <div className="text-lg font-bold">
+            {t('assete.assetOnChainDetails')}
+          </div>
+          <Input
+            className="w-64 max-md:w-50% [&>input]:!h-6"
+            placeholder={t('assete.searchAsset')}
+            prefix={<div className="i-gg:search text-4 text-#E5E7EB"></div>}
+            onKeyUp={(e) => {
+              // 按下回车键
+              if (e.key === 'Enter') {
+                setSearchText(e.currentTarget.value)
+              }
+            }}
+          />
+        </div>
+        <AssetsTable
+          openErrorDialog={data =>
+            setAsseteErrorDialogVisible({ value: true, data })}
+          searchText={searchText}
+        />
+      </div>
+      <div className="mt-8">
+        <div className="text-2xl font-600">
+          {t('assete.assetOperatingStatusTitle')}
+        </div>
+        <div className="grid cols-4 mt-6 gap-4 max-md:cols-1">
+          {assetOperatingStatus.map(item => (
             // hover 添加阴影 移动到右上10px
             <div
               key={item.title}
@@ -146,67 +234,56 @@ function RouteComponent() {
               </div>
               <div>{item.icon}</div>
             </div>
-          ))
-        }
-      </div>
-      {/* 资产上链明细 */}
-      <div className="mt-8 rounded-2 bg-#161B22 backdrop-blur-4">
-        <div className="fyc justify-between p-4">
-          <div className="text-lg font-bold">{t('assete.assetOnChainDetails')}</div>
-          <Input
-            className="w-64 max-md:w-50% [&>input]:!h-6"
-            placeholder={t('assete.searchAsset')}
-            prefix={
-              <div className="i-gg:search text-4 text-#E5E7EB"></div>
-            }
-            onKeyUp={(e) => {
-              // 按下回车键
-              if (e.key === 'Enter') {
-                setSearchText(e.currentTarget.value)
-              }
-            }}
-          />
-        </div>
-        <AssetsTable openErrorDialog={() => setAsseteErrorDialogVisible(true)} searchText={searchText} />
-      </div>
-      <div className="mt-8">
-        <div className="text-2xl font-600">{t('assete.assetOperatingStatusTitle')}</div>
-        <div className="grid cols-4 mt-6 gap-4 max-md:cols-1">
-          {
-            assetOperatingStatus.map(item => (
-              // hover 添加阴影 移动到右上10px
-              <div
-                key={item.title}
-                className="flex justify-between gap-3 rounded-2 bg-#161B22 px-5 py-10 backdrop-blur-4 transition-all-300 hover:translate-[4px,-4px] hover:shadow-2xl"
-              >
-                <div>
-                  <div className="text-sm text-#9CA3AF">{t(item.title)}</div>
-                  <div className="mt-1 text-7.5 font-bold">{item.num}</div>
-                </div>
-                <div>{item.icon}</div>
-              </div>
-            ))
-          }
+          ))}
         </div>
         <div className="mt-8 rounded-2 bg-#161B22 backdrop-blur-4">
           <div className="fyc justify-between p-4">
-            <div className="text-lg font-bold">{t('assete.propertyOperatingDetails')}</div>
+            <div className="text-lg font-bold">
+              {t('assete.propertyOperatingDetails')}
+            </div>
           </div>
-          <AssetOperatingTable openPayDialog={() => setPayRentDialogVisible(true)} openDefaultDetailsDialog={() => setDefaultDetailsDialogVisible(true)} />
+          <AssetOperatingTable
+            openPayDialog={data =>
+              setPayRentDialogVisible({ value: true, data })}
+            openDefaultDetailsDialog={data =>
+              setDefaultDetailsDialogVisible({ value: true, data })}
+          />
         </div>
       </div>
       {/* 驳回原因 */}
-      <AsseteErrorDialog visible={asseteErrorDialogVisible} setVisible={setAsseteErrorDialogVisible} message="驳回原因" />
+      <AsseteErrorDialog
+        visible={asseteErrorDialogVisible.value}
+        setVisible={(val) => {
+          setAsseteErrorDialogVisible(pre => ({ value: val, data: pre.data }))
+        }}
+        message={asseteErrorDialogVisible.data}
+      />
       {/* 缴纳租金 */}
-      <PayRentDialog visible={payRentDialogVisible} setVisible={setPayRentDialogVisible} />
+      <PayRentDialog
+        visible={payRentDialogVisible.value}
+        data={payRentDialogVisible.data}
+        setVisible={val =>
+          setPayRentDialogVisible(pre => ({ value: val, data: pre.data }))}
+      />
       {/* 违约详情 */}
-      <DefaultDetailsDialog visible={defaultDetailsDialogVisible} setVisible={setDefaultDetailsDialogVisible} />
+      <DefaultDetailsDialog
+        visible={defaultDetailsDialogVisible.value}
+        data={defaultDetailsDialogVisible.data}
+        setVisible={val =>
+          setDefaultDetailsDialogVisible(pre => ({
+            value: val,
+            data: pre.data
+          }))}
+      />
     </div>
   )
 }
 
 // 资产上链明细
-function AssetsTable({ openErrorDialog, searchText }: {
+function AssetsTable({
+  openErrorDialog,
+  searchText
+}: {
   openErrorDialog: (message: any) => void
   searchText: string
 }) {
@@ -235,24 +312,58 @@ function AssetsTable({ openErrorDialog, searchText }: {
   function findAssetType(type: number) {
     return assetType?.find(item => item.id === type) || null
   }
-  const dataStatusContent = (status: number, text: string) => {
+  const dataStatusContent = (status: ASSET_STATUS, _text: string) => {
     let data = {} as { className: string, text: string }
     if (status < 2) {
-      data = { className: 'bg-#00FF8733 text-#00FF85', text: t('assete.assetStatus.lawyerConfirming') } // 律师确认中
+      data = {
+        className: 'bg-#00FF8733 text-#00FF85',
+        text: t('assete.assetStatus.lawyerConfirming')
+      } // 律师确认中
     }
-    else if ([2, 5].includes(status)) {
-      data = { className: 'bg-#CD647833 text-#CF6679', text: t('assete.assetStatus.rejected') } // 驳回
+    else if (
+      [ASSET_STATUS.LAWYER_REJECTED, ASSET_STATUS.ASSESSOR_REJECTED].includes(
+        status
+      )
+    ) {
+      data = {
+        className: 'bg-#CD647833 text-#CF6679',
+        text: t('assete.assetStatus.rejected')
+      } // 驳回
     }
-    else if ([4, 7, 8].includes(status)) {
-      data = { className: 'bg-#2E2F1F text-#FFDD00', text: t('assete.assetStatus.pendingEvaluation') } // 待评估
+    else if (
+      [
+        ASSET_STATUS.ASSESSOR_CLAIMED,
+        ASSET_STATUS.LAWYER_CLAIMED_OFFLINE,
+        ASSET_STATUS.LAWYER_UPLOADED_MATERIALS
+      ].includes(status)
+    ) {
+      data = {
+        className: 'bg-#2E2F1F text-#FFDD00',
+        text: t('assete.assetStatus.pendingEvaluation')
+      } // 待评估
     }
     else {
-      data = { className: 'bg-#00FF8733 text-#00FF85', text: t('assete.assetStatus.onChainSuccess') } // 已上链
+      data = {
+        className: 'bg-#00FF8733 text-#00FF85',
+        text: t('assete.assetStatus.onChainSuccess')
+      } // 已上链
     }
 
     return (
-      <div className={cn(data.className, 'rounded-9999px px-2 py-1 text-xs font-400 w-fit')}>
-        {text}
+      <div
+        className={cn(
+          data.className,
+          'rounded-9999px px-2 py-1 text-xs font-400 w-fit'
+        )}
+      >
+        {t(
+          `common.assetStatus.${
+            ASSET_STATUS.DRAFT <= status
+            && ASSET_STATUS.ASSET_ON_CHAIN >= status
+              ? status
+              : 'other'
+          }`
+        )}
       </div>
     )
   }
@@ -264,7 +375,11 @@ function AssetsTable({ openErrorDialog, searchText }: {
       key: 'asset_name',
       render: (_, record) => (
         <div className="fcc gap-3">
-          <img className="size-10 rounded-6px object-cover" src={record.asset_image[0]} alt="" />
+          <img
+            className="size-10 rounded-6px object-cover"
+            src={record.asset_image[0]}
+            alt=""
+          />
           <div>
             <div className="text-sm font-500">{record.asset_name}</div>
             <div className="text-xs text-#9CA3AF">{record.code}</div>
@@ -289,13 +404,11 @@ function AssetsTable({ openErrorDialog, searchText }: {
       key: 'asset_type',
       render: data => (
         <div className="text-sm text-#D1D5DB">
-          {
-            i18n.language === 'zh'
-              ? findAssetType(data)?.name_zh_cn
-              : i18n.language === 'en'
-                ? findAssetType(data)?.name_en
-                : findAssetType(data)?.name_ja
-          }
+          {i18n.language === 'zh'
+            ? findAssetType(data)?.name_zh_cn
+            : i18n.language === 'en'
+              ? findAssetType(data)?.name_en
+              : findAssetType(data)?.name_ja}
         </div>
       )
     },
@@ -303,13 +416,21 @@ function AssetsTable({ openErrorDialog, searchText }: {
       title: t('assete.table.updateTime'),
       dataIndex: 'update_time',
       key: 'update_time',
-      render: data => <div className="text-sm text-#D1D5DB">{dayjs(data).format('YYYY-MM-DD HH:mm')}</div>
+      render: data => (
+        <div className="text-sm text-#D1D5DB">
+          {dayjs(data).format('YYYY-MM-DD HH:mm')}
+        </div>
+      )
     },
     {
       title: t('assete.table.status'),
       dataIndex: 'status',
       key: 'status',
-      render: (data, record) => <div className="text-sm text-#D1D5DB">{dataStatusContent(data, record.status_label)}</div>
+      render: (data, record) => (
+        <div className="text-sm text-#D1D5DB">
+          {dataStatusContent(data, record.status_label)}
+        </div>
+      )
     },
     {
       title: t('assete.table.processor'),
@@ -324,9 +445,18 @@ function AssetsTable({ openErrorDialog, searchText }: {
       render: (_, record) => (
         <div className="fyc gap-4">
           <Link to="/assete/info/$id" params={{ id: record.id.toString() }}>
-            <div className="text-sm text-#D1D5DB clickable">{t('assete.table.view')}</div>
+            <div className="text-sm text-#D1D5DB clickable">
+              {t('assete.table.view')}
+            </div>
           </Link>
-          {record.status === ASSET_STATUS.LAWYER_REJECTED && <div onClick={() => openErrorDialog(record)} className="text-sm text-#CF6679 clickable">{t('assete.rejectedReason')}</div>}
+          {record.status === ASSET_STATUS.LAWYER_REJECTED && (
+            <div
+              onClick={() => openErrorDialog(record)}
+              className="text-sm text-#CF6679 clickable"
+            >
+              {t('assete.rejectedReason')}
+            </div>
+          )}
         </div>
       )
     }
@@ -350,9 +480,13 @@ function AssetsTable({ openErrorDialog, searchText }: {
 }
 
 // 资产运营状态
-function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
-  openPayDialog: (record: any) => void
-  openDefaultDetailsDialog: (record: any) => void
+function AssetOperatingTable({
+  openPayDialog,
+  openDefaultDetailsDialog
+}: {
+  // 支付房租
+  openPayDialog: (record: AssetsOperationData) => void
+  openDefaultDetailsDialog: (record: AssetsOperationData) => void
 }) {
   const { t } = useTranslation()
 
@@ -376,29 +510,62 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
         return t('assete.operatingStatus.payRent')
     }
   }
-  const dataStatusContent = (status: number, text: string) => {
+  const dataStatusContent = (status: string, _text: string) => {
     let data = {} as { className: string, text: string }
     switch (status) {
-      case 1:
-        data = { className: 'bg-#00FF8733 text-#00FF85', text: t('assete.operatingStatus.normal') } // 正常
+      case '1':
+        data = {
+          className: 'bg-#00FF8733 text-#00FF85',
+          text: t('assete.operatingStatus.normal')
+        } // 正常
         break
-      case 2:
-        data = { className: 'bg-#B987FA33 text-#BB86FC', text: t('assete.operatingStatus.pending') } // 待缴
+      case '2':
+        data = {
+          className: 'bg-#B987FA33 text-#BB86FC',
+          text: t('assete.operatingStatus.pending')
+        } // 待缴
         break
-      case 3:
-        data = { className: 'bg-#CD647833 text-#CF6679', text: t('assete.operatingStatus.default') } // 违约
+      case '3':
+        data = {
+          className: 'bg-#CD647833 text-#CF6679',
+          text: t('assete.operatingStatus.overdue')
+        } // 逾期
         break
       default:
-        data = { className: 'bg-#EBB40A33 text-#FACC15', text: t('assete.operatingStatus.overdue') } // 逾期
+        data = {
+          className: 'bg-#EBB40A33 text-#FACC15',
+          text: t('common.assetRentStatus.0')
+        } // 未知
     }
 
     return (
-      <div className={cn(data.className, 'rounded-9999px px-2 py-1 text-xs font-400 w-fit')}>
-        {text}
+      <div
+        className={cn(
+          data.className,
+          'rounded-9999px px-2 py-1 text-xs font-400 w-fit'
+        )}
+      >
+        {data.text}
       </div>
     )
   }
-  const [propertyOperatingStatusDetailsDialogVisible, setPropertyOperatingStatusDetailsDialogVisible] = useState(false)
+  const [
+    propertyOperatingStatusDetailsDialogVisible,
+    setPropertyOperatingStatusDetailsDialogVisible
+  ] = useState({
+    visible: false,
+    data: {} as AssetsOperationData
+  })
+
+  useEffect(() => {
+    // 全局事件总线监听资产运营状态详情弹窗关闭
+    return () => {
+      setPropertyOperatingStatusDetailsDialogVisible({
+        visible: false,
+        data: {} as AssetsOperationData
+      })
+    }
+  }, [])
 
   const columns: ColumnsType<AssetsOperationData> = [
     {
@@ -407,10 +574,14 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
       key: 'assetInfo',
       render: (_, record) => (
         <div className="fcc gap-3">
-          <img className="size-10 rounded-6px object-cover" src={record?.image_urls || ''} alt="" />
+          <img
+            className="size-10 rounded-6px object-cover"
+            src={record?.image_urls || ''}
+            alt=""
+          />
           <div>
-            <div className="text-sm font-500">{record.name}</div>
-            <div className="text-xs text-#9CA3AF">{record.code}</div>
+            <div className="text-sm font-500">{record?.name}</div>
+            <div className="text-xs text-#9CA3AF">{record?.code}</div>
           </div>
         </div>
       )
@@ -421,15 +592,16 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
       key: 'tenant',
       render: data => (
         <div>
-          <div className="text-sm text-#D1D5DB">{data.name}</div>
+          {/* TODO */}
+          <div className="text-sm text-#D1D5DB">{data?.name}</div>
           <div className="text-xs text-#9CA3AF">
             {t('assete.operatingTable.contractPeriod')}
             :
-            {(new Date(data.startDate).getFullYear())}
+            {new Date(data?.startDate || '').getFullYear()}
             {' '}
             -
             {' '}
-            {(new Date(data.endDate).getFullYear())}
+            {new Date(data?.endDate || '').getFullYear()}
           </div>
         </div>
       )
@@ -449,7 +621,11 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
       title: t('assete.operatingTable.paymentStatus'),
       dataIndex: 'rent_status',
       key: 'rent_status',
-      render: data => <div className="text-sm text-#D1D5DB">{dataStatusContent(data.key, data.label)}</div>
+      render: data => (
+        <div className="text-sm text-#D1D5DB">
+          {dataStatusContent(data?.key, data?.label)}
+        </div>
+      )
     },
     {
       title: t('assete.operatingTable.nextPaymentDate'),
@@ -457,20 +633,23 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
       key: 'next_rent_date',
       render: (time, content) => (
         <div className="fyc gap-1 text-sm text-#D1D5DB">
-          {dayjs(time).format('YYYY-MM-DD HH:mm')}
-          {
-            content.status >= ASSET_STATUS.LAWYER_REJECTED && (
-              <div className={cn('text-xs ', content.status === 3 ? 'text-#CF6679' : 'text-#FACC15')}>
-                (
-                {t('assete.operatingTable.overdue')}
-                {' '}
-                {dayjs(time).diff(dayjs(), 'day')}
-                {' '}
-                {t('assete.operatingTable.days')}
-                )
-              </div>
-            )
-          }
+          {dayjs(time || '').format('YYYY-MM-DD')}
+          {content?.status >= ASSET_STATUS.LAWYER_REJECTED && (
+            <div
+              className={cn(
+                'text-xs ',
+                content?.status === 3 ? 'text-#CF6679' : 'text-#FACC15'
+              )}
+            >
+              (
+              {t('assete.operatingTable.overdue')}
+              {' '}
+              {Math.max(content.breaking_contract_number, 1)}
+              {' '}
+              {t('assete.operatingTable.days')}
+              )
+            </div>
+          )}
         </div>
       )
     },
@@ -481,15 +660,33 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
         <div className="fyc gap-4">
           <div
             onClick={() => {
-              if (content.status !== 0)
+              if (content?.status !== 0)
                 openPayDialog(content)
             }}
-            className={cn('text-sm text-#D1D5DB', content.status !== 0 && 'clickable')}
+            className={cn(
+              'text-sm text-#D1D5DB',
+              content?.status !== 0 && 'clickable'
+            )}
           >
-            {dataTypeContent(content.status >= 2 ? 1 : 0)}
+            {dataTypeContent(content?.status >= 2 ? 1 : 0)}
           </div>
-          {content.status === 3 && <div onClick={() => openDefaultDetailsDialog(content)} className="text-sm text-#CF6679 clickable">{t('assete.operatingTable.defaultDetails')}</div>}
-          <div className="clickable" onClick={() => setPropertyOperatingStatusDetailsDialogVisible(true)}>{t('assete.table.view')}</div>
+          {content?.status === 3 && (
+            <div
+              onClick={() => openDefaultDetailsDialog(content)}
+              className="text-sm text-#CF6679 clickable"
+            >
+              {t('assete.operatingTable.defaultDetails')}
+            </div>
+          )}
+          <div
+            className="clickable"
+            onClick={() => setPropertyOperatingStatusDetailsDialogVisible({
+              visible: true,
+              data: content
+            })}
+          >
+            {t('assete.table.view')}
+          </div>
         </div>
       )
     }
@@ -510,13 +707,25 @@ function AssetOperatingTable({ openPayDialog, openDefaultDetailsDialog }: {
           }
         }}
       />
-      <PropertyOperatingStatusDetailsDialog visible={propertyOperatingStatusDetailsDialogVisible} setVisible={setPropertyOperatingStatusDetailsDialogVisible} />
+      <PropertyOperatingStatusDetailsDialog
+        visible={propertyOperatingStatusDetailsDialogVisible.visible}
+        data={propertyOperatingStatusDetailsDialogVisible.data}
+        setVisible={(visible => setPropertyOperatingStatusDetailsDialogVisible(pre => ({ visible, data: pre.data })))}
+      />
     </div>
   )
 }
 
 // 资产错误弹窗
-function AsseteErrorDialog({ visible, setVisible, message }: { visible: boolean, setVisible: (visible: boolean) => void, message: any }) {
+function AsseteErrorDialog({
+  visible,
+  setVisible,
+  message
+}: {
+  visible: boolean
+  setVisible: (visible: boolean) => void
+  message: SubmissionData
+}) {
   const { t } = useTranslation()
 
   return (
@@ -525,11 +734,21 @@ function AsseteErrorDialog({ visible, setVisible, message }: { visible: boolean,
       onCancel={() => setVisible(false)}
       maskClosable={false}
       width={420}
-      className={cn('login-dialog [&>div>.ant-modal-content]:!bg-#171b21 b-1 b-solid  b-#1E293B', 'rounded-2')}
+      className={cn(
+        'login-dialog [&>div>.ant-modal-content]:!bg-#171b21 b-1 b-solid  b-#1E293B',
+        'rounded-2'
+      )}
       centered
-      title={<div className="text-lg font-600">{t('assete.rejectedReasonDialog.title')}</div>}
+      title={(
+        <div className="text-lg font-600">
+          {t('assete.rejectedReasonDialog.title')}
+        </div>
+      )}
       footer={() => (
-        <Button onClick={() => setVisible(false)} className="h-10.5 b-#00E5FF bg-#00E2FF1A px-4 text-base text-#00E5FF">
+        <Button
+          onClick={() => setVisible(false)}
+          className="h-10.5 b-#00E5FF bg-#00E2FF1A px-4 text-base text-#00E5FF"
+        >
           {t('assete.rejectedReasonDialog.confirm')}
         </Button>
       )}
@@ -537,23 +756,20 @@ function AsseteErrorDialog({ visible, setVisible, message }: { visible: boolean,
       <div className="flex flex-col gap-4 b-b b-t b-#1E293B b-solid py-5 text-white [&>div>div:last-child]:mt-1.5 [&>div>div:first-child]:text-sm [&>div>div:last-child]:text-base [&>div>div:first-child]:text-#9CA3AF [&>div>div:last-child]:font-500">
         <div>
           <div>{t('assete.rejectedReasonDialog.assetName')}</div>
-          <div>商标权 - 品牌标识</div>
+          <div>{message.asset_name}</div>
         </div>
         <div>
           <div>{t('assete.rejectedReasonDialog.rejectedBy')}</div>
-          <div>
-            李华律师
-            {message}
-          </div>
+          <div>{message.processor}</div>
         </div>
         <div>
           <div>{t('assete.rejectedReasonDialog.rejectedTime')}</div>
-          <div>{dayjs().format('YYYY-MM-DD HH:mm')}</div>
+          <div>{dayjs(message.update_time).format('YYYY-MM-DD HH:mm')}</div>
         </div>
         <div>
           <div>{t('assete.rejectedReasonDialog.reason')}</div>
           <div className="b b-#1D2738 rounded-1.5 b-solid bg-#0D1117 p-4 text-400 text-sm text-#D1D5DB">
-            商标注册证扫描件不清晰，缺少最新的商标续展证明文件，请补充提供高清扫描件和完整的商标续展证明。
+            {message.review_remark}
           </div>
         </div>
       </div>
@@ -562,7 +778,15 @@ function AsseteErrorDialog({ visible, setVisible, message }: { visible: boolean,
 }
 
 // 房产运营状态明细详情弹窗
-function PropertyOperatingStatusDetailsDialog({ visible, setVisible }: { visible: boolean, setVisible: (visible: boolean) => void }) {
+function PropertyOperatingStatusDetailsDialog({
+  visible,
+  setVisible,
+  data
+}: {
+  visible: boolean
+  setVisible: (visible: boolean) => void
+  data: AssetsOperationData
+}) {
   const { t } = useTranslation()
   return (
     <CommonDialog
@@ -570,50 +794,83 @@ function PropertyOperatingStatusDetailsDialog({ visible, setVisible }: { visible
       onCancel={() => setVisible(false)}
       maskClosable={false}
       width={894}
-      className={cn('login-dialog [&>div>.ant-modal-content]:!bg-#171b21 b-1 b-solid  b-#1E293B', 'rounded-2')}
+      className={cn(
+        'login-dialog [&>div>.ant-modal-content]:!bg-#171b21 b-1 b-solid  b-#1E293B',
+        'rounded-2'
+      )}
       centered
-      title={<div className="text-lg font-600">{t('assete.propertyOperatingStatusDetailsDialog.title')}</div>}
+      title={(
+        <div className="text-lg font-600">
+          {t('assete.propertyOperatingStatusDetailsDialog.title')}
+        </div>
+      )}
       footer={false}
       closable
     >
       <div className="fol gap-6 py-6">
-        <img src={(new URL('@/assets/test/test.png', import.meta.url).href)} className="h-64 w-full rounded-2" alt="" />
+        <img
+          src={new URL('@/assets/test/test.png', import.meta.url).href}
+          className="h-64 w-full rounded-2"
+          alt=""
+        />
         <div className="grid cols-2 gap-6 [&>div>div:last-child]:mt-1 [&>div>div:first-child]:text-sm [&>div>div:last-child]:text-lg [&>div>div:first-child]:text-#9CA3AF [&>div>div:last-child]:font-500">
           <div>
-            <div>{t('assete.propertyOperatingStatusDetailsDialog.propertyName')}</div>
-            <div>深江云驿4栋</div>
+            <div>
+              {t('assete.propertyOperatingStatusDetailsDialog.propertyName')}
+            </div>
+            <div>{data?.name}</div>
           </div>
           <div>
-            <div>{t('assete.propertyOperatingStatusDetailsDetailsDialog.location')}</div>
-            <div>深圳市南山区</div>
+            <div>
+              {t('assete.propertyOperatingStatusDetailsDialog.location')}
+            </div>
+            <div>{data?.address}</div>
           </div>
           <div>
-            <div>{t('assete.propertyOperatingStatusDetailsDialog.managementMethod')}</div>
+            <div>
+              {t(
+                'assete.propertyOperatingStatusDetailsDialog.managementMethod'
+              )}
+            </div>
+            {/* TODO */}
             <div>科技未来租赁方案</div>
           </div>
           <div>
             <div>{t('assete.propertyOperatingStatusDetailsDialog.rent')}</div>
             <div>
               $
-              {formatNumberNoRound(45000, 6, 0)}
-              /月
+              {formatNumberNoRound(data?.monthly_rent || 0, 6, 0)}
+              /
+              {t('common.month')}
             </div>
           </div>
           <div>
             <div>{t('assete.propertyOperatingStatusDetailsDialog.status')}</div>
-            <div className="fyc gap-2 text-#00FF85">
-              <div className="size-2 rounded-full bg-#00FF85"></div>
-              <div>正常</div>
+            <div className={cn('fyc gap-2', data.property_status === RISK_STATUS.NORMAL ? 'text-#00FF85' : 'text-#FF4D4F')}>
+              <div className={cn('size-2 rounded-full', data.property_status === RISK_STATUS.NORMAL ? 'bg-#00FF85' : 'bg-#FF4D4F')}></div>
+              <div>
+              </div>
+              {t(`common.assetPropertyStatus.${
+                (data?.property_status < RISK_STATUS.NORMAL || data?.property_status > RISK_STATUS.AUCTION_FAILURE) ? 'other' : (data?.property_status || 'other')
+              }`)}
             </div>
           </div>
           <div>
-            <div>{t('assete.propertyOperatingStatusDetailsDialog.nextPayment')}</div>
-            <div>{dayjs().add(1, 'month').format('MM-DD')}</div>
+            <div>
+              {t('assete.propertyOperatingStatusDetailsDialog.nextPayment')}
+            </div>
+            <div>{dayjs(data?.next_rent_date || '').format('MM-DD')}</div>
           </div>
         </div>
         <div>
-          <div className="text-sm text-#9CA3AF font-400">{t('assete.propertyOperatingStatusDetailsDialog.propertyDescription')}</div>
-          <div className="mt-1 text-base text-#D1D5DB font-400">该房产位于深圳市南山区核心地段，交通便利，周边配套设施完善。采用科技未来租赁方案，配备智能门锁、智能温控系统和24小时安保服务，为租户提供安全舒适的居住环境。</div>
+          <div className="text-sm text-#9CA3AF font-400">
+            {t(
+              'assete.propertyOperatingStatusDetailsDialog.propertyDescription'
+            )}
+          </div>
+          <div className="mt-1 text-base text-#D1D5DB font-400">
+            {data?.property_description}
+          </div>
         </div>
       </div>
     </CommonDialog>

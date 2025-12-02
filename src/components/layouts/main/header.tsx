@@ -18,6 +18,24 @@ export default function MainHeader() {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
+  const { authenticated, user, getAccessToken, logout } = usePrivy()
+
+  // 用户登出
+  async function handleLogout(isShowToast?: boolean) {
+    logout()
+      .then(() =>
+        navigate({
+          to: '/register'
+        })
+      )
+      .then(() => {
+        clearUserData()
+        clearToken()
+        clearRegisterData()
+        setCode(UserCode.NotExist)
+        isShowToast && toast.success(t('common.logoutSuccess'))
+      })
+  }
   const menu = (
     <Menu className="b-1 b-#2D333B b-solid bg-#161B22! p-0!">
       <Menu.Item key="profile">
@@ -38,23 +56,35 @@ export default function MainHeader() {
       </Menu.Item>
       {/* 评估方才显示 */}
       <Menu.Item key="report">
-        <div onClick={() => navigate({ to: '/evaluation/reportManagement' })} className="w-40.5 fyc gap-2 py-2 text-sm text-#D1D5DB">
+        <div
+          onClick={() => navigate({ to: '/evaluation/reportManagement' })}
+          className="w-40.5 fyc gap-2 py-2 text-sm text-#D1D5DB"
+        >
           <div className="i-mdi:file"></div>
           <div>{t('header.reportManagement')}</div>
         </div>
       </Menu.Item>
       <Menu.Item key="logout" className="b-t-1 b-t-#2D333B rounded-t-0!">
-        <div className="w-40.5 fyc gap-2 py-2 text-sm text-#FF3A3A">
+        <div
+          onClick={() => handleLogout(true)}
+          className="w-40.5 fyc gap-2 py-2 text-sm text-#FF3A3A"
+        >
           <div className="i-ic:outline-logout"></div>
           <div>{t('header.logout')}</div>
         </div>
       </Menu.Item>
     </Menu>
   )
-  const { authenticated, user, getAccessToken, logout } = usePrivy()
 
   const [logoutLoading, setLogoutLoading] = useState(false)
-  const { clearUserData, refreshUserInfo, setCode, setUserData, getUserInfo, clearRegisterData } = useUserStore()
+  const {
+    clearUserData,
+    refreshUserInfo,
+    setCode,
+    setUserData,
+    getUserInfo,
+    clearRegisterData
+  } = useUserStore()
   const [openLoginDialog, setOpenLoginDialog] = useState(false)
   const isFirst = useRef(true)
 
@@ -69,20 +99,34 @@ export default function MainHeader() {
       const data = res?.data || {}
       setUserData(data)
       isFirst.current = false
-      const hasLogin = !localStorage.getItem(USER_INFO_KEY) ? false : JSON.parse(localStorage.getItem(USER_INFO_KEY) || '')
-      if (hasLogin) { //  查看是否是用户在点击登陆之后获取的用户信息，是=》记录登陆日志
+      const hasLogin = !localStorage.getItem(USER_INFO_KEY)
+        ? false
+        : JSON.parse(localStorage.getItem(USER_INFO_KEY) || '')
+      if (hasLogin) {
+        //  查看是否是用户在点击登陆之后获取的用户信息，是=》记录登陆日志
         localStorage.setItem(USER_INFO_KEY, 'false')
       }
       // 判断用户是否注册
-      const hasError = errorList.some(item => item.message === t('login.register_message') && item.time > Date.now() - 5000)
-      if ((res?.code !== 1 || res.data?.user?.audit_status === USER_AUDIT_STATUS.REJECT) && !hasError) {
+      const hasError = errorList.some(
+        item =>
+          item.message === t('login.register_message')
+          && item.time > Date.now() - 5000
+      )
+      if (
+        (res?.code !== 1
+          || res.data?.user?.audit_status === USER_AUDIT_STATUS.REJECT)
+        && !hasError
+      ) {
         toast.warning(t('login.register_message'))
         navigate({ to: '/register' })
       }
       if (hasError) {
         setErrorList((pre) => {
           return pre.map((item) => {
-            if (item.message === t('login.register_message') && item.time > Date.now() - 5000) {
+            if (
+              item.message === t('login.register_message')
+              && item.time > Date.now() - 5000
+            ) {
               return { ...item, time: Date.now() }
             }
             else {
@@ -92,7 +136,10 @@ export default function MainHeader() {
         })
       }
       else {
-        setErrorList(pre => [...pre, { message: t('login.register_message'), time: Date.now() }])
+        setErrorList(pre => [
+          ...pre,
+          { message: t('login.register_message'), time: Date.now() }
+        ])
       }
       return data
     }
@@ -101,18 +148,16 @@ export default function MainHeader() {
   // 仅在使用组件登录的时候，登出函数
   const noAuthenticatedHandleLogout = () => {
     setLogoutLoading(true)
-    logout()
-      .then(
-        () => {
-          setLogoutLoading(false)
-          navigate({
-            to: '/register'
-          })
-        }
-      )
+    logout().then(() => {
+      setLogoutLoading(false)
+      navigate({
+        to: '/register'
+      })
+    })
   }
 
-  useEffect(() => { // 监听是否需要重新获取用户信息
+  useEffect(() => {
+    // 监听是否需要重新获取用户信息
     if (refreshUserInfo > 0) {
       mutateAsync()
     }
@@ -139,31 +184,14 @@ export default function MainHeader() {
           return
         setToken(token, 2)
       })
-    ])
-      .then(() => {
-        if (openLoginDialog) {
-          setOpenLoginDialog(false)
-        }
-      })
+    ]).then(() => {
+      if (openLoginDialog) {
+        setOpenLoginDialog(false)
+      }
+    })
   }, [authenticated, user, mutateAsync])
 
   const { refreshUser } = useUser()
-
-  // 用户登出
-  async function handleLogout() {
-    logout()
-      .then(
-        () => navigate({
-          to: '/register'
-        })
-      )
-      .then(() => {
-        clearUserData()
-        clearToken()
-        clearRegisterData()
-        setCode(UserCode.NotExist)
-      })
-  }
 
   // 监测用户token是否过期
   const checkToken = async () => {
@@ -172,12 +200,15 @@ export default function MainHeader() {
       if (token && isTokenExpired(token)) {
         await refreshUser()
         const newToken = await getAccessToken()
-        if (newToken) { // 获取新token，成功刷新用户信息
+        if (newToken) {
+          // 获取新token，成功刷新用户信息
           await getUserInfo()
           setToken(token, 2)
         }
-        else { // 获取失败退出登陆
+        else {
+          // 获取失败退出登陆
           handleLogout()
+          toast.warning(t('common.token_expired'))
         }
       }
     }
@@ -188,25 +219,8 @@ export default function MainHeader() {
     }
   }
   useEffect(() => {
-    // 定时监测，刷新token (10分钟)
-    let interval = setInterval(checkToken, 1000 * 60 * 10)
-    const visibilitychange = () => {
-      if (document.visibilityState === 'visible') {
-        checkToken()
-        interval = setInterval(checkToken, 5000 * 60)
-      }
-      else {
-        clearInterval(interval)
-      }
-    }
     // 全局事件总线监听token失效
     eventBus.on('tokenExpired', checkToken)
-    // 从网页从后台切换至前台，监测token是否过期
-    window.addEventListener('visibilitychange', visibilitychange)
-    return () => {
-      window.removeEventListener('visibilitychange', visibilitychange)
-      clearInterval(interval)
-    }
   }, [])
 
   return (
@@ -220,10 +234,15 @@ export default function MainHeader() {
           </Link>
         </div>
         <div className="fyc gap-3">
-          {
-            !userData?.user?.id
+          <Waiting for={!isLoading}>
+            {!userData?.user?.id
               ? (
-                  (!authenticated && <LoginButton isLoading={isLoading} setOpenLoginDialog={setOpenLoginDialog} />)
+                  !authenticated && (
+                    <LoginButton
+                      isLoading={isLoading}
+                      setOpenLoginDialog={setOpenLoginDialog}
+                    />
+                  )
                 )
               : (
                   <div className="fyc">
@@ -235,26 +254,37 @@ export default function MainHeader() {
                     <Dropdown open={open} onOpenChange={setOpen} overlay={menu}>
                       <div className="ml-4 fyc gap-2">
                         <div className="size-10 overflow-hidden b-2 b-#00E5FF80 rounded-full b-solid">
-                          <img className="size-full object-cover" src={(new URL('@/assets/test/test.png', import.meta.url).href)} alt="" />
+                          <img
+                            className="size-full object-cover"
+                            src={
+                              new URL('@/assets/test/test.png', import.meta.url)
+                                .href
+                            }
+                            alt=""
+                          />
                         </div>
                         <div className="">User1</div>
-                        <div className={cn(
-                          'i-mingcute:down-line text-#9ea3ae text-4  transition-all-300',
-                          open && 'transform-rotate-180 '
-                        )}
+                        <div
+                          className={cn(
+                            'i-mingcute:down-line text-#9ea3ae text-4  transition-all-300',
+                            open && 'transform-rotate-180 '
+                          )}
                         >
                         </div>
                       </div>
                     </Dropdown>
-
                   </div>
-                )
-          }
-          {authenticated && !userData?.user?.id && (
-            <Button loading={logoutLoading} className="border-1 border-#00E5FF bg-primary bg-none text-black" onClick={noAuthenticatedHandleLogout}>
-              退出登录
-            </Button>
-          )}
+                )}
+            {authenticated && !userData?.user?.id && (
+              <Button
+                loading={logoutLoading}
+                className="border-1 border-#00E5FF bg-primary bg-none text-black"
+                onClick={noAuthenticatedHandleLogout}
+              >
+                {t('header.logout')}
+              </Button>
+            )}
+          </Waiting>
           <LanguageSelect />
         </div>
       </div>
@@ -341,18 +371,27 @@ export function LanguageSelect() {
   )
 }
 
-function LoginButton({ isLoading, setOpenLoginDialog }: { isLoading: boolean, setOpenLoginDialog: (open: boolean) => void }) {
+function LoginButton({
+  isLoading,
+  setOpenLoginDialog
+}: {
+  isLoading: boolean
+  setOpenLoginDialog: (open: boolean) => void
+}) {
   const { ready } = usePrivy()
   const { t } = useTranslation()
 
   return (
     <>
       <Waiting for={ready}>
-        <Button loading={isLoading} onClick={() => setOpenLoginDialog(true)} className="border-1 border-#00E5FF bg-none text-#00E5FF">
+        <Button
+          loading={isLoading}
+          onClick={() => setOpenLoginDialog(true)}
+          className="border-1 border-#00E5FF bg-none text-#00E5FF"
+        >
           {t('header.login')}
         </Button>
       </Waiting>
-
     </>
   )
 }
