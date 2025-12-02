@@ -497,7 +497,6 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
         successButton={{
           text: t('register.asset.enterLawyerTaskCenter'),
           onClick: () => {
-            // TODO 跳转进入资产上传中心
             navigate({ to: '/evaluation' })
           }
         }}

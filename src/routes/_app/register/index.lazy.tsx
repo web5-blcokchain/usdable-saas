@@ -20,7 +20,15 @@ export const Route = createLazyFileRoute('/_app/register/')({
   component: RouteComponent
 })
 
-function AnimationComponent({ animKey, children, className }: { animKey: string, children: React.ReactNode, className?: string }) {
+function AnimationComponent({
+  animKey,
+  children,
+  className
+}: {
+  animKey: string
+  children: React.ReactNode
+  className?: string
+}) {
   return (
     <motion.div
       key={animKey}
@@ -87,15 +95,19 @@ function RouteComponent() {
   const [lastDialog, setLastDialog] = useState(0)
   const [dialogButton, setDialogButton] = useState({
     text: '',
-    onClick: () => { }
+    onClick: () => {}
   })
 
   useEffect(() => {
     if (authenticated) {
-      if (!userData?.user?.id) { // 用户未登录
+      if (!userData?.user?.id) {
+        // 用户未登录
         setIsSuccess(false)
       }
-      else if (userData && userData?.user?.audit_status === USER_AUDIT_STATUS.REJECT) {
+      else if (
+        userData
+        && userData?.user?.audit_status === USER_AUDIT_STATUS.REJECT
+      ) {
         setSelectStatus(0)
         // 弹出间隔不能少于5s
         if (Date.now() - lastDialog > 5000) {
@@ -105,7 +117,10 @@ function RouteComponent() {
         setLastDialog(Date.now())
         setErrorMessage(userData.user?.review_remark)
       }
-      else if (userData && userData?.user?.audit_status === USER_AUDIT_STATUS.PASS) {
+      else if (
+        userData
+        && userData?.user?.audit_status === USER_AUDIT_STATUS.PASS
+      ) {
         if (Date.now() - lastDialog > 5000) {
           setIsSuccess(true)
         }
@@ -150,16 +165,32 @@ function RouteComponent() {
     screenToTop()
   }, [selectStatus])
 
+  const changeType = (index: number) => {
+    const isRegister
+      = !!userData?.user?.id
+        && userData?.user?.audit_status === USER_AUDIT_STATUS.PASS
+    if (!isRegister) {
+      changeSelectStatus(index)
+    }
+    else {
+      toast.warning(t('common.hasRegistered'))
+    }
+  }
+
   let lastStatus = 0
   const selectComponent = useMemo(() => {
     let status = selectStatus
     // 如果未登录则返回表单首页
-    if ((!authenticated) && selectStatus > 0 && lastStatus !== status) {
+    if (!authenticated && selectStatus > 0 && lastStatus !== status) {
       toast.error(t('login.pleaseLogin'))
       setSelectStatus(0)
       status = 0
     }
-    else if (userData?.user?.audit_status === USER_AUDIT_STATUS.PASS && selectStatus > 0 && lastStatus !== status) {
+    else if (
+      userData?.user?.audit_status === USER_AUDIT_STATUS.PASS
+      && selectStatus > 0
+      && lastStatus !== status
+    ) {
       toast.info(t('login.userRegistered'))
       setSelectStatus(0)
       status = 0
@@ -168,25 +199,40 @@ function RouteComponent() {
     switch (status) {
       case 0:
         return (
-          <AnimationComponent className="mt-41 fcc px-66 max-md:mt-3 max-md:px-4 max-xl:px-12% max-md:pb-30" animKey="frist">
+          <AnimationComponent
+            className="mt-41 fcc px-66 max-md:mt-3 max-md:px-4 max-xl:px-12% max-md:pb-30"
+            animKey="frist"
+          >
             <div className="b-2 b-#31363c rounded-lg b-solid p-12 max-md:px-6 max-md:py-4">
-              <div className="text-10 font-bold leading-15 max-md:text-3xl">{t('home.selectIdentity')}</div>
-              <div className="mt-2.5 text-base text-#8B949E">{t('home.selectIdentityDesc')}</div>
+              <div className="text-10 font-bold leading-15 max-md:text-3xl">
+                {t('home.selectIdentity')}
+              </div>
+              <div className="mt-2.5 text-base text-#8B949E">
+                {t('home.selectIdentityDesc')}
+              </div>
               <div className="grid grid-cols-3 mt-10 gap-6 max-md:grid-cols-1">
-                {
-                  selectType.map((item, index) => (
-                    <div key={item.title} onClick={() => { changeSelectStatus(index + 1) }} className="flex flex-col border-1 b-#30363D rounded-3 b-solid p-6 clickable">
-                      <div className="flex-1">
-                        <div className="size-14 fcc rounded-2 bg-#161B22">
-                          <img src={item.icon} className="h-8" alt="" />
-                        </div>
-                        <div className="mt-5 text-xl">{t(item.title)}</div>
-                        <div className="mt-3 text-base text-#8B949E">{t(item.description)}</div>
+                {selectType.map((item, index) => (
+                  <div
+                    key={item.title}
+                    onClick={() => {
+                      changeType(index + 1)
+                    }}
+                    className="flex flex-col border-1 b-#30363D rounded-3 b-solid p-6 clickable"
+                  >
+                    <div className="flex-1">
+                      <div className="size-14 fcc rounded-2 bg-#161B22">
+                        <img src={item.icon} className="h-8" alt="" />
                       </div>
-                      <div className="mt-6 b-t-1 b-#30363D b-solid pt-4 text-sm text-#E5E7EB">{t(item.feature)}</div>
+                      <div className="mt-5 text-xl">{t(item.title)}</div>
+                      <div className="mt-3 text-base text-#8B949E">
+                        {t(item.description)}
+                      </div>
                     </div>
-                  ))
-                }
+                    <div className="mt-6 b-t-1 b-#30363D b-solid pt-4 text-sm text-#E5E7EB">
+                      {t(item.feature)}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </AnimationComponent>
@@ -211,7 +257,7 @@ function RouteComponent() {
         )
     }
   }, [selectStatus, i18n.language])
-  // TODO 失败或审核弹窗
+
   return (
     <div>
       <ConfigProvider
@@ -225,11 +271,7 @@ function RouteComponent() {
           }
         }}
       >
-        <AnimatePresence mode="wait">
-          {
-            selectComponent
-          }
-        </AnimatePresence>
+        <AnimatePresence mode="wait">{selectComponent}</AnimatePresence>
       </ConfigProvider>
       <RegisterStatus
         visible={isSuccess}

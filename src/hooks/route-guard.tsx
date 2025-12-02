@@ -1,3 +1,5 @@
+import type { User } from '@/api/apiMyInfoApi'
+import { USER_AUDIT_STATUS, USER_TYPE } from '@/enum/user'
 import { useUserStore } from '@/stores/user'
 import { screenToTop } from '@/utils'
 import { getToken } from '@/utils/user.ts'
@@ -12,23 +14,36 @@ import { useTranslation } from 'react-i18next'
 export function useRouteGuard() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { code } = useUserStore()
+  const { code, userData } = useUserStore()
   const { t } = useTranslation()
   const token = getToken()
 
   useEffect(() => {
     // 白名单路径列表，支持字符串和正则
-    // const currentPath = location.pathname
+    const currentPath = location.pathname
+    const isRegister = !!userData?.user?.id && userData?.user?.audit_status === USER_AUDIT_STATUS.PASS
 
-    // 如果用户未登录，则只能访问首页
-    // if (
-    //   (!token || !userData.id) && currentPath !== '/'
-    // ) {
-    //   navigate({
-    //     to: '/'
-    //   })
-    // }
-    // TODO 权限检测
+    // 如果用户未登录或者未审核，则只能访问首页和注册页面
+    if (
+      (!userData?.user?.id && !['/', '/register'].includes(currentPath))
+      || userData?.user?.audit_status !== USER_AUDIT_STATUS.PASS
+    ) {
+      navigate({
+        to: '/register'
+      })
+    }
+    // 校验用户身份访问的页面是否匹配
+    if (
+      isRegister
+      && !['/', '/register'].includes(currentPath)
+    ) {
+      const userCheck = checkUserIdentity(userData.user, currentPath)
+      if (!userCheck.value) {
+        navigate({
+          to: userCheck.url
+        })
+      }
+    }
 
     // 跳转路由后，返回页面顶部
     setTimeout(() => {
@@ -41,4 +56,36 @@ export function useRouteGuard() {
     t,
     token
   ])
+}
+
+function checkUserIdentity(userData: User, path: string) {
+  const userChenck = {
+    value: false,
+    url: '/register'
+  }
+  if (userData.type === USER_TYPE.ASSET && !path.includes('/assete')) {
+    // 如果是资产方
+    userChenck.value = false
+    userChenck.url = '/assete'
+  }
+  else if (
+    userData.type === USER_TYPE.ASSESS
+    && !path.includes('/evaluation')
+  ) {
+    // 如果是评估方
+    userChenck.value = false
+    userChenck.url = '/evaluation'
+  }
+  else if (
+    userData.type === USER_TYPE.LAWYER
+    && path.includes('/lawyerWorkbench')
+  ) {
+    // 如果是律师方
+    userChenck.value = false
+    userChenck.url = '/lawyerWorkbench'
+  }
+  else {
+    userChenck.value = true
+  }
+  return userChenck
 }

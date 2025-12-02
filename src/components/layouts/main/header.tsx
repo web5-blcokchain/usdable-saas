@@ -3,7 +3,7 @@ import apiMyInfoApi from '@/api/apiMyInfoApi'
 import logo from '@/assets/images/logo.png'
 import { LoginDialog } from '@/components/dialog/login'
 import { USER_INFO_KEY } from '@/constants/user'
-import { USER_AUDIT_STATUS } from '@/enum/user'
+import { USER_AUDIT_STATUS, USER_TYPE } from '@/enum/user'
 import { UserCode } from '@/enums/user'
 import { eventBus } from '@/hooks/EventBus'
 import { useUserStore } from '@/stores/user'
@@ -23,11 +23,6 @@ export default function MainHeader() {
   // 用户登出
   async function handleLogout(isShowToast?: boolean) {
     logout()
-      .then(() =>
-        navigate({
-          to: '/register'
-        })
-      )
       .then(() => {
         clearUserData()
         clearToken()
@@ -35,6 +30,13 @@ export default function MainHeader() {
         setCode(UserCode.NotExist)
         isShowToast && toast.success(t('common.logoutSuccess'))
       })
+      .then(() =>
+        setTimeout(() => {
+          navigate({
+            to: '/register'
+          })
+        }, 100)
+      )
   }
   const menu = (
     <Menu className="b-1 b-#2D333B b-solid bg-#161B22! p-0!">
@@ -223,12 +225,27 @@ export default function MainHeader() {
     eventBus.on('tokenExpired', checkToken)
   }, [])
 
+  const linkIdentityHome = useMemo(() => {
+    const isRegister = !!userData?.user?.id && userData?.user?.audit_status === USER_AUDIT_STATUS.PASS
+    if (!isRegister)
+      return '/register'
+    switch (userData?.user?.type) {
+      case USER_TYPE.ASSET:
+        return '/assete'
+      case USER_TYPE.ASSESS:
+        return '/evaluation'
+      case USER_TYPE.LAWYER:
+        return '/lawyerWorkbench'
+      default:
+        return '/register'
+    }
+  }, [userData])
+
   return (
     <header className="sticky left-0 top-0 z-99 bg-#0c0f13">
       <div className="fyc justify-between px-22 py-3">
         <div className="fyc gap-2">
-          {/* TODO 在登录后跳转到自己管理页的首页 */}
-          <Link to="/register">
+          <Link to={linkIdentityHome}>
             {' '}
             <img className="h-14" src={logo} alt="" />
           </Link>

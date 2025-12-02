@@ -56,7 +56,6 @@ export function RegisterSuccess({ visible, className, back, successButton }:
   )
 }
 
-// TODO 失败窗口什么时候弹出
 export function RegisterError({ visible, className, errorMessage, setVisible }: { visible: boolean, className?: string, errorMessage: string, setVisible: (visible: boolean) => void }) {
   const { t } = useTranslation()
   return (

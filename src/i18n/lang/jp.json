@@ -61,7 +61,9 @@
     },
     "paySuccess": "支払いが成功しました",
     "copySuccess": "コピーが成功しました",
-    "logoutSuccess": "ログアウトが成功しました"
+    "logoutSuccess": "ログアウトが成功しました",
+    "haveDefaulted": "遅延支払いがあります",
+    "hasRegistered": "既に登録済みです"
   },
   "header": {
     "login": "ログイン",
@@ -536,7 +538,7 @@
       "paymentMethod": "支払い方法",
       "selectCrypto": "暗号資産を選択",
       "paymentAddress": "受取アドレス",
-      "paymentInstruction": "暗号資産ウォレットでQRコードをスキャンするか、アドレスをコピーして送金してください。"
+      "paymentInstruction": "送金には暗号通貨ワレットまたはコピーアドレスをご利用くださいますようお願いします。"
     },
     "defaultDetails": {
       "title": "違約詳細",

@@ -3,6 +3,8 @@ import type { INPUT_FORMAT_TYPE, INPUT_UI_TYPE, IS_REQUIRED, REVIEW_STATUS } fro
 import type { DataListResponse } from './responseData'
 import apiClient from './client'
 
+// 资产方
+
 // 资产类型
 export interface AssetType {
   /**
@@ -89,7 +91,7 @@ export interface SubmissionData {
   /**
    * 状态
 状态 审核状态 -1草稿 0待审核 1律师已确认 2为审核驳回\r\n3 律师已审核
- 4评估方已认领 5 评估方已驳回 6 评估方已评估7：律师已认领线下 8律师线下上传材料 9资产已上链
+ 4评估方已认领 5 评估方已驳回 6 评估方已评估 7：律师已认领线下 8律师线下上传材料 9资产已上链
    */
   status: ASSET_STATUS
   /**
@@ -922,6 +924,90 @@ export interface SaveRentIncome {
   tx_hash?: string
 }
 
+/**
+ * 房租详情
+ */
+export interface RentPaymentDetails {
+  /**
+   * 缴纳租金合约地址
+   */
+  contract_address: string
+  /**
+   * 本月缴纳信息
+   */
+  current_payment: null
+  /**
+   * 图片
+   */
+  image_list: string
+  /**
+   * 租金
+   */
+  monthly_rent: number
+  /**
+   * 下一个交租日期
+   */
+  next_rent_date: string
+  /**
+   * 历史缴纳记录
+   */
+  payment_history: string[]
+  /**
+   * 催缴记录
+   */
+  payment_reminder_records: PaymentReminderRecord[]
+  /**
+   * 资产id
+   */
+  properties_id: number
+  /**
+   * 地址
+   */
+  property_address: string
+  /**
+   * 名称
+   */
+  property_name: string
+  /**
+   * 交租日期
+   */
+  rent_day: number
+  /**
+   * 状态 0为未知 1为正常 2为待缴纳 3 为逾期
+   */
+  rent_status: RentStatus
+  /**
+   * 提交资产id
+   */
+  submission_id: number
+  /**
+   * 处理建议
+   */
+  suggestions: string[]
+}
+
+export interface PaymentReminderRecord {
+  created_at: number
+  id: number
+  operator_id: number
+  reminder_content: string
+  reminder_time: number
+  reminder_times: number
+  reminder_title: string
+  reminder_type: string
+  status: number
+  submission_id: number
+  updated_at: number
+  user_id: number
+}
+
+/**
+ * 状态 0为未知 1为正常 2为待缴纳 3 为逾期
+ */
+export interface RentStatus {
+  key: string
+  label: string
+}
 export default {
   /**
    * 资产类型
@@ -1032,5 +1118,15 @@ export default {
        */
       total_properties: number
     }>('/api/assetsinfo/saveRentIncome', data)
+  },
+  /**
+   * 资产租金支付详情
+   * @param data 资产租金支付详情
+   * @returns
+   */
+  getRentPaymentDetails(data: {
+    submission_id: string
+  }) {
+    return apiClient.post<RentPaymentDetails>('/api/assetsInfo/rentPaymentDetails', data)
   }
 }

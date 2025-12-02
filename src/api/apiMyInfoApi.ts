@@ -3,6 +3,7 @@ import type { ASSET_TYPE, USER_AUDIT_STATUS, USER_TYPE } from '@/enum/user'
 import type { AccountType } from '@/enums/create-account.ts'
 import apiClient from './client'
 
+// 用户
 export interface RegisterParams {
   mobile?: string
   email?: string
@@ -70,7 +71,7 @@ interface LawFirm {
   user_id: number
 }
 
-interface User {
+export interface User {
   /**
    * 地址
    */

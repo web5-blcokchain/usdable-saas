@@ -21,7 +21,6 @@ import { Route as AppEvaluationReportManagementIndexImport } from './routes/_app
 
 const AppIndexLazyImport = createFileRoute('/_app/')()
 const AppRegisterIndexLazyImport = createFileRoute('/_app/register/')()
-const AppNodeOperatorIndexLazyImport = createFileRoute('/_app/nodeOperator/')()
 const AppLawyerWorkbenchIndexLazyImport = createFileRoute(
   '/_app/lawyerWorkbench/',
 )()
@@ -65,14 +64,6 @@ const AppRegisterIndexLazyRoute = AppRegisterIndexLazyImport.update({
   getParentRoute: () => AppRoute,
 } as any).lazy(() =>
   import('./routes/_app/register/index.lazy').then((d) => d.Route),
-)
-
-const AppNodeOperatorIndexLazyRoute = AppNodeOperatorIndexLazyImport.update({
-  id: '/nodeOperator/',
-  path: '/nodeOperator/',
-  getParentRoute: () => AppRoute,
-} as any).lazy(() =>
-  import('./routes/_app/nodeOperator/index.lazy').then((d) => d.Route),
 )
 
 const AppLawyerWorkbenchIndexLazyRoute =
@@ -226,13 +217,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLawyerWorkbenchIndexLazyImport
       parentRoute: typeof AppImport
     }
-    '/_app/nodeOperator/': {
-      id: '/_app/nodeOperator/'
-      path: '/nodeOperator'
-      fullPath: '/nodeOperator'
-      preLoaderRoute: typeof AppNodeOperatorIndexLazyImport
-      parentRoute: typeof AppImport
-    }
     '/_app/register/': {
       id: '/_app/register/'
       path: '/register'
@@ -320,7 +304,6 @@ interface AppRouteChildren {
   AppEvaluationIndexRoute: typeof AppEvaluationIndexRoute
   AppAsseteIndexLazyRoute: typeof AppAsseteIndexLazyRoute
   AppLawyerWorkbenchIndexLazyRoute: typeof AppLawyerWorkbenchIndexLazyRoute
-  AppNodeOperatorIndexLazyRoute: typeof AppNodeOperatorIndexLazyRoute
   AppRegisterIndexLazyRoute: typeof AppRegisterIndexLazyRoute
   AppAsseteInfoIdLazyRoute: typeof AppAsseteInfoIdLazyRoute
   AppEvaluationInfoIdLazyRoute: typeof AppEvaluationInfoIdLazyRoute
@@ -339,7 +322,6 @@ const AppRouteChildren: AppRouteChildren = {
   AppEvaluationIndexRoute: AppEvaluationIndexRoute,
   AppAsseteIndexLazyRoute: AppAsseteIndexLazyRoute,
   AppLawyerWorkbenchIndexLazyRoute: AppLawyerWorkbenchIndexLazyRoute,
-  AppNodeOperatorIndexLazyRoute: AppNodeOperatorIndexLazyRoute,
   AppRegisterIndexLazyRoute: AppRegisterIndexLazyRoute,
   AppAsseteInfoIdLazyRoute: AppAsseteInfoIdLazyRoute,
   AppEvaluationInfoIdLazyRoute: AppEvaluationInfoIdLazyRoute,
@@ -365,7 +347,6 @@ export interface FileRoutesByFullPath {
   '/evaluation': typeof AppEvaluationIndexRoute
   '/assete': typeof AppAsseteIndexLazyRoute
   '/lawyerWorkbench': typeof AppLawyerWorkbenchIndexLazyRoute
-  '/nodeOperator': typeof AppNodeOperatorIndexLazyRoute
   '/register': typeof AppRegisterIndexLazyRoute
   '/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
   '/evaluation/info/$id': typeof AppEvaluationInfoIdLazyRoute
@@ -384,7 +365,6 @@ export interface FileRoutesByTo {
   '/evaluation': typeof AppEvaluationIndexRoute
   '/assete': typeof AppAsseteIndexLazyRoute
   '/lawyerWorkbench': typeof AppLawyerWorkbenchIndexLazyRoute
-  '/nodeOperator': typeof AppNodeOperatorIndexLazyRoute
   '/register': typeof AppRegisterIndexLazyRoute
   '/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
   '/evaluation/info/$id': typeof AppEvaluationInfoIdLazyRoute
@@ -405,7 +385,6 @@ export interface FileRoutesById {
   '/_app/evaluation/': typeof AppEvaluationIndexRoute
   '/_app/assete/': typeof AppAsseteIndexLazyRoute
   '/_app/lawyerWorkbench/': typeof AppLawyerWorkbenchIndexLazyRoute
-  '/_app/nodeOperator/': typeof AppNodeOperatorIndexLazyRoute
   '/_app/register/': typeof AppRegisterIndexLazyRoute
   '/_app/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
   '/_app/evaluation/info/$id': typeof AppEvaluationInfoIdLazyRoute
@@ -427,7 +406,6 @@ export interface FileRouteTypes {
     | '/evaluation'
     | '/assete'
     | '/lawyerWorkbench'
-    | '/nodeOperator'
     | '/register'
     | '/assete/info/$id'
     | '/evaluation/info/$id'
@@ -445,7 +423,6 @@ export interface FileRouteTypes {
     | '/evaluation'
     | '/assete'
     | '/lawyerWorkbench'
-    | '/nodeOperator'
     | '/register'
     | '/assete/info/$id'
     | '/evaluation/info/$id'
@@ -464,7 +441,6 @@ export interface FileRouteTypes {
     | '/_app/evaluation/'
     | '/_app/assete/'
     | '/_app/lawyerWorkbench/'
-    | '/_app/nodeOperator/'
     | '/_app/register/'
     | '/_app/assete/info/$id'
     | '/_app/evaluation/info/$id'
@@ -507,7 +483,6 @@ export const routeTree = rootRoute
         "/_app/evaluation/",
         "/_app/assete/",
         "/_app/lawyerWorkbench/",
-        "/_app/nodeOperator/",
         "/_app/register/",
         "/_app/assete/info/$id",
         "/_app/evaluation/info/$id",
@@ -535,10 +510,6 @@ export const routeTree = rootRoute
     },
     "/_app/lawyerWorkbench/": {
       "filePath": "_app/lawyerWorkbench/index.lazy.tsx",
-      "parent": "/_app"
-    },
-    "/_app/nodeOperator/": {
-      "filePath": "_app/nodeOperator/index.lazy.tsx",
       "parent": "/_app"
     },
     "/_app/register/": {

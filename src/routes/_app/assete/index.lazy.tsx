@@ -136,16 +136,47 @@ function RouteComponent() {
     value: false,
     data: {} as SubmissionData
   })
+  // 缴纳租金
   const [payRentDialogVisible, setPayRentDialogVisible] = useState({
     value: false,
     data: {} as AssetsOperationData
-  }) // 房租缴纳
+  })
+  // 违约详情
   const [defaultDetailsDialogVisible, setDefaultDetailsDialogVisible]
     = useState({
       value: false,
       data: {} as AssetsOperationData
     })
   const [searchText, setSearchText] = useState('')
+  const [selectAssetId, setSelectAssetId] = useState('')
+  const { data: rentPaymentDetails, isFetching: paymentLoading } = useQuery({
+    queryKey: ['getRentPaymentDetails', selectAssetId],
+    queryFn: async () => {
+      const res = await assetsApi.getRentPaymentDetails({
+        submission_id: selectAssetId
+      })
+      return res.data
+    },
+    enabled: !!selectAssetId
+  })
+
+  function onChangeDialog(data: AssetsOperationData, type: number) {
+    setSelectAssetId(data?.submission_id.toString())
+    switch (type) {
+      case 1:
+        setPayRentDialogVisible({
+          value: true,
+          data
+        })
+        break
+      case 2:
+        setDefaultDetailsDialogVisible({
+          value: true,
+          data
+        })
+        break
+    }
+  }
 
   useEffect(() => {
     return () => {
@@ -243,10 +274,8 @@ function RouteComponent() {
             </div>
           </div>
           <AssetOperatingTable
-            openPayDialog={data =>
-              setPayRentDialogVisible({ value: true, data })}
-            openDefaultDetailsDialog={data =>
-              setDefaultDetailsDialogVisible({ value: true, data })}
+            openPayDialog={data => onChangeDialog(data, 1)}
+            openDefaultDetailsDialog={data => onChangeDialog(data, 2)}
           />
         </div>
       </div>
@@ -258,17 +287,25 @@ function RouteComponent() {
         }}
         message={asseteErrorDialogVisible.data}
       />
-      {/* 缴纳租金 */}
+      {/* TODO 缴纳租金 */}
       <PayRentDialog
         visible={payRentDialogVisible.value}
-        data={payRentDialogVisible.data}
+        data={{
+          asset: payRentDialogVisible.data,
+          payment: rentPaymentDetails
+        }}
+        loading={paymentLoading}
         setVisible={val =>
           setPayRentDialogVisible(pre => ({ value: val, data: pre.data }))}
       />
       {/* 违约详情 */}
       <DefaultDetailsDialog
         visible={defaultDetailsDialogVisible.value}
-        data={defaultDetailsDialogVisible.data}
+        data={{
+          asset: defaultDetailsDialogVisible.data,
+          payment: rentPaymentDetails
+        }}
+        loading={paymentLoading}
         setVisible={val =>
           setDefaultDetailsDialogVisible(pre => ({
             value: val,
@@ -680,10 +717,11 @@ function AssetOperatingTable({
           )}
           <div
             className="clickable"
-            onClick={() => setPropertyOperatingStatusDetailsDialogVisible({
-              visible: true,
-              data: content
-            })}
+            onClick={() =>
+              setPropertyOperatingStatusDetailsDialogVisible({
+                visible: true,
+                data: content
+              })}
           >
             {t('assete.table.view')}
           </div>
@@ -710,7 +748,11 @@ function AssetOperatingTable({
       <PropertyOperatingStatusDetailsDialog
         visible={propertyOperatingStatusDetailsDialogVisible.visible}
         data={propertyOperatingStatusDetailsDialogVisible.data}
-        setVisible={(visible => setPropertyOperatingStatusDetailsDialogVisible(pre => ({ visible, data: pre.data })))}
+        setVisible={visible =>
+          setPropertyOperatingStatusDetailsDialogVisible(pre => ({
+            visible,
+            data: pre.data
+          }))}
       />
     </div>
   )
@@ -846,13 +888,32 @@ function PropertyOperatingStatusDetailsDialog({
           </div>
           <div>
             <div>{t('assete.propertyOperatingStatusDetailsDialog.status')}</div>
-            <div className={cn('fyc gap-2', data.property_status === RISK_STATUS.NORMAL ? 'text-#00FF85' : 'text-#FF4D4F')}>
-              <div className={cn('size-2 rounded-full', data.property_status === RISK_STATUS.NORMAL ? 'bg-#00FF85' : 'bg-#FF4D4F')}></div>
-              <div>
+            <div
+              className={cn(
+                'fyc gap-2',
+                data.property_status === RISK_STATUS.NORMAL
+                  ? 'text-#00FF85'
+                  : 'text-#FF4D4F'
+              )}
+            >
+              <div
+                className={cn(
+                  'size-2 rounded-full',
+                  data.property_status === RISK_STATUS.NORMAL
+                    ? 'bg-#00FF85'
+                    : 'bg-#FF4D4F'
+                )}
+              >
               </div>
-              {t(`common.assetPropertyStatus.${
-                (data?.property_status < RISK_STATUS.NORMAL || data?.property_status > RISK_STATUS.AUCTION_FAILURE) ? 'other' : (data?.property_status || 'other')
-              }`)}
+              <div></div>
+              {t(
+                `common.assetPropertyStatus.${
+                  data?.property_status < RISK_STATUS.NORMAL
+                  || data?.property_status > RISK_STATUS.AUCTION_FAILURE
+                    ? 'other'
+                    : data?.property_status || 'other'
+                }`
+              )}
             </div>
           </div>
           <div>

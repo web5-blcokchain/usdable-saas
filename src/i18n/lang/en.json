@@ -61,7 +61,9 @@
     },
     "paySuccess": "Payment Successful",
     "copySuccess": "Copy Successful",
-    "logoutSuccess": "Logout Successful"
+    "logoutSuccess": "Logout Successful",
+    "haveDefaulted": "Have Defaulted",
+    "hasRegistered": "You have registered, no need to register again"
   },
   "header": {
     "login": "Login",
@@ -536,7 +538,7 @@
       "paymentMethod": "Payment Method",
       "selectCrypto": "Select Cryptocurrency",
       "paymentAddress": "Payment Address",
-      "paymentInstruction": "Please use your cryptocurrency wallet to scan the QR code or copy the address to make the transfer."
+      "paymentInstruction": "Please use your cryptocurrency wallet or copy the address to make the transfer."
     },
     "defaultDetails": {
       "title": "Default Details",
