@@ -1,0 +1,40 @@
+// 案件状态
+export enum PENDING_CASE_STATUS {
+  /**
+   * 待初审
+   */
+  PENDING_INITIAL = 1,
+  /**
+   * 待线下认领
+   */
+  PENDING_OFFLINE = 6,
+  /**
+   * 线下已认领
+   */
+  OFFLINE_CLAIMED = 7,
+  /**
+   * 已提交线下资料
+   */
+  OFFLINE_DOCUMENT_SUBMITTED = 8
+}
+/**
+ * 申请状态 0为未申请 1为处理中 2为已通过 3为异常
+ */
+export enum APPLICATION_STATUS {
+  /**
+   * 未申请
+   */
+  UNAPPLIED = 0,
+  /**
+   * 处理中
+   */
+  PROCESSING = 1,
+  /**
+   * 已通过
+   */
+  APPROVED = 2,
+  /**
+   * 异常
+   */
+  EXCEPTION = 3
+}

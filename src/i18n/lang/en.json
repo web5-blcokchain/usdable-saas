@@ -943,7 +943,7 @@
     "pendingOfflineConfirmation": "Cases awaiting offline enforcement",
     "completedCases": "Completed Cases",
     "completedAuctionCases": "Completed Auction Cases",
-    "auctionTasks": "Pending Auction Cases",
+    "auctionTasks": "Pending Auction Tasks",
     "pendingClaimInitialReview": "Pending claim cases (Preliminary Review Stage)",
     "pendingClaimOfflineConfirmation": "Pending Claim Cases (Offline Confirmation)",
     "viewDetails": "View Details",

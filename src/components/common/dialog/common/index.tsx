@@ -20,6 +20,7 @@ export function CommonDialog({
       className={cn(props.className, `common-dialog`, !props.footer && `[&.common-dialog>div>.ant-modal-content>.ant-modal-footer]:py-0 
         [&.common-dialog>div>.ant-modal-content>.ant-modal-footer]:b-0`)}
       closable={false}
+      centered={props.centered ?? true}
       title={(
         <div className="fyc justify-between gap-4">
           {props.title}

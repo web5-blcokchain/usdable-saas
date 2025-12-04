@@ -28,11 +28,13 @@ export function uploadFile(data: FormData) {
 
 export interface Region {
   id: number
-  pid: number // 父级ID
-  level: number // 层级
-  name: string // 中文名称
-  name_en: string // 英文名称
-  name_pinyin: string // 拼音
+  code: string
+  has_children: boolean
+  level: number
+  level_name: string
+  name: string
+  name_en: string
+  parent_id: number
 }
 
 export function getLocation(data: {

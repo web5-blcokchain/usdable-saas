@@ -975,7 +975,7 @@
     "pendingOfflineConfirmation": "待线下执行案件",
     "completedCases": "已完成案件",
     "completedAuctionCases": "已完成拍卖案件",
-    "auctionTasks": "待执行拍卖案件",
+    "auctionTasks": "拍卖任务",
     "pendingClaimInitialReview": "待认领案件（初审阶段）",
     "pendingClaimOfflineConfirmation": "待认领案件（线下确认）",
     "viewDetails": "查看详情",

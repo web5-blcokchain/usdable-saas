@@ -943,7 +943,7 @@
     "pendingOfflineConfirmation": "オフラインでの実行案件待ちです",
     "completedCases": "完了案件",
     "completedAuctionCases": "完了オークション案件",
-    "auctionTasks": "オークション待機案件",
+    "auctionTasks": "オークション待機タスク",
     "pendingClaimInitialReview": "認知待ち事件(初審の段階です)",
     "pendingClaimOfflineConfirmation": "未認領案件（オフライン確認）",
     "viewDetails": "詳細を表示",

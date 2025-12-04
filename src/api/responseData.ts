@@ -15,3 +15,9 @@ export interface ResponseListData<T> {
   msg: string
   data: DataListResponse<T>
 }
+
+export interface PageRequest {
+  page: number
+  pageSize: number
+  keyword?: string
+}
