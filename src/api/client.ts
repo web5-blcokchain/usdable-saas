@@ -33,26 +33,28 @@ axios.interceptors.request.use(
 
 let errorList: { message: string, time: number }[] = []
 axios.interceptors.response.use(async (res: ResponseData<any>) => {
-  const code = _get(res.data, 'code', 0)
+  const code = res.data.code || 0
   // 401 账户不存在不需要提示，因为是强制跳转创建账号页面 TODO Expired token
   let fullUrl = ''
   const config = (res as any).config
+  // 不需要验证的api
+  // const noAuthApiList = ['/api/user/getRegisterInfo', '/api/appraiser/reportDetail']
   if (config)
     fullUrl = config.url
   if ((code === 401 && fullUrl.includes('/api/user/getRegisterInfo'))) {
     return res.data
   }
-  if (code !== 1 && fullUrl.includes('/api/info/addContractLog')) {
-    throw new Error('调用合约日志异常')
+  else if ((code === 0 && fullUrl.includes('/api/appraiser/reportDetail'))) {
+    return res.data
+  }
+  else if (code === 401 || res?.data?.msg === 'Expired token') {
+    eventBus.emit('tokenExpired', { msg: 'Token is expired' })
+    return
   }
   const lang = localStorage.getItem(TOKEN_LANG_KEY) || 'en'
   const defaultMessage = lang === 'en' ? 'Response error' : lang === 'ja' ? 'エラーが発生しました' : 'Response error'
   if (code !== 1 && code !== 401) {
     const message = _get(res.data, 'msg', defaultMessage)
-    if (message.includes('Token is expired') || message.includes('Expired token')) { // 触发全局事件总线，重新获取token
-      eventBus.emit('tokenExpired', { msg: 'Token is expired' })
-      return
-    }
     // 同一个提示信息一段时间只出现一次
     const hasError = errorList.some(item => item.message === message && item.time > Date.now() - 5000)
     if (!hasError) {

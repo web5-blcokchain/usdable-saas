@@ -21,7 +21,9 @@ export function useRouteGuard() {
   useEffect(() => {
     // 白名单路径列表，支持字符串和正则
     const currentPath = location.pathname
-    const isRegister = !!userData?.user?.id && userData?.user?.audit_status === USER_AUDIT_STATUS.PASS
+    const isRegister
+      = !!userData?.user?.id
+        && userData?.user?.audit_status === USER_AUDIT_STATUS.PASS
 
     // 如果用户未登录或者未审核，则只能访问首页和注册页面
     if (
@@ -33,10 +35,7 @@ export function useRouteGuard() {
       })
     }
     // 校验用户身份访问的页面是否匹配
-    if (
-      isRegister
-      && !['/', '/register'].includes(currentPath)
-    ) {
+    if (isRegister && !['/', '/register'].includes(currentPath)) {
       const userCheck = checkUserIdentity(userData.user, currentPath)
       if (!userCheck.value) {
         navigate({
@@ -58,10 +57,15 @@ export function useRouteGuard() {
   ])
 }
 
+const commonPaths = ['/', '/register', '/user', '/user/']
 function checkUserIdentity(userData: User, path: string) {
   const userChenck = {
-    value: false,
+    value: true,
     url: '/register'
+  }
+  const isCommonPath = commonPaths.some(item => path.includes(item))
+  if (isCommonPath) {
+    return userChenck
   }
   if (userData.type === USER_TYPE.ASSET && !path.includes('/assete')) {
     // 如果是资产方

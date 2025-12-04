@@ -479,6 +479,7 @@ export function SecondStep({ form, back, onFinish, className }: {
     })
     setErrorFormItem(errorList)
     console.log('❌ 验证失败:', errorInfo, errorList)
+    toast.error(t('common.formDataError'))
   }
 
   const [sumbitLoading, setSumbitLoading] = useState(false)

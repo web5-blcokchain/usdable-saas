@@ -39,9 +39,9 @@ export function CommonTable({
     >
 
       <Table
+        rowKey="id"
         {...tableProps}
         tableLayout="fixed"
-        key={(`${Date.now() + Math.random()}`)}
         scroll={{ x: 'max-content' }}
         columns={columns}
         dataSource={data}

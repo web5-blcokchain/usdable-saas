@@ -66,7 +66,7 @@ function UploadMultifileCard({
 
           return false
         }}
-        disabled={!beforeUpload}
+        disabled={!beforeUpload || loading}
         accept={fileType}
         multiple={multiple === undefined ? true : multiple}
       >

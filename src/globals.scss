@@ -2,6 +2,7 @@
   --primary: #00e5ff;
   --background: #ffffff;
   --foreground: #191a1f;
+
   .ant-menu-dark.ant-menu-inline .ant-menu-sub.ant-menu-inline {
     background: none;
   }
@@ -94,6 +95,7 @@ a {
 }
 
 :root {
+
   a:hover,
   .main-hover:hover {
     color: var(--primary);
@@ -107,18 +109,36 @@ a {
 
 // 隐藏滚动条
 .scrollbar-hidden {
-  scrollbar-width: none; /* 隐藏滚动条 */
-  -ms-overflow-style: none; /* 隐藏滚动条 */
+  scrollbar-width: none;
+  /* 隐藏滚动条 */
+  -ms-overflow-style: none;
+
+  /* 隐藏滚动条 */
   &::-webkit-scrollbar {
-    display: none; /* 隐藏滚动条 */
+    display: none;
+  }
+}
+
+textarea {
+  scrollbar-width: none;
+  /* 隐藏滚动条 */
+  -ms-overflow-style: none;
+
+  /* 隐藏滚动条 */
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 
 .ant-modal {
-  scrollbar-width: none; /* 隐藏滚动条 */
-  -ms-overflow-style: none; /* 隐藏滚动条 */
+  scrollbar-width: none;
+  /* 隐藏滚动条 */
+  -ms-overflow-style: none;
+
+  /* 隐藏滚动条 */
   &::-webkit-scrollbar {
-    display: none; /* 隐藏滚动条 */
+    display: none;
+    /* 隐藏滚动条 */
   }
 
   @apply max-h-80% overflow-y-scroll;
@@ -131,10 +151,12 @@ a {
 .file-card-full {
   .ant-upload-wrapper.UploadCard {
     width: 100%;
+
     .ant-upload {
       width: 100%;
       display: block;
-      .ant-upload > div > div {
+
+      .ant-upload>div>div {
         width: 100%;
       }
     }
@@ -152,9 +174,11 @@ a {
   .ant-picker {
     border-color: var(--input-border-color, #30363d);
     @apply h-10.5 bg-transparent w-full;
+
     input {
       background-color: var(--input-bg-color, #24292f);
     }
+
     .ant-select-selector {
       background-color: var(--input-bg-color, #24292f);
     }
@@ -170,9 +194,11 @@ a {
 
 .ant-upload-wrapper {
   width: 100% !important;
+
   .ant-upload {
     width: 100% !important;
-    > div > div {
+
+    >div>div {
       width: 100%;
     }
   }
@@ -181,6 +207,7 @@ a {
 .backtop-btn {
   transition: opacity 0.3s ease-in-out;
 }
+
 .backtop-btn.ant-fade-enter-active {
   animation: fade-in 0.3s ease-in-out;
   animation-fill-mode: forwards;
@@ -190,11 +217,13 @@ a {
     0% {
       opacity: 0;
     }
+
     100% {
       opacity: 1;
     }
   }
 }
+
 .backtop-btn.ant-fade-leave {
   opacity: 0;
 }

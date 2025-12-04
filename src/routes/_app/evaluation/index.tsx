@@ -1,7 +1,7 @@
 import type { ColumnsType } from 'antd/es/table'
 import * as evaluationApi from '@/api/evaluationApi'
 import { CommonTable } from '@/components/common/common-table'
-import { ASSET_STATUS } from '@/enum/asset'
+import { ASSET_EVALUATIO_STATUS } from '@/enum/evaluation'
 import { formatNumberNoRound } from '@/utils/number'
 import { cn } from '@/utils/style'
 import { useQuery } from '@tanstack/react-query'
@@ -71,45 +71,39 @@ function RouteComponent() {
   const [formData, setFormData] = useState({
     page: 1,
     pageSize: 10,
-    name: '',
+    keyword: '',
     status: 0
   })
 
   // 获取评估列表
-  const { data } = useQuery({
+  const { data, isFetching: dataLoading } = useQuery({
     queryKey: ['getCaseList', formData],
     queryFn: async () => {
-      const data = await evaluationApi.getCaseList(formData)
+      const data = await evaluationApi.getCaseList({
+        ...formData,
+        status: formData.status === 0 ? undefined : formData.status
+      })
       return data?.data
     }
   })
 
   // 案件状态
-  const dataStatusContent = (status: ASSET_STATUS, _text: string) => {
+  const dataStatusContent = (status: ASSET_EVALUATIO_STATUS, _text: string) => {
     let data = {} as { className: string, text: string }
-    if (status < 2) {
+    // 已完成
+    if ([ASSET_EVALUATIO_STATUS.COMPLETED].includes(status)) {
       data = {
         className: 'bg-#00FF8733 text-#00FF85',
         text: t('assete.assetStatus.lawyerConfirming')
-      } // 律师确认中
+      } // 已驳回
     }
-    else if (
-      [ASSET_STATUS.LAWYER_REJECTED, ASSET_STATUS.ASSESSOR_REJECTED].includes(
-        status
-      )
-    ) {
+    else if ([ASSET_EVALUATIO_STATUS.REJECTED].includes(status)) {
       data = {
         className: 'bg-#CD647833 text-#CF6679',
         text: t('assete.assetStatus.rejected')
-      } // 驳回
+      } // 待认领
     }
-    else if (
-      [
-        ASSET_STATUS.ASSESSOR_CLAIMED,
-        ASSET_STATUS.LAWYER_CLAIMED_OFFLINE,
-        ASSET_STATUS.LAWYER_UPLOADED_MATERIALS
-      ].includes(status)
-    ) {
+    else if ([ASSET_EVALUATIO_STATUS.PENDING_CLAIM].includes(status)) {
       data = {
         className: 'bg-#2E2F1F text-#FFDD00',
         text: t('assete.assetStatus.pendingEvaluation')
@@ -130,23 +124,28 @@ function RouteComponent() {
         )}
       >
         {t(
-          `common.assetStatus.${
-            ASSET_STATUS.DRAFT <= status
-            && ASSET_STATUS.ASSET_ON_CHAIN >= status
-              ? status
-              : 'other'
-          }`
+          (ASSET_EVALUATIO_STATUS.PENDING_CLAIM <= status
+            && ASSET_EVALUATIO_STATUS.EVALUATED >= status)
+          || ASSET_EVALUATIO_STATUS.COMPLETED === status
+            ? `evaluation.asseteStatus.${status}`
+            : `common.assetStatus.other`
         )}
       </div>
     )
   }
 
-  const dataStatus = Array.from({ length: 10 }, (_, index) => {
-    return {
-      value: index - 1,
-      label: t(`common.assetStatus.${index - 1}`)
-    }
-  })
+  const dataStatus = [
+    {
+      value: 0,
+      label: t('common.all')
+    },
+    ...[3, 4, 5, 6].map((item) => {
+      return {
+        value: item,
+        label: t(`evaluation.asseteStatus.${item}`)
+      }
+    })
+  ]
 
   const columns: ColumnsType<evaluationApi.CaseListResponse> = [
     {
@@ -162,7 +161,7 @@ function RouteComponent() {
       render: data => (
         <div className="flex items-center gap-3">
           {/* <img className="size-8 rounded-full object-cover" src={data.img} alt="" /> */}
-          <div className="text-sm text-#8B949E">{data}</div>
+          <div className="text-sm text-#8B949E">{data || '-'}</div>
         </div>
       )
     },
@@ -212,24 +211,41 @@ function RouteComponent() {
       title: t('evaluation.table.action'),
       key: 'action',
       render: (_, record) => (
-        <div className="clickable">
-          {record.status === 0
+        <div className="fcc gap2">
+          {record?.status === ASSET_EVALUATIO_STATUS.CLAIMED && (
+            <Link
+              to="/evaluation/info/$id"
+              params={{ id: (record.id || '').toString() }}
+            >
+              <div>评估</div>
+            </Link>
+          )}
+          {record.status === ASSET_EVALUATIO_STATUS.PENDING_CLAIM
             ? (
-                <div onClick={() => setEvaluationInfoDialogVisible({
-                  value: true,
-                  data: record
-                })}
+                <div
+                  className="clickable"
+                  onClick={() =>
+                    setEvaluationInfoDialogVisible({
+                      value: true,
+                      data: record,
+                      isView: false
+                    })}
                 >
                   {t('evaluation.action.claimEvaluation')}
                 </div>
               )
             : (
-                <Link
-                  to="/evaluation/info/$id"
-                  params={{ id: (record?.id || '').toString() }}
+                <div
+                  className="clickable"
+                  onClick={() =>
+                    setEvaluationInfoDialogVisible({
+                      value: true,
+                      data: record,
+                      isView: true
+                    })}
                 >
-                  <div>{t('evaluation.action.viewDetails')}</div>
-                </Link>
+                  {t('evaluation.action.viewDetails')}
+                </div>
               )}
         </div>
       )
@@ -239,14 +255,16 @@ function RouteComponent() {
   const [evaluationInfoDialogVisible, setEvaluationInfoDialogVisible]
     = useState({
       value: false,
-      data: {} as evaluationApi.CaseListResponse
+      data: {} as evaluationApi.CaseListResponse,
+      isView: false
     })
 
   useEffect(() => {
     return () => {
       setEvaluationInfoDialogVisible({
         value: false,
-        data: {} as evaluationApi.CaseListResponse
+        data: {} as evaluationApi.CaseListResponse,
+        isView: false
       })
     }
   }, [])
@@ -279,6 +297,14 @@ function RouteComponent() {
               className="w-64 bg-#24292f !h-9.5 max-md:w-50% [&>input]:!h-full"
               placeholder={t('evaluation.searchPlaceholder')}
               prefix={<div className="i-gg:search text-4 text-#E5E7EB"></div>}
+              onKeyUp={(e) => {
+                if (e.key === 'Enter') {
+                  setFormData(pre => ({
+                    ...pre,
+                    keyword: e.currentTarget?.value
+                  }))
+                }
+              }}
             />
             <Select
               className="w-64 !h-9.5 [&>input]:h-full max-md:w-50% [&>.ant-select-selector]:bg-#24292f"
@@ -291,13 +317,29 @@ function RouteComponent() {
           </div>
         </div>
         <CommonTable
+          tableProps={{
+            loading: dataLoading
+          }}
           className="b-1 rounded-0"
           data={data?.list || []}
           columns={columns}
+          pagination={{
+            total: data?.count || 0,
+            current: formData.page,
+            pageSize: formData.pageSize,
+            onChange: (page, pageSize) => {
+              setFormData(pre => ({
+                ...pre,
+                page,
+                pageSize
+              }))
+            }
+          }}
           tableConfig={
             {
               borderColor: '#30363D',
               headerBorderRadius: 0
+
             } as any
           }
         />
@@ -307,10 +349,12 @@ function RouteComponent() {
         setVisible={(visible) => {
           setEvaluationInfoDialogVisible(pre => ({
             value: visible,
-            data: pre.data
+            data: {} as any,
+            isView: pre.isView
           }))
         }}
-        _evaluationInfo={evaluationInfoDialogVisible.data}
+        evaluationInfo={evaluationInfoDialogVisible.data}
+        isView={evaluationInfoDialogVisible.isView}
       />
     </div>
   )

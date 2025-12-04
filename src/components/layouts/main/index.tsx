@@ -7,9 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import MainFooter from './footer'
 import MainHeader from './header'
 
-const MainLayout: FC = ({
-  children
-}) => {
+const MainLayout: FC = ({ children }) => {
   // const { pathname } = useLocation()
   // const isIndex = pathname === '/'
   const router = useRouterState()
@@ -21,7 +19,7 @@ const MainLayout: FC = ({
       <MainHeader />
       <App>
         <div className="mx-a min-h-screen overflow-hidden text-white">
-          <AnimatePresence>
+          <AnimatePresence mode="wait">
             <motion.div
               key={pathKey}
               initial={{ x: 100, opacity: 0 }}
@@ -29,16 +27,23 @@ const MainLayout: FC = ({
               // exit={{ x: -100, opacity: 0 }}
               transition={{ duration: 0.4, ease: 'easeInOut' }}
             >
-              <ConfigProvider locale={
-                i18n.language === 'zh' ? zhCN : i18n.language === 'en' ? enUS : jaJP
-              }
+              <ConfigProvider
+                locale={
+                  i18n.language === 'zh'
+                    ? zhCN
+                    : i18n.language === 'en'
+                      ? enUS
+                      : jaJP
+                }
               >
                 {children}
               </ConfigProvider>
             </motion.div>
-
           </AnimatePresence>
-          <FloatButton.BackTop className="my-backtop" target={() => (document.querySelector('.app-content')) as HTMLElement}>
+          <FloatButton.BackTop
+            className="my-backtop"
+            target={() => document.querySelector('.app-content') as HTMLElement}
+          >
             <div className="backtop-btn size-12 fcc rounded-full bg-#737373">
               <div className="text-balck i-carbon:back-to-top text-xl"></div>
             </div>

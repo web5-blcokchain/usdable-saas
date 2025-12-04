@@ -75,7 +75,12 @@
     "copySuccess": "复制成功",
     "logoutSuccess": "退出登录成功",
     "haveDefaulted": "已违约",
-    "hasRegistered": "您已注册，无需再次注册"
+    "hasRegistered": "您已注册，无需再次注册",
+    "all": "全部",
+    "formDataError": "请填写表单内容",
+    "submissionStatusPending": "未提交",
+    "submissionStatusApproved": "已提交",
+    "downloadFailed": "下载文件失败"
   },
   "header": {
     "login": "登录",
@@ -620,6 +625,13 @@
     "contactUs": "联系我们"
   },
   "evaluation": {
+    "asseteStatus": {
+      "3": "待认领",
+      "4": "已认领",
+      "5": "已驳回",
+      "6": "已评估",
+      "9": "已完成"
+    },
     "title": "案件评估",
     "description": "接收并处理由律师初审通过的资产估值案件，查看详细信息并进行专业评估审核",
     "caseStatus": {
@@ -651,17 +663,19 @@
     "infoDialog": {
       "title": "案件详情",
       "caseDescription": "案件描述",
-      "assetList": "资产清单",
+      "assetList": "房产详情",
       "type": "类型",
       "caseInfo": "案件信息",
-      "assetType": "资产类型",
+      "assetType": "房产类型",
       "currentStatus": "当前状态",
       "totalValuationAmount": "总估值金额",
       "submittedLawyer": "提交律师",
       "assetOwnerInfo": "资产方信息",
       "assetValuationRequest": "资产估值申请",
       "lawyerReviewOpinion": "律师初审意见",
-      "startEvaluation": "开始评估"
+      "startEvaluation": "开始评估",
+      "claimEvaluationSuccess": "认领评估成功",
+      "rejectAssetSuccess": "驳回资料成功"
     },
     "info": {
       "back": "返回",
@@ -696,18 +710,25 @@
         "assetNumber": "资产编号",
         "propertyName": "房产名称",
         "appraiserName": "评估师姓名",
+        "appraiserNameRequired": "请输入评估师姓名",
         "appraiserNamePlaceholder": "请输入评估师姓名",
         "evaluationAgency": "评估机构",
+        "evaluationAgencyRequired": "请输入评估机构",
         "evaluationAgencyPlaceholder": "请输入评估机构",
         "evaluationDate": "评估日期",
+        "evaluationDateRequired": "请选择评估日期",
         "evaluationDatePlaceholder": "请选择评估日期",
         "evaluationMethod": "评估方法",
+        "evaluationMethodRequired": "请选择评估方法",
         "evaluationMethodPlaceholder": "请选择评估方法",
         "evaluationPrice": "评估价（万元）",
+        "evaluationPriceRequired": "请输入评估价格",
         "evaluationPricePlaceholder": "请输入评估价",
         "evaluationConclusion": "评估结论",
+        "evaluationConclusionRequired": "请输入评估结论",
         "evaluationConclusionPlaceholder": "请输入评估结论",
         "uploadReportFile": "上传评估报告文件",
+        "uploadReportFileRequired": "请上传评估报告文件",
         "fileSupport": "支持格式：PDF / DOCX / JPG（≤20MB）",
         "dragHere": "拖拽文件到此处或",
         "clickUpload": "点击选择文件",
@@ -722,7 +743,9 @@
           "method1": "方法一",
           "method2": "方法二",
           "method3": "方法三"
-        }
+        },
+        "submitReportSuccess": "提交评估报告成功",
+        "saveDraftSuccess": "保存草稿成功"
       }
     },
     "reportManagement": {

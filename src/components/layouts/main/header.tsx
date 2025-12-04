@@ -7,6 +7,7 @@ import { USER_AUDIT_STATUS, USER_TYPE } from '@/enum/user'
 import { UserCode } from '@/enums/user'
 import { eventBus } from '@/hooks/EventBus'
 import { useUserStore } from '@/stores/user'
+import { showToastOnce } from '@/utils/toast'
 import { clearToken, getToken, setToken } from '@/utils/user'
 import { usePrivy, useUser } from '@privy-io/react-auth'
 import { useMutation } from '@tanstack/react-query'
@@ -38,45 +39,66 @@ export default function MainHeader() {
         }, 100)
       )
   }
-  const menu = (
-    <Menu className="b-1 b-#2D333B b-solid bg-#161B22! p-0!">
-      <Menu.Item key="profile">
-        <Link to="/user/info">
+  const menuList: MenuProps['items'] = useMemo(() => {
+    return [
+      {
+        key: 'profile',
+        icon: <div className="i-carbon:user-avatar-filled text-#D1D5DB"></div>,
+        label: (
           <div className="w-40.5 fyc gap-2 py-2 text-sm text-#D1D5DB">
-            <div className="i-carbon:user-avatar-filled"></div>
             <div>{t('header.profile')}</div>
           </div>
-        </Link>
-      </Menu.Item>
-      <Menu.Item key="setting">
-        <Link to="/user/setting">
+        ),
+        onClick: () => {
+          navigate({
+            to: '/user/info'
+          })
+        }
+      },
+      {
+        key: 'setting',
+        icon: <div className="i-tdesign:setting-1-filled text-#D1D5DB"></div>,
+        label: (
           <div className="w-40.5 fyc gap-2 py-2 text-sm text-#D1D5DB">
-            <div className="i-tdesign:setting-1-filled"></div>
             <div>{t('header.accountSettings')}</div>
           </div>
-        </Link>
-      </Menu.Item>
-      {/* 评估方才显示 */}
-      <Menu.Item key="report">
-        <div
-          onClick={() => navigate({ to: '/evaluation/reportManagement' })}
-          className="w-40.5 fyc gap-2 py-2 text-sm text-#D1D5DB"
-        >
-          <div className="i-mdi:file"></div>
-          <div>{t('header.reportManagement')}</div>
-        </div>
-      </Menu.Item>
-      <Menu.Item key="logout" className="b-t-1 b-t-#2D333B rounded-t-0!">
-        <div
-          onClick={() => handleLogout(true)}
-          className="w-40.5 fyc gap-2 py-2 text-sm text-#FF3A3A"
-        >
-          <div className="i-ic:outline-logout"></div>
-          <div>{t('header.logout')}</div>
-        </div>
-      </Menu.Item>
-    </Menu>
-  )
+        ),
+        onClick: () => {
+          navigate({
+            to: '/user/setting'
+          })
+        }
+      },
+      {
+        key: 'report',
+        icon: <div className="i-mdi:file text-#D1D5DB"></div>,
+        label: (
+          <div className="w-40.5 fyc gap-2 py-2 text-sm text-#D1D5DB">
+            <div>{t('header.reportManagement')}</div>
+          </div>
+        ),
+        onClick: () => {
+          navigate({
+            to: '/evaluation/reportManagement'
+          })
+        }
+      },
+      {
+        key: 'logout',
+        icon: <div className="i-ic:outline-logout text-#FF3A3A"></div>,
+        label: (
+          <div className="w-40.5 fyc gap-2 py-2 text-sm text-#FF3A3A">
+            <div>{t('header.logout')}</div>
+          </div>
+        ),
+        onClick: () => {
+          handleLogout(true)
+        }
+      }
+    ].filter(item =>
+      item.key === 'report' ? userData?.user?.type === USER_TYPE.ASSESS : true
+    )
+  }, [userData])
 
   const [logoutLoading, setLogoutLoading] = useState(false)
   const {
@@ -165,13 +187,18 @@ export default function MainHeader() {
     }
   }, [refreshUserInfo])
 
+  function parseJwt(token: string) {
+    const base64Url = token.split('.')[1]
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+
+    const decoded = Buffer.from(base64, 'base64').toString('utf-8')
+    return JSON.parse(decoded)
+  }
   // 判断token是否过期
   function isTokenExpired(token: string) {
-    if (!token)
-      return true
-    const payload = JSON.parse(atob(token.split('.')[1]))
+    const { exp } = parseJwt(token)
     const now = Math.floor(Date.now() / 1000)
-    return payload.exp < now
+    return now > exp
   }
 
   // 监听用户信息变化，用户是否登录成功
@@ -195,29 +222,40 @@ export default function MainHeader() {
 
   const { refreshUser } = useUser()
 
+  const lastCheckTime = useRef(0)
   // 监测用户token是否过期
   const checkToken = async () => {
     try {
       const token = getToken()
-      if (token && isTokenExpired(token)) {
+      // 判断token是否过期，并且该函数在5s只触发一次
+      if (
+        (!token || isTokenExpired(token))
+        && Date.now() - lastCheckTime.current > 5000
+      ) {
+        lastCheckTime.current = Date.now()
         await refreshUser()
         const newToken = await getAccessToken()
         if (newToken) {
           // 获取新token，成功刷新用户信息
           await getUserInfo()
-          setToken(token, 2)
+          setToken(newToken, 2)
         }
         else {
           // 获取失败退出登陆
           handleLogout()
-          toast.warning(t('common.token_expired'))
+          showToastOnce(t('common.token_expired'), 'warning')
         }
+      }
+      else if (!token) {
+        handleLogout()
+        showToastOnce(t('common.token_expired'), 'warning')
       }
     }
     catch (error) {
       console.log('获取token失败', error)
       // 重新获取token失败，重新登录
       handleLogout()
+      showToastOnce(t('common.token_expired'), 'warning')
     }
   }
   useEffect(() => {
@@ -226,7 +264,9 @@ export default function MainHeader() {
   }, [])
 
   const linkIdentityHome = useMemo(() => {
-    const isRegister = !!userData?.user?.id && userData?.user?.audit_status === USER_AUDIT_STATUS.PASS
+    const isRegister
+      = !!userData?.user?.id
+        && userData?.user?.audit_status === USER_AUDIT_STATUS.PASS
     if (!isRegister)
       return '/register'
     switch (userData?.user?.type) {
@@ -268,7 +308,17 @@ export default function MainHeader() {
                         <div className="i-mdi:bell text-4.5 text-#9da3ae"></div>
                       </Badge>
                     </Link>
-                    <Dropdown open={open} onOpenChange={setOpen} overlay={menu}>
+                    <Dropdown
+                      open={open}
+                      onOpenChange={setOpen}
+                      dropdownRender={() => (
+                        <Menu
+                          className="b-1 b-#2D333B b-solid bg-#161B22! p-0!"
+                          items={menuList}
+                        >
+                        </Menu>
+                      )}
+                    >
                       <div className="ml-4 fyc gap-2">
                         <div className="size-10 overflow-hidden b-2 b-#00E5FF80 rounded-full b-solid">
                           <img

@@ -116,6 +116,7 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
     })
     setErrorFormItem(errorList)
     console.log('❌ 验证失败:', errorInfo, errorList)
+    toast.error(t('common.formDataError'))
   }
 
   // 文件上传

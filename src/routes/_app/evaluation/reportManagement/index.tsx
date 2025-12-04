@@ -1,6 +1,10 @@
 import type { ColumnsType } from 'antd/es/table'
+import * as evaluationApi from '@/api/evaluationApi'
 import { CommonTable } from '@/components/common/common-table'
+import { SUBMISSION_STATUS } from '@/enum/common'
+import { downloadFile } from '@/utils/file'
 import { cn } from '@/utils/style'
+import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { Input } from 'antd'
 import dayjs from 'dayjs'
@@ -14,46 +18,77 @@ export const Route = createFileRoute('/_app/evaluation/reportManagement/')({
 function RouteComponent() {
   const { t } = useTranslation()
 
-  const data = [
-    {
-      id: 'VAL-2025-00120',
-      address: '上海花家地园区',
-      status: 1,
-      createTime: '2125-11-12 12:12:12'
-    },
-    {
-      id: 'VAL-2025-00120',
-      address: '上海花家地园区',
-      status: 1,
-      createTime: '2025-11-12 12:12:12'
-    },
-    {
-      id: 'VAL-2025-00120',
-      address: '上海花家地园区',
-      status: 0,
-      createTime: '2025-11-12 12:12:12'
-    }
-  ]
+  const [pageInfo, setPageInfo] = useState({
+    page: 1,
+    pageSize: 10,
+    keyword: ''
+  })
 
-  const columns: ColumnsType<typeof data[0]> = [
+  const { data, isFetching } = useQuery({
+    queryKey: ['getReportList', pageInfo],
+    queryFn: async () => {
+      const res = await evaluationApi.getReportList(pageInfo)
+      return res.data
+    }
+  })
+
+  const dataStatusContent = (status: SUBMISSION_STATUS) => {
+    let data = ''
+    // 已完成
+    if (SUBMISSION_STATUS.APPROVED === status) {
+      data = 'bg-#00FF8733 text-#00FF85' // 已驳回
+    }
+    else if (SUBMISSION_STATUS.PENDING === status) {
+      data = 'bg-#CD647833 text-#CF6679' // 待认领
+    }
+    return (
+      <div
+        className={cn(
+          data,
+          'rounded-9999px px-2 py-1 text-xs font-400 w-fit fcc gap-1'
+        )}
+      >
+        <div
+          className={cn(
+            status !== SUBMISSION_STATUS.APPROVED && 'i-ep:success-filled',
+            status === SUBMISSION_STATUS.PENDING && 'i-ix:namur-failure-filled'
+          )}
+        >
+        </div>
+        <div>
+          {t(
+            status === SUBMISSION_STATUS.PENDING
+              ? 'common.submissionStatusPending'
+              : 'common.submissionStatusApproved'
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  const columns: ColumnsType<evaluationApi.AppraiserReportList> = [
     {
       title: t('evaluation.reportManagement.table.reportId'),
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: 'report_code',
+      key: 'report_code',
       render: text => (
         <div>
-          <div className="text-#9CA3AF">{t('evaluation.reportManagement.table.reportId')}</div>
+          <div className="text-#9CA3AF">
+            {t('evaluation.reportManagement.table.reportId')}
+          </div>
           <div className="mt-1.5 font-bold">{text}</div>
         </div>
       )
     },
     {
       title: t('evaluation.reportManagement.table.assetName'),
-      dataIndex: 'address',
-      key: 'address',
+      dataIndex: 'asset_name',
+      key: 'asset_name',
       render: text => (
         <div>
-          <div className="mb-1.5 text-#9CA3AF">{t('evaluation.reportManagement.table.assetName')}</div>
+          <div className="mb-1.5 text-#9CA3AF">
+            {t('evaluation.reportManagement.table.assetName')}
+          </div>
           <div>{text}</div>
         </div>
       )
@@ -64,37 +99,44 @@ function RouteComponent() {
       key: 'status',
       render: text => (
         <div>
-          <div className="mb-1.5 text-#9CA3AF">{t('evaluation.reportManagement.table.status')}</div>
-          <div className={cn(text === 1 ? 'bg-#00FF8733 text-#00FF85' : 'text-#F87171 bg-#EB45451A', 'px-2 py-1.5 rounded-9999px fyc gap-1 text-xs w-fit h-fit')}>
-            <div className={cn(text === 1 ? 'i-ep:success-filled' : 'i-ix:namur-failure-filled')}></div>
-            <div>{text === 1 ? t('evaluation.reportManagement.table.passed') : t('evaluation.reportManagement.table.failed')}</div>
+          <div className="mb-1.5 text-#9CA3AF">
+            {t('evaluation.reportManagement.table.status')}
           </div>
+          <div>{dataStatusContent(text)}</div>
         </div>
       )
     },
     {
       title: t('evaluation.reportManagement.table.submitTime'),
-      dataIndex: 'createTime',
-      key: 'createTime',
+      dataIndex: 'submit_time',
+      key: 'submit_time',
       render: text => (
         <div>
-          <div className="mb-1.5 text-#9CA3AF">{t('evaluation.reportManagement.table.submitTime')}</div>
-          <div className="text-#D1D5DB">{dayjs(text).format('YYYY-MM-DD HH:mm:ss')}</div>
+          <div className="mb-1.5 text-#9CA3AF">
+            {t('evaluation.reportManagement.table.submitTime')}
+          </div>
+          <div className="text-#D1D5DB">
+            {dayjs(typeof text === 'string' ? text : text * 1000).format(
+              'YYYY-MM-DD HH:mm:ss'
+            )}
+          </div>
         </div>
       )
     },
     {
       title: t('evaluation.reportManagement.table.action'),
       key: 'action',
-      render: () => (
+      render: (_, record) => (
         <div className="fcc gap-4 text-base text-#9CA3AF [&>div]:fcc [&>div]:clickable [&>div]:gap-1">
-          <div>
+          <div
+            onClick={() =>
+              downloadFile({
+                downLoadUrl: record?.files,
+                t
+              })}
+          >
             <div className="i-flowbite:download-solid"></div>
             <div>{t('evaluation.reportManagement.table.download')}</div>
-          </div>
-          <div>
-            <div className="i-ic:baseline-delete"></div>
-            <div>{t('evaluation.reportManagement.table.delete')}</div>
           </div>
         </div>
       )
@@ -105,8 +147,12 @@ function RouteComponent() {
     <div className="reportManagement px-22 py-13 text-base max-md:px-4">
       <div className="fyc justify-between gap-4">
         <div>
-          <div className="text-8 font-600">{t('evaluation.reportManagement.title')}</div>
-          <div className="mt-2 text-#9CA3AF">{t('evaluation.reportManagement.description')}</div>
+          <div className="text-8 font-600">
+            {t('evaluation.reportManagement.title')}
+          </div>
+          <div className="mt-2 text-#9CA3AF">
+            {t('evaluation.reportManagement.description')}
+          </div>
         </div>
       </div>
       <Input
@@ -115,9 +161,33 @@ function RouteComponent() {
         addonBefore={
           <div className="i-weui:search-filled text-4 text-#9ea3ae"></div>
         }
+        onKeyUp={(e) => {
+          if (e.key === 'Enter') {
+            setPageInfo({
+              ...pageInfo,
+              keyword: e.currentTarget?.value
+            })
+          }
+        }}
       />
       <div className="mt-8">
-        <CommonTable data={data} columns={columns} />
+        <CommonTable
+          tableProps={{ loading: isFetching }}
+          data={data?.list}
+          columns={columns}
+          pagination={{
+            total: data?.count || 0,
+            current: pageInfo.page,
+            pageSize: pageInfo.pageSize,
+            onChange: (page, pageSize) => {
+              setPageInfo({
+                ...pageInfo,
+                page,
+                pageSize
+              })
+            }
+          }}
+        />
       </div>
     </div>
   )

@@ -135,3 +135,17 @@ export enum REVIEW_STATUS {
    */
   WITHDRAWN = -1
 }
+
+/**
+ * 提交状态
+ */
+export enum SUBMISSION_STATUS {
+  /**
+   * 0是未提交
+   */
+  PENDING = 0,
+  /**
+   * 1是已提交
+   */
+  APPROVED = 1
+}

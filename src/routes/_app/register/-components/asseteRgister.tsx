@@ -101,6 +101,7 @@ export function AsseteRgister({ back }: { back: () => void }) {
     })
     setErrorFormItem(errorList)
     // console.log('❌ 验证失败:', errorInfo, errorList)
+    toast.error(t('common.formDataError'))
   }
   useEffect(() => {
     return () => {

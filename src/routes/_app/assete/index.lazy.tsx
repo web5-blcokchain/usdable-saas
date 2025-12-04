@@ -237,7 +237,7 @@ function RouteComponent() {
             onKeyUp={(e) => {
               // 按下回车键
               if (e.key === 'Enter') {
-                setSearchText(e.currentTarget.value)
+                setSearchText(e.currentTarget?.value)
               }
             }}
           />

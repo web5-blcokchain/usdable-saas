@@ -63,7 +63,12 @@
     "copySuccess": "コピーが成功しました",
     "logoutSuccess": "ログアウトが成功しました",
     "haveDefaulted": "遅延支払いがあります",
-    "hasRegistered": "既に登録済みです"
+    "hasRegistered": "既に登録済みです",
+    "all": "全て",
+    "formDataError": "フォーム内容を入力してください",
+    "submissionStatusPending": "提出待ち",
+    "submissionStatusApproved": "承認済み",
+    "downloadFailed": "ファイルダウンロードに失敗しました"
   },
   "header": {
     "login": "ログイン",
@@ -592,6 +597,13 @@
     "contactUs": "お問い合わせ"
   },
   "evaluation": {
+    "asseteStatus": {
+      "3": "認知待ちです",
+      "4": "認領済です",
+      "5": "却下済です",
+      "6": "評価済です",
+      "9": "完了済です"
+    },
     "title": "案件評価",
     "description": "弁護士の予備審査通過済資産評価案件を受け取り処理し、詳細情報を確認して専門的な評価審査を行います",
     "caseStatus": {
@@ -619,6 +631,23 @@
     "action": {
       "claimEvaluation": "評価を認領",
       "viewDetails": "詳細を表示"
+    },
+    "infoDialog": {
+      "title": "案件詳細",
+      "caseDescription": "案件説明",
+      "assetList": "不動産詳細",
+      "type": "種類",
+      "caseInfo": "案件情報",
+      "assetType": "不動産のタイプです",
+      "currentStatus": "現在のステータス",
+      "totalValuationAmount": "総評価額",
+      "submittedLawyer": "提出弁護士",
+      "assetOwnerInfo": "資産所有者情報",
+      "assetValuationRequest": "資産評価申請",
+      "lawyerReviewOpinion": "弁護士初期審査意見",
+      "startEvaluation": "評価開始",
+      "claimEvaluationSuccess": "評価の受領に成功",
+      "rejectAssetSuccess": "資産家に却下通知を送信しました"
     },
     "info": {
       "back": "戻る",
@@ -655,18 +684,25 @@
         "assetNumber": "資産番号",
         "propertyName": "物件名",
         "appraiserName": "評価師氏名",
+        "appraiserNameRequired": "評価師氏名を入力してください",
         "appraiserNamePlaceholder": "評価師氏名を入力してください",
         "evaluationAgency": "評価機関",
+        "evaluationAgencyRequired": "評価機関を入力してください",
         "evaluationAgencyPlaceholder": "評価機関を入力してください",
         "evaluationDate": "評価日",
+        "evaluationDateRequired": "評価日を選択してください",
         "evaluationDatePlaceholder": "評価日を選択してください",
         "evaluationMethod": "評価方法",
+        "evaluationMethodRequired": "評価方法を選択してください",
         "evaluationMethodPlaceholder": "評価方法を選択してください",
         "evaluationPrice": "評価価格（万元）",
+        "evaluationPriceRequired": "評価価格を入力してください",
         "evaluationPricePlaceholder": "評価価格を入力してください",
         "evaluationConclusion": "評価結論",
+        "evaluationConclusionRequired": "評価結論を入力してください",
         "evaluationConclusionPlaceholder": "評価結論を入力してください",
         "uploadReportFile": "評価レポートファイルをアップロード",
+        "uploadReportFileRequired": "評価レポートファイルをアップロードしてください",
         "fileSupport": "対応フォーマット：PDF / DOCX / JPG（≤20MB）",
         "dragHere": "ファイルをここにドラッグするか",
         "clickUpload": "ファイルを選択",

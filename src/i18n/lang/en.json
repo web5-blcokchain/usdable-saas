@@ -63,7 +63,12 @@
     "copySuccess": "Copy Successful",
     "logoutSuccess": "Logout Successful",
     "haveDefaulted": "Have Defaulted",
-    "hasRegistered": "You have registered, no need to register again"
+    "hasRegistered": "You have registered, no need to register again",
+    "all": "All",
+    "formDataError": "Please fill in the form content",
+    "submissionStatusPending": "Pending Submission",
+    "submissionStatusApproved": "Approved Submission",
+    "downloadFailed": "Download File Failed"
   },
   "header": {
     "login": "Login",
@@ -592,6 +597,13 @@
     "contactUs": "Contact Us"
   },
   "evaluation": {
+    "asseteStatus": {
+      "3": "Pending Claim",
+      "4": "Claimed",
+      "5": "Rejected",
+      "6": "Evaluated",
+      "9": "Completed"
+    },
     "title": "Case Evaluation",
     "description": "Receive and process asset valuation cases preliminarily reviewed and approved by lawyers, view detailed information, and conduct professional evaluation reviews.",
     "caseStatus": {
@@ -619,6 +631,23 @@
     "action": {
       "claimEvaluation": "Claim Evaluation",
       "viewDetails": "View Details"
+    },
+    "infoDialog": {
+      "title": "Case Details",
+      "caseDescription": "Case Description",
+      "assetList": "Property Details",
+      "type": "Type",
+      "caseInfo": "Case Information",
+      "assetType": "Property Type",
+      "currentStatus": "Current Status",
+      "totalValuationAmount": "Total Valuation Amount",
+      "submittedLawyer": "Submitting Lawyer",
+      "assetOwnerInfo": "Asset Owner Information",
+      "assetValuationRequest": "Asset Valuation Request",
+      "lawyerReviewOpinion": "Lawyer Initial Review Opinion",
+      "startEvaluation": "Start Evaluation",
+      "claimEvaluationSuccess": "Evaluation Claim Successful",
+      "rejectAssetSuccess": "Asset Party Rejected for Additional Documents"
     },
     "info": {
       "back": "Back",
@@ -655,18 +684,25 @@
         "assetNumber": "Asset Number",
         "propertyName": "Property Name",
         "appraiserName": "Appraiser Name",
+        "appraiserNameRequired": "Please enter appraiser name",
         "appraiserNamePlaceholder": "Please enter appraiser name",
         "evaluationAgency": "Evaluation Agency",
+        "evaluationAgencyRequired": "Please enter evaluation agency",
         "evaluationAgencyPlaceholder": "Please enter evaluation agency",
         "evaluationDate": "Evaluation Date",
+        "evaluationDateRequired": "Please select evaluation date",
         "evaluationDatePlaceholder": "Please select evaluation date",
         "evaluationMethod": "Evaluation Method",
+        "evaluationMethodRequired": "Please select evaluation method",
         "evaluationMethodPlaceholder": "Please select evaluation method",
         "evaluationPrice": "Evaluation Price (10K yuan)",
+        "evaluationPriceRequired": "Please enter evaluation price",
         "evaluationPricePlaceholder": "Please enter evaluation price",
         "evaluationConclusion": "Evaluation Conclusion",
+        "evaluationConclusionRequired": "Please enter evaluation conclusion",
         "evaluationConclusionPlaceholder": "Please enter evaluation conclusion",
         "uploadReportFile": "Upload Evaluation Report File",
+        "uploadReportFileRequired": "Please upload evaluation report file",
         "fileSupport": "Supported formats: PDF / DOCX / JPG (≤20MB)",
         "dragHere": "Drag files here or",
         "clickUpload": "Click to select files",

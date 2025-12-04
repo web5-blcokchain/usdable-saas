@@ -821,7 +821,7 @@ export interface Properties {
   /**
    * 单价
    */
-  price: null
+  price: string
   properties_user: number
   /**
    * 房产描述
