@@ -1,12 +1,21 @@
 import { FilePreview } from '@/components/common/file-preview'
 import { UploadFileType } from '@/enums/file'
+import { formatNumberNoRound } from '@/utils/number'
 import { Image, Spin, Upload } from 'antd'
 import { UploadIcon } from './upload-card'
 
 function urlTofileType(fileUrl: string) {
   // 判断url是图片还是文件
   const isImage = (url: string) => {
-    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg']
+    const imageExtensions = [
+      '.jpg',
+      '.jpeg',
+      '.png',
+      '.gif',
+      '.bmp',
+      '.webp',
+      '.svg'
+    ]
     return imageExtensions.some(ext => url.toLowerCase().endsWith(ext))
   }
   return isImage(fileUrl || '') ? UploadFileType.Image : UploadFileType.Document
@@ -28,7 +37,8 @@ function UploadMultifileCard({
   loading = false,
   children,
   multiple = true,
-  isMultipleFiles = false
+  isMultipleFiles = false,
+  fileSize = 1024 * 1024 * 5
 }: {
   fileType: string
   fileUrl: string[]
@@ -46,6 +56,7 @@ function UploadMultifileCard({
   children?: React.ReactNode
   multiple?: boolean
   isMultipleFiles?: boolean
+  fileSize?: number
 }) {
   const toFileUrl = (file: string) => {
     window.open(file, '_blank')
@@ -53,13 +64,24 @@ function UploadMultifileCard({
   const [imageList, setImageList] = useState<string[]>([])
   const [previewVisible, setPreviewVisible] = useState(false)
   const [previewCurrent, setPreviewCurrent] = useState(0)
+  const { t } = useTranslation()
   return (
     <div>
       <Upload
         className={cn('UploadCard space-y-4 w-fit block')}
         showUploadList={false}
         beforeUpload={(e: File) => {
-          if (fileUrl.length < maxLength) {
+          if (e.size > fileSize) {
+            const fileSizeNumber = fileSize / 1024 / 1024
+            const fileSizeType = fileSize > 1 ? 'MB' : 'KB'
+            toast.error(
+              t('common.fileSizeError', {
+                size: formatNumberNoRound(fileSizeNumber, 2, 0) + fileSizeType
+              })
+            )
+            return false
+          }
+          else if (fileUrl.length < maxLength) {
             // setNowUploadLoading([...nowUploadLoading,e.name])
             beforeUpload?.(e)
           }
@@ -90,7 +112,7 @@ function UploadMultifileCard({
                     imageClass="h-full  aspect-[none] "
                     onImageClick={(_file, _index) => {
                       if (urlTofileType(item) === UploadFileType.Image) {
-                      // e.stopPropagation()
+                        // e.stopPropagation()
                       }
                       else {
                         toFileUrl(item)
@@ -112,7 +134,10 @@ function UploadMultifileCard({
                     >
                       <div className="i-weui:eyes-on-outlined size-6"></div>
                     </div>
-                    <div onClick={() => removeFile?.(index)} className="cursor-pointer clickable">
+                    <div
+                      onClick={() => removeFile?.(index)}
+                      className="cursor-pointer clickable"
+                    >
                       <div className="i-material-symbols:delete-outline size-6 bg-white"></div>
                     </div>
                   </div>
@@ -131,18 +156,23 @@ function UploadMultifileCard({
           >
             {/* <img className="max-h-128 w-full" src={imageList[0]} alt="" /> */}
           </Image.PreviewGroup>
-          {(fileUrl.length < maxLength || isMultipleFiles)
-            && (
-              <div className="h-full">
-
-                <Spin spinning={loading}>
-                  <UploadIcon className="max-md:!w-full" style={{ width, height }} icon={icon} iconClass={iconClass} title={title} subTitle={label} beforeUpload={beforeUpload}>
-                    {children}
-                  </UploadIcon>
-                </Spin>
-
-              </div>
-            )}
+          {(fileUrl.length < maxLength || isMultipleFiles) && (
+            <div className="h-full">
+              <Spin spinning={loading}>
+                <UploadIcon
+                  className="max-md:!w-full"
+                  style={{ width, height }}
+                  icon={icon}
+                  iconClass={iconClass}
+                  title={title}
+                  subTitle={label}
+                  beforeUpload={beforeUpload}
+                >
+                  {children}
+                </UploadIcon>
+              </Spin>
+            </div>
+          )}
         </div>
       </Upload>
     </div>

@@ -68,13 +68,15 @@
     "formDataError": "Please fill in the form content",
     "submissionStatusPending": "Pending Submission",
     "submissionStatusApproved": "Approved Submission",
-    "downloadFailed": "Download File Failed"
+    "downloadFailed": "Download File Failed",
+    "fileSizeError": "File size cannot exceed {{size}}"
   },
   "header": {
     "login": "Login",
     "profile": "Profile",
     "accountSettings": "Account Settings",
     "reportManagement": "Report Management",
+    "case": "Case Management",
     "logout": "Logout",
     "nav": {
       "home": "Home",
@@ -588,7 +590,11 @@
     "today": "Today",
     "viewCase": "View Case",
     "readMessages": "Read Messages",
-    "loadMore": "Load More"
+    "loadMore": "Load More",
+    "userAudit": "User Audit",
+    "assetOnchainSuccess": "Asset Onchain Success",
+    "propertyDefault": "Property Default",
+    "announcement": "Announcement"
   },
   "footer": {
     "copyright": "© 2025 Report Management System. All rights reserved.",
@@ -978,6 +984,8 @@
     "allocating": "Allocating",
     "allocationCompleted": "Allocation Completed",
     "offlineExecutionText": "Offline Execution",
+    "search": "Search",
+    "searchPlaceholder": "Search for cases",
     "initialReview": {
       "back": "Back",
       "fileReviewArea": "File Review Area",
@@ -1165,6 +1173,62 @@
       "reportNumber": "Report Number",
       "evaluationMethod": "Evaluation Method",
       "relatedDocuments": "Related Documents"
+    }
+  },
+  "user": {
+    "info": {
+      "title": "Profile",
+      "description": "Edit your personal information and preferences",
+      "back": "Back",
+      "saveChanges": "Save Changes",
+      "avatarInstruction1": "Click the camera icon to change avatar",
+      "avatarInstruction2": "Supports JPG and PNG formats, size under 5MB",
+      "username": "Name",
+      "usernamePlaceholder": "Enter your name",
+      "nickname": "Nickname",
+      "nicknamePlaceholder": "Enter your nickname",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your phone number",
+      "modify": "Edit",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
+      "introduction": "Bio",
+      "introductionPlaceholder": "Enter your personal introduction",
+      "saveSuccess": "User information saved successfully"
+    },
+    "setting": {
+      "title": "Account Settings",
+      "description": "Manage your account security and privacy preferences",
+      "back": "Back",
+      "saveChanges": "Save Changes",
+      "securitySetting": "Security Settings",
+      "twoFactorAuth": "Two-Factor Authentication",
+      "googleAuth": "Google Authenticator",
+      "googleAuthDesc": "Requires Google verification code during login when enabled",
+      "smsAuth": "SMS Verification",
+      "smsAuthDesc": "Requires SMS verification for sensitive actions",
+      "walletSetting": "Wallet Binding Settings",
+      "walletSettingDesc": "Bind and verify your wallet address for on-chain asset operations and income reception.",
+      "wallet": "Wallet",
+      "walletAddress": "Wallet Address",
+      "bindingStatus": "Binding Status:",
+      "unbound": "Unbound",
+      "connectWallet": "Connect Wallet",
+      "privacySetting": "Privacy Settings",
+      "personalInfoVisibility": "Personal Information Visibility",
+      "personalInfoVisibilityDesc": "Control how your personal information is visible to others",
+      "assetInfoProtection": "Asset Information Protection",
+      "assetInfoProtectionDesc": "Hide your asset valuation and transaction history",
+      "receiveMarketingInfo": "Receive Marketing Information",
+      "receiveMarketingInfoDesc": "Receive product updates and promotional information",
+      "notificationSetting": "Notification Settings",
+      "assetStatusUpdate": "Asset Status Update",
+      "assetStatusUpdateDesc": "Notify when asset review status changes",
+      "systemAnnouncement": "System Announcements",
+      "systemAnnouncementDesc": "Receive important platform announcements and updates",
+      "accountActivityAlert": "Account Activity Alerts",
+      "accountActivityAlertDesc": "Alerts for unusual logins and sensitive operations",
+      "saveSuccess": "Account settings saved successfully"
     }
   },
   "layoutFooter": {

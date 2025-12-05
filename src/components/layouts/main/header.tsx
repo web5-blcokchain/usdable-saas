@@ -6,6 +6,7 @@ import { USER_INFO_KEY } from '@/constants/user'
 import { USER_AUDIT_STATUS, USER_TYPE } from '@/enum/user'
 import { UserCode } from '@/enums/user'
 import { eventBus } from '@/hooks/EventBus'
+import { useMessageStore } from '@/stores/message'
 import { useUserStore } from '@/stores/user'
 import { showToastOnce } from '@/utils/toast'
 import { clearToken, getToken, setToken } from '@/utils/user'
@@ -23,21 +24,18 @@ export default function MainHeader() {
 
   // 用户登出
   async function handleLogout(isShowToast?: boolean) {
-    logout()
-      .then(() => {
-        clearUserData()
-        clearToken()
-        clearRegisterData()
-        setCode(UserCode.NotExist)
-        isShowToast && toast.success(t('common.logoutSuccess'))
-      })
-      .then(() =>
-        setTimeout(() => {
-          navigate({
-            to: '/register'
-          })
-        }, 100)
-      )
+    logout().finally(() => {
+      clearUserData()
+      clearToken()
+      clearRegisterData()
+      setCode(UserCode.NotExist)
+      isShowToast && toast.success(t('common.logoutSuccess'))
+      setTimeout(() => {
+        navigate({
+          to: '/register'
+        })
+      }, 100)
+    })
   }
   const menuList: MenuProps['items'] = useMemo(() => {
     return [
@@ -84,6 +82,20 @@ export default function MainHeader() {
         }
       },
       {
+        key: 'case',
+        icon: <div className="i-ix:work-case-filled text-#D1D5DB"></div>,
+        label: (
+          <div className="w-40.5 fyc gap-2 py-2 text-sm text-#D1D5DB">
+            <div>{t('header.case')}</div>
+          </div>
+        ),
+        onClick: () => {
+          navigate({
+            to: '/lawyerWorkbench/casePending'
+          })
+        }
+      },
+      {
         key: 'logout',
         icon: <div className="i-ic:outline-logout text-#FF3A3A"></div>,
         label: (
@@ -96,7 +108,11 @@ export default function MainHeader() {
         }
       }
     ].filter(item =>
-      item.key === 'report' ? userData?.user?.type === USER_TYPE.ASSESS : true
+      item.key === 'report'
+        ? userData?.user?.type === USER_TYPE.ASSESS
+        : item.key === 'case'
+          ? userData?.user?.type === USER_TYPE.LAWYER
+          : true
     )
   }, [userData])
 
@@ -113,6 +129,7 @@ export default function MainHeader() {
   const isFirst = useRef(true)
 
   const [errorList, setErrorList] = useState<any[]>([])
+  // 获取用户信息
   const { mutateAsync, isPending: isLoading } = useMutation({
     mutationKey: ['getUserInfo'],
     gcTime: 2000,
@@ -138,7 +155,7 @@ export default function MainHeader() {
       )
       if (
         (res?.code !== 1
-          || res.data?.user?.audit_status === USER_AUDIT_STATUS.REJECT)
+          || res.data?.user?.audit_status !== USER_AUDIT_STATUS.PASS)
         && !hasError
       ) {
         toast.warning(t('login.register_message'))
@@ -281,6 +298,11 @@ export default function MainHeader() {
     }
   }, [userData])
 
+  const { unReadCount, getUnReadMessageCount } = useMessageStore()
+  useEffect(() => {
+    getUnReadMessageCount()
+  }, [getUnReadMessageCount])
+
   return (
     <header className="sticky left-0 top-0 z-99 bg-#0c0f13">
       <div className="fyc justify-between px-22 py-3">
@@ -304,7 +326,7 @@ export default function MainHeader() {
               : (
                   <div className="fyc">
                     <Link to="/user/message">
-                      <Badge count={5}>
+                      <Badge count={unReadCount}>
                         <div className="i-mdi:bell text-4.5 text-#9da3ae"></div>
                       </Badge>
                     </Link>
@@ -324,13 +346,14 @@ export default function MainHeader() {
                           <img
                             className="size-full object-cover"
                             src={
-                              new URL('@/assets/test/test.png', import.meta.url)
+                              userData?.user?.avatar
+                              || new URL('@/assets/test/avatar.png', import.meta.url)
                                 .href
                             }
                             alt=""
                           />
                         </div>
-                        <div className="">User1</div>
+                        <div className="">{userData?.user?.nickname ?? 'User'}</div>
                         <div
                           className={cn(
                             'i-mingcute:down-line text-#9ea3ae text-4  transition-all-300',

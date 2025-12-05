@@ -145,12 +145,19 @@ export interface User {
    */
   mobile: string
   money: number
-  motto: string
   nationality: string
   /**
    * 用户名称
    */
   nickname: string
+  /**
+   * 昵称
+   */
+  petname: string
+  /**
+   * 个人简介
+   */
+  motto: string
   /**
    * 资产方类型 1为个人 2为企业
    */
@@ -190,6 +197,26 @@ export interface User {
    * 年份
    */
   year: number
+  /**
+   * 是否开启Google认证
+   */
+  ga_2fa_enabled: string
+  /**
+   * 是否开启短信认证
+   */
+  sms_2fa_enabled: string
+  /**
+   * 是否开启资产状态通知
+   */
+  notify_asset_status: string
+  /**
+   * 是否开启系统公告通知
+   */
+  notify_system_announcement: string
+  /**
+   * 是否开启账号活动通知
+   */
+  notify_account_activity: string
 }
 
 // 用户注册信息
@@ -430,6 +457,56 @@ export interface EntityTypeSpecialtyData {
   updated_at: string
 }
 
+/**
+ * 保存用户信息
+ */
+export interface SaveUserModel {
+  /**
+   * 邮箱
+   */
+  email?: string
+  /**
+   * 二次验证-Google Authenticator: 0=未启用,1=已启用
+   */
+  ga_2fa_enabled?: string
+  /**
+   * 手机号码
+   */
+  mobile?: string
+  /**
+   * 个人简介
+   */
+  motto?: string
+  /**
+   * 姓名
+   */
+  nickname?: string
+  /**
+   * 账户活动提醒: 0=关闭,1=开启
+   */
+  notify_account_activity?: string
+  /**
+   * 资产状态更新通知: 0=关闭,1=开启
+   */
+  notify_asset_status?: string
+  /**
+   * 系统公告通知: 0=关闭,1=开启
+   */
+  notify_system_announcement?: string
+  /**
+   * 昵称
+   */
+  petname?: string
+  /**
+   * 二次验证-短信验证: 0=未启用,1=已启用
+   */
+  sms_2fa_enabled?: string
+  /**
+   * 钱包地址
+   */
+  wallet_address?: string
+}
+
 export default {
   /**
    * 获取用户信息
@@ -467,5 +544,13 @@ export default {
    */
   resubmitRegister(data: UserRegisterModel) {
     return apiClient.post<string>('/api/user/resubmitRegister', data)
+  },
+  /**
+   *  保存用户信息
+   * @param data 用户信息
+   * @returns
+   */
+  saveUserInfo(data: SaveUserModel) {
+    return apiClient.post<string>('/api/info/saveInfo', data)
   }
 }

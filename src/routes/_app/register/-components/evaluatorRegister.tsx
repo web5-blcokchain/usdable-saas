@@ -381,6 +381,7 @@ function FirstStep({ form, back, onFinish, className }: {
               >
                 <Select
                   placeholder={t('register.evaluator.province')}
+                  disabled={locationDataLoading && selectPid.selectedLocation === 1}
                   loading={locationDataLoading && selectPid.selectedLocation === 1}
                   onChange={val => changeCity(val, 1)}
                   options={locationData.province}
@@ -392,6 +393,7 @@ function FirstStep({ form, back, onFinish, className }: {
               >
                 <Select
                   placeholder={t('register.evaluator.city')}
+                  disabled={locationDataLoading && selectPid.selectedLocation === 2}
                   loading={locationDataLoading && selectPid.selectedLocation === 2}
                   onChange={val => changeCity(val, 2)}
                   options={locationData.city}

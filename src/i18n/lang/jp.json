@@ -68,13 +68,15 @@
     "formDataError": "フォーム内容を入力してください",
     "submissionStatusPending": "提出待ち",
     "submissionStatusApproved": "承認済み",
-    "downloadFailed": "ファイルダウンロードに失敗しました"
+    "downloadFailed": "ファイルダウンロードに失敗しました",
+    "fileSizeError": "ファイルサイズは {{size}} を超えません"
   },
   "header": {
     "login": "ログイン",
     "profile": "プロフィール",
     "accountSettings": "アカウント設定",
     "reportManagement": "レポート管理",
+    "case": "事件が未処理です",
     "logout": "ログアウト",
     "nav": {
       "home": "ホーム",
@@ -588,7 +590,11 @@
     "today": "今日",
     "viewCase": "案件を表示",
     "readMessages": "既読メッセージ",
-    "loadMore": "さらに読み込む"
+    "loadMore": "さらに読み込む",
+    "userAudit": "ユーザー審査",
+    "assetOnchainSuccess": "資産上链成功",
+    "propertyDefault": "不動産違約",
+    "announcement": "お知らせ"
   },
   "footer": {
     "copyright": "© 2025 レポート管理システム. すべての権利を保留します.",
@@ -978,6 +984,8 @@
     "allocating": "分配中",
     "allocationCompleted": "分配完了",
     "offlineExecutionText": "オフラインで行う実行",
+    "search": "検索",
+    "searchPlaceholder": "検索キーワードを入力",
     "initialReview": {
       "back": "戻る",
       "fileReviewArea": "ファイル審査エリア",
@@ -1166,6 +1174,62 @@
       "reportNumber": "レポート番号",
       "evaluationMethod": "評価方法",
       "relatedDocuments": "関連書類"
+    }
+  },
+  "user": {
+    "info": {
+      "title": "個人情報",
+      "description": "個人情報と設定を編集します",
+      "back": "戻る",
+      "saveChanges": "変更を保存",
+      "avatarInstruction1": "カメラアイコンをクリックしてアバターを変更",
+      "avatarInstruction2": "JPG・PNG形式、5MB以下をサポート",
+      "username": "氏名",
+      "usernamePlaceholder": "氏名を入力してください",
+      "nickname": "ニックネーム",
+      "nicknamePlaceholder": "ニックネームを入力してください",
+      "phone": "電話番号",
+      "phonePlaceholder": "電話番号を入力してください",
+      "modify": "編集",
+      "email": "メールアドレス",
+      "emailPlaceholder": "メールアドレスを入力してください",
+      "introduction": "自己紹介",
+      "introductionPlaceholder": "自己紹介を入力してください",
+      "saveSuccess": "ユーザー情報を正常に保存しました"
+    },
+    "setting": {
+      "title": "アカウント設定",
+      "description": "アカウントのセキュリティとプライバシー設定を管理します",
+      "back": "戻る",
+      "saveChanges": "変更を保存",
+      "securitySetting": "セキュリティ設定",
+      "twoFactorAuth": "二段階認証",
+      "googleAuth": "Google Authenticator",
+      "googleAuthDesc": "有効化すると、ログイン時にGoogle認証コードが必要になります",
+      "smsAuth": "SMS認証",
+      "smsAuthDesc": "敏感操作時にSMS認証が必要になります",
+      "walletSetting": "ウォレット連携設定",
+      "walletSettingDesc": "資産のオンチェーン処理や収益受取のため、ウォレットアドレスを連携し認証します。",
+      "wallet": "ウォレット",
+      "walletAddress": "ウォレットアドレス",
+      "bindingStatus": "連携状況:",
+      "unbound": "未連携",
+      "connectWallet": "ウォレットを接続",
+      "privacySetting": "プライバシー設定",
+      "personalInfoVisibility": "個人情報の公開範囲",
+      "personalInfoVisibilityDesc": "他のユーザーに対する個人情報の表示可否を制御します",
+      "assetInfoProtection": "資産情報保護",
+      "assetInfoProtectionDesc": "資産評価額や取引履歴を非表示にします",
+      "receiveMarketingInfo": "マーケティング情報を受け取る",
+      "receiveMarketingInfoDesc": "製品アップデートやキャンペーン情報を受信します",
+      "notificationSetting": "通知設定",
+      "assetStatusUpdate": "資産ステータス更新",
+      "assetStatusUpdateDesc": "資産審査ステータスが変更された際に通知",
+      "systemAnnouncement": "システム公告",
+      "systemAnnouncementDesc": "重要なお知らせや更新情報を受け取ります",
+      "accountActivityAlert": "アカウント活動アラート",
+      "accountActivityAlertDesc": "異常なログインや敏感操作に対する警告",
+      "saveSuccess": "アカウント設定を正常に保存しました"
     }
   },
   "layoutFooter": {

@@ -207,7 +207,7 @@ export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, on
             </Form.Item>
             {/* 建筑年限 */}
             <Form.Item name="house_life" label={t('assete.addAsset.buildingYear')} required rules={[{ required: true, message: t('assete.addAsset.buildingYearPlaceholder') }]}>
-              <InputNumber controls={false} placeholder={t('assete.addAsset.buildingYearPlaceholder')} />
+              <InputNumber min={1} max={200} controls={false} placeholder={t('assete.addAsset.buildingYearPlaceholder')} />
             </Form.Item>
             {/* 资产估值 */}
             {/* <Form.Item name="assetValuation" label={t('assete.addAsset.assetValuation')} required rules={[{ required: true, message: t('assete.addAsset.assetValuationPlaceholder') }]}>
@@ -215,7 +215,7 @@ export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, on
             </Form.Item> */}
             {/* 卧室数量 */}
             <Form.Item name="bedrooms" label={t('assete.addAsset.bedroomCount')} required rules={[{ required: true, message: t('assete.addAsset.bedroomCountPlaceholder') }]}>
-              <InputNumber min={1} controls={false} placeholder={t('assete.addAsset.bedroomCountPlaceholder')} />
+              <InputNumber min={1} max={100} controls={false} placeholder={t('assete.addAsset.bedroomCountPlaceholder')} />
             </Form.Item>
             {/* 缴租日期 */}
             <Form.Item name="rent_day" label={t('assete.addAsset.rentDate')} required rules={[{ required: true, message: t('assete.addAsset.rentDatePlaceholder') }]}>
@@ -238,11 +238,11 @@ export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, on
             </Form.Item>
             {/* 预计年化收益下限 */}
             <Form.Item name="annual_return_min" label={t('assete.addAsset.expectedAnnualReturnLower')}>
-              <InputNumber min={1} controls={false} placeholder={t('assete.addAsset.expectedAnnualReturnLowerPlaceholder')} />
+              <InputNumber min={1} max={100} controls={false} placeholder={t('assete.addAsset.expectedAnnualReturnLowerPlaceholder')} />
             </Form.Item>
             {/* 预计年化收益上限 */}
             <Form.Item name="annual_return_max" label={t('assete.addAsset.expectedAnnualReturnUpper')}>
-              <InputNumber min={1} controls={false} placeholder={t('assete.addAsset.expectedAnnualReturnUpperPlaceholder')} />
+              <InputNumber min={1} max={100} controls={false} placeholder={t('assete.addAsset.expectedAnnualReturnUpperPlaceholder')} />
             </Form.Item>
             {/* 经度 */}
             <Form.Item name="longitude" label={t('assete.addAsset.longitude')}>
@@ -269,6 +269,7 @@ export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, on
             <Form.Item name="city" required label={t('assete.addAsset.cityCode')} rules={[{ required: true, message: t('register.evaluator.selectProvincePlaceholder') }]}>
               <Select
                 placeholder={t('register.evaluator.province')}
+                disabled={locationDataLoading && selectPid.selectedLocation === 1}
                 loading={locationDataLoading && selectPid.selectedLocation === 1}
                 onChange={val => changeCity(val, 1)}
                 options={locationData.province}

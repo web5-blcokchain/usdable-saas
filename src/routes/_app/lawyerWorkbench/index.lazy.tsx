@@ -66,10 +66,10 @@ function RouteComponent() {
   }, [statisticsData, t])
 
   const [filterParams, setFilterParams] = useState({
-    startDate: '',
-    endDate: '',
-    status: 0,
-    country: 0
+    start_date: '',
+    end_date: '',
+    country_id: 0,
+    keyword: ''
   } as SearchParams)
 
   const [allDialogVisible, setAllDialogVisible] = useState(false)
@@ -240,17 +240,17 @@ function RouteComponent() {
           searchParams={filterParams}
         />
         {/* 待执行拍卖案件 */}
-        <PendingAuctionExecutionTable
+        {/* <PendingAuctionExecutionTable
           openAuctionDetailDialog={data =>
             setAuctionCaseData({ visible: true, data })}
           openDialog={() => showTableAllDialog(5)}
-        />
+        /> */}
         {/* 已完成拍卖案件 */}
-        <CompletedAuctionTable
+        {/* <CompletedAuctionTable
           openCaseDetailDialog={data =>
             setCompletedCaseData({ visible: true, data })}
           openDialog={() => showTableAllDialog(6)}
-        />
+        /> */}
       </div>
       {/* 展示所有的案件分类全部列表弹窗 */}
       <TableAllDialog
@@ -312,19 +312,19 @@ function TableAllDialog({
 }) {
   // const { t } = useTranslation()
   const [filterParams, setFilterParams] = useState({
-    startDate: '',
-    endDate: '',
-    status: 0,
-    country: 0
+    start_date: '',
+    end_date: '',
+    country_id: 0,
+    keyword: ''
   } as SearchParams)
 
   const onCancel = () => {
     setVisible(false)
     setFilterParams({
-      startDate: '',
-      endDate: '',
-      status: 0,
-      country: 0
+      start_date: '',
+      end_date: '',
+      country_id: 0,
+      keyword: ''
     })
   }
 

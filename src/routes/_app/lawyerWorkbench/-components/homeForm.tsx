@@ -3,7 +3,7 @@ import type { Dayjs } from 'dayjs'
 import type { Dispatch, SetStateAction } from 'react'
 import { getLocation } from '@/api/common'
 import { useQuery } from '@tanstack/react-query'
-import { DatePicker, Select } from 'antd'
+import { DatePicker, Input, Select } from 'antd'
 import dayjs from 'dayjs'
 
 const { RangePicker } = DatePicker
@@ -53,14 +53,19 @@ export function HomeForm({
   ) => {
     const [start, end] = dates || [null, null]
     setFilterParams((pre) => {
-      const startDate = start ? start.format('YYYY-MM-DD') : ''
-      const endDate = end ? end.format('YYYY-MM-DD') : ''
+      const start_date = start ? start.format('YYYY-MM-DD') : ''
+      const end_date = end ? end.format('YYYY-MM-DD') : ''
       return {
         ...pre,
-        startDate,
-        endDate
+        start_date,
+        end_date
       }
     })
+  }
+  const onSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setFilterParams(prev => ({ ...prev, keyword: e.currentTarget?.value }))
+    }
   }
 
   return (
@@ -77,7 +82,7 @@ export function HomeForm({
         <div>{t('lawyerWorkbench.country')}</div>
         {/* 全部 */}
         <Select
-          value={filterParams.country || undefined}
+          value={filterParams.country_id || undefined}
           showSearch
           onSearch={setSearchCountry}
           defaultActiveFirstOption={false}
@@ -85,7 +90,7 @@ export function HomeForm({
           options={filteredCountryData}
           loading={locationDataLoading}
           onChange={value =>
-            setFilterParams(prev => ({ ...prev, country: value }))}
+            setFilterParams(prev => ({ ...prev, country_id: value }))}
           className="[&>.ant-select-selector]:!b-#334155"
           placeholder={t('lawyerWorkbench.selectCountry')}
         />
@@ -95,23 +100,20 @@ export function HomeForm({
         {/* 全部时间 */}
         <RangePicker
           value={
-            !filterParams.startDate || !filterParams.endDate
+            !filterParams.start_date || !filterParams.end_date
               ? [null, null]
-              : [dayjs(filterParams.startDate), dayjs(filterParams.endDate)]
+              : [dayjs(filterParams.start_date), dayjs(filterParams.end_date)]
           }
           onChange={changeDateRange}
           className="!b-#334155 !bg-#1f2328"
         />
       </div>
       <div>
-        <div>{t('lawyerWorkbench.caseStatus')}</div>
-        {/* 全部状态 */}
-        <Select
-          value={filterParams.status || undefined}
-          onChange={value =>
-            setFilterParams(prev => ({ ...prev, status: value }))}
-          className="[&>.ant-select-selector]:!b-#334155"
-          placeholder={t('lawyerWorkbench.selectCaseStatus')}
+        <div>{t('lawyerWorkbench.search')}</div>
+        <Input
+          onKeyUp={onSearch}
+          className="!b-#334155 !bg-#1f2328"
+          placeholder={t('lawyerWorkbench.searchPlaceholder')}
         />
       </div>
     </div>

@@ -68,7 +68,9 @@ export function formatTimeDiff(time: string | number | Date, t?: any): string {
  * @param time 时间
  * @returns
  */
-export function formatSmartTime(time: string | number | Date, t?: any): string {
+export function formatSmartTime(time: string | number | Date | undefined, t?: any): string {
+  if (!time)
+    return ''
   const now = dayjs()
   const date = dayjs(time)
 

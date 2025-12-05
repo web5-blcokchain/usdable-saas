@@ -15,6 +15,7 @@ export const envConfig = {
   // 链配置
   chainId: import.meta.env.VITE_PUBLIC_WEB3_CHAIN_ID,
   chainName: import.meta.env.VITE_APP_CHAIN_NAME,
+  chainNameShort: import.meta.env.VITE_APP_CHAIN_NAME_SHORT,
 
   // 原生货币配置
   nativeCurrency: {

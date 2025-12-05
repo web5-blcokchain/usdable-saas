@@ -28,6 +28,9 @@ const AppAsseteIndexLazyImport = createFileRoute('/_app/assete/')()
 const AppUserSettingIndexLazyImport = createFileRoute('/_app/user/setting/')()
 const AppUserMessageIndexLazyImport = createFileRoute('/_app/user/message/')()
 const AppUserInfoIndexLazyImport = createFileRoute('/_app/user/info/')()
+const AppLawyerWorkbenchCasePendingIndexLazyImport = createFileRoute(
+  '/_app/lawyerWorkbench/casePending/',
+)()
 const AppAsseteAddAsseteIndexLazyImport = createFileRoute(
   '/_app/assete/addAssete/',
 )()
@@ -44,6 +47,9 @@ const AppEvaluationInfoIdLazyImport = createFileRoute(
   '/_app/evaluation/info/$id',
 )()
 const AppAsseteInfoIdLazyImport = createFileRoute('/_app/assete/info/$id')()
+const AppLawyerWorkbenchCasePendingInfoIdLazyImport = createFileRoute(
+  '/_app/lawyerWorkbench/casePending/info/$id',
+)()
 
 // Create/Update Routes
 
@@ -113,6 +119,17 @@ const AppUserInfoIndexLazyRoute = AppUserInfoIndexLazyImport.update({
   import('./routes/_app/user/info/index.lazy').then((d) => d.Route),
 )
 
+const AppLawyerWorkbenchCasePendingIndexLazyRoute =
+  AppLawyerWorkbenchCasePendingIndexLazyImport.update({
+    id: '/lawyerWorkbench/casePending/',
+    path: '/lawyerWorkbench/casePending/',
+    getParentRoute: () => AppRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/lawyerWorkbench/casePending/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
 const AppAsseteAddAsseteIndexLazyRoute =
   AppAsseteAddAsseteIndexLazyImport.update({
     id: '/assete/addAssete/',
@@ -177,6 +194,17 @@ const AppAsseteInfoIdLazyRoute = AppAsseteInfoIdLazyImport.update({
 } as any).lazy(() =>
   import('./routes/_app/assete/info/$id.lazy').then((d) => d.Route),
 )
+
+const AppLawyerWorkbenchCasePendingInfoIdLazyRoute =
+  AppLawyerWorkbenchCasePendingInfoIdLazyImport.update({
+    id: '/lawyerWorkbench/casePending/info/$id',
+    path: '/lawyerWorkbench/casePending/info/$id',
+    getParentRoute: () => AppRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/lawyerWorkbench/casePending/info/$id.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 // Populate the FileRoutesByPath interface
 
@@ -273,6 +301,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAsseteAddAsseteIndexLazyImport
       parentRoute: typeof AppImport
     }
+    '/_app/lawyerWorkbench/casePending/': {
+      id: '/_app/lawyerWorkbench/casePending/'
+      path: '/lawyerWorkbench/casePending'
+      fullPath: '/lawyerWorkbench/casePending'
+      preLoaderRoute: typeof AppLawyerWorkbenchCasePendingIndexLazyImport
+      parentRoute: typeof AppImport
+    }
     '/_app/user/info/': {
       id: '/_app/user/info/'
       path: '/user/info'
@@ -294,6 +329,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppUserSettingIndexLazyImport
       parentRoute: typeof AppImport
     }
+    '/_app/lawyerWorkbench/casePending/info/$id': {
+      id: '/_app/lawyerWorkbench/casePending/info/$id'
+      path: '/lawyerWorkbench/casePending/info/$id'
+      fullPath: '/lawyerWorkbench/casePending/info/$id'
+      preLoaderRoute: typeof AppLawyerWorkbenchCasePendingInfoIdLazyImport
+      parentRoute: typeof AppImport
+    }
   }
 }
 
@@ -312,9 +354,11 @@ interface AppRouteChildren {
   AppLawyerWorkbenchOfflineExecutionIdLazyRoute: typeof AppLawyerWorkbenchOfflineExecutionIdLazyRoute
   AppEvaluationReportManagementIndexRoute: typeof AppEvaluationReportManagementIndexRoute
   AppAsseteAddAsseteIndexLazyRoute: typeof AppAsseteAddAsseteIndexLazyRoute
+  AppLawyerWorkbenchCasePendingIndexLazyRoute: typeof AppLawyerWorkbenchCasePendingIndexLazyRoute
   AppUserInfoIndexLazyRoute: typeof AppUserInfoIndexLazyRoute
   AppUserMessageIndexLazyRoute: typeof AppUserMessageIndexLazyRoute
   AppUserSettingIndexLazyRoute: typeof AppUserSettingIndexLazyRoute
+  AppLawyerWorkbenchCasePendingInfoIdLazyRoute: typeof AppLawyerWorkbenchCasePendingInfoIdLazyRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -334,9 +378,13 @@ const AppRouteChildren: AppRouteChildren = {
   AppEvaluationReportManagementIndexRoute:
     AppEvaluationReportManagementIndexRoute,
   AppAsseteAddAsseteIndexLazyRoute: AppAsseteAddAsseteIndexLazyRoute,
+  AppLawyerWorkbenchCasePendingIndexLazyRoute:
+    AppLawyerWorkbenchCasePendingIndexLazyRoute,
   AppUserInfoIndexLazyRoute: AppUserInfoIndexLazyRoute,
   AppUserMessageIndexLazyRoute: AppUserMessageIndexLazyRoute,
   AppUserSettingIndexLazyRoute: AppUserSettingIndexLazyRoute,
+  AppLawyerWorkbenchCasePendingInfoIdLazyRoute:
+    AppLawyerWorkbenchCasePendingInfoIdLazyRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -355,9 +403,11 @@ export interface FileRoutesByFullPath {
   '/lawyerWorkbench/offlineExecution/$id': typeof AppLawyerWorkbenchOfflineExecutionIdLazyRoute
   '/evaluation/reportManagement': typeof AppEvaluationReportManagementIndexRoute
   '/assete/addAssete': typeof AppAsseteAddAsseteIndexLazyRoute
+  '/lawyerWorkbench/casePending': typeof AppLawyerWorkbenchCasePendingIndexLazyRoute
   '/user/info': typeof AppUserInfoIndexLazyRoute
   '/user/message': typeof AppUserMessageIndexLazyRoute
   '/user/setting': typeof AppUserSettingIndexLazyRoute
+  '/lawyerWorkbench/casePending/info/$id': typeof AppLawyerWorkbenchCasePendingInfoIdLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -373,9 +423,11 @@ export interface FileRoutesByTo {
   '/lawyerWorkbench/offlineExecution/$id': typeof AppLawyerWorkbenchOfflineExecutionIdLazyRoute
   '/evaluation/reportManagement': typeof AppEvaluationReportManagementIndexRoute
   '/assete/addAssete': typeof AppAsseteAddAsseteIndexLazyRoute
+  '/lawyerWorkbench/casePending': typeof AppLawyerWorkbenchCasePendingIndexLazyRoute
   '/user/info': typeof AppUserInfoIndexLazyRoute
   '/user/message': typeof AppUserMessageIndexLazyRoute
   '/user/setting': typeof AppUserSettingIndexLazyRoute
+  '/lawyerWorkbench/casePending/info/$id': typeof AppLawyerWorkbenchCasePendingInfoIdLazyRoute
 }
 
 export interface FileRoutesById {
@@ -393,9 +445,11 @@ export interface FileRoutesById {
   '/_app/lawyerWorkbench/offlineExecution/$id': typeof AppLawyerWorkbenchOfflineExecutionIdLazyRoute
   '/_app/evaluation/reportManagement/': typeof AppEvaluationReportManagementIndexRoute
   '/_app/assete/addAssete/': typeof AppAsseteAddAsseteIndexLazyRoute
+  '/_app/lawyerWorkbench/casePending/': typeof AppLawyerWorkbenchCasePendingIndexLazyRoute
   '/_app/user/info/': typeof AppUserInfoIndexLazyRoute
   '/_app/user/message/': typeof AppUserMessageIndexLazyRoute
   '/_app/user/setting/': typeof AppUserSettingIndexLazyRoute
+  '/_app/lawyerWorkbench/casePending/info/$id': typeof AppLawyerWorkbenchCasePendingInfoIdLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -414,9 +468,11 @@ export interface FileRouteTypes {
     | '/lawyerWorkbench/offlineExecution/$id'
     | '/evaluation/reportManagement'
     | '/assete/addAssete'
+    | '/lawyerWorkbench/casePending'
     | '/user/info'
     | '/user/message'
     | '/user/setting'
+    | '/lawyerWorkbench/casePending/info/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -431,9 +487,11 @@ export interface FileRouteTypes {
     | '/lawyerWorkbench/offlineExecution/$id'
     | '/evaluation/reportManagement'
     | '/assete/addAssete'
+    | '/lawyerWorkbench/casePending'
     | '/user/info'
     | '/user/message'
     | '/user/setting'
+    | '/lawyerWorkbench/casePending/info/$id'
   id:
     | '__root__'
     | '/_app'
@@ -449,9 +507,11 @@ export interface FileRouteTypes {
     | '/_app/lawyerWorkbench/offlineExecution/$id'
     | '/_app/evaluation/reportManagement/'
     | '/_app/assete/addAssete/'
+    | '/_app/lawyerWorkbench/casePending/'
     | '/_app/user/info/'
     | '/_app/user/message/'
     | '/_app/user/setting/'
+    | '/_app/lawyerWorkbench/casePending/info/$id'
   fileRoutesById: FileRoutesById
 }
 
@@ -491,9 +551,11 @@ export const routeTree = rootRoute
         "/_app/lawyerWorkbench/offlineExecution/$id",
         "/_app/evaluation/reportManagement/",
         "/_app/assete/addAssete/",
+        "/_app/lawyerWorkbench/casePending/",
         "/_app/user/info/",
         "/_app/user/message/",
-        "/_app/user/setting/"
+        "/_app/user/setting/",
+        "/_app/lawyerWorkbench/casePending/info/$id"
       ]
     },
     "/_app/": {
@@ -544,6 +606,10 @@ export const routeTree = rootRoute
       "filePath": "_app/assete/addAssete/index.lazy.tsx",
       "parent": "/_app"
     },
+    "/_app/lawyerWorkbench/casePending/": {
+      "filePath": "_app/lawyerWorkbench/casePending/index.lazy.tsx",
+      "parent": "/_app"
+    },
     "/_app/user/info/": {
       "filePath": "_app/user/info/index.lazy.tsx",
       "parent": "/_app"
@@ -554,6 +620,10 @@ export const routeTree = rootRoute
     },
     "/_app/user/setting/": {
       "filePath": "_app/user/setting/index.lazy.tsx",
+      "parent": "/_app"
+    },
+    "/_app/lawyerWorkbench/casePending/info/$id": {
+      "filePath": "_app/lawyerWorkbench/casePending/info/$id.lazy.tsx",
       "parent": "/_app"
     }
   }

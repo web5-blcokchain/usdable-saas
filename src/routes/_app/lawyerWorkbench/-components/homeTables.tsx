@@ -3,6 +3,7 @@ import type { ColumnsType } from 'antd/es/table'
 import * as lawyerWorkbenchApi from '@/api/lawyerWorkbenchApi'
 import { CommonTable } from '@/components/common/common-table'
 import { ASSET_STATUS } from '@/enum/asset'
+import { PENDING_CASE_STATUS } from '@/enum/lawyerWorkbench'
 import { formatNumberNoRound } from '@/utils/number'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
@@ -18,8 +19,7 @@ export function CaseTable({
   pagination?: boolean
   searchParams?: SearchParams
   columns: ColumnsType<any>
-  // 1为待初审 6为待线下认领 7线下已认领 8 已提交线下资料
-  status: number
+  status: PENDING_CASE_STATUS
 }) {
   const [pageInfo, setPageInfo] = useState({
     pageSize: 10,
@@ -32,7 +32,11 @@ export function CaseTable({
     queryFn: async () => {
       const res = await lawyerWorkbenchApi.getCaseList({
         ...pageInfo,
-        status
+        status,
+        country_id: searchParams?.country_id || undefined,
+        start_date: searchParams?.start_date || undefined,
+        end_date: searchParams?.end_date || undefined,
+        keyword: searchParams?.keyword || undefined
       })
       return res.data
     }
@@ -138,7 +142,7 @@ export function PendingClaimCasesTable({
         pagination={pagination}
         searchParams={searchParams}
         columns={columns}
-        status={1}
+        status={PENDING_CASE_STATUS.PENDING_INITIAL}
       />
     </div>
   )
@@ -225,7 +229,7 @@ export function PendingOfflineExecutionTable({
         pagination={pagination}
         searchParams={searchParams}
         columns={columns}
-        status={6}
+        status={PENDING_CASE_STATUS.PENDING_OFFLINE}
       />
     </div>
   )
@@ -346,7 +350,7 @@ export function PendingRightConfirmationTable({
         pagination={pagination}
         searchParams={searchParams}
         columns={columns}
-        status={7}
+        status={PENDING_CASE_STATUS.OFFLINE_CLAIMED}
       />
     </div>
   )
@@ -421,7 +425,7 @@ export function CompletedCasesTable({
         pagination={pagination}
         searchParams={searchParams}
         columns={columns}
-        status={8}
+        status={PENDING_CASE_STATUS.OFFLINE_DOCUMENT_SUBMITTED}
       />
     </div>
   )

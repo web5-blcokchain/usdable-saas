@@ -1,5 +1,5 @@
 import type { ASSET_STATUS } from '@/enum/asset'
-import type { APPLICATION_STATUS } from '@/enum/lawyerWorkbench'
+import type { APPLICATION_STATUS, PENDING_CASE_STATUS } from '@/enum/lawyerWorkbench'
 import type { DataListResponse, PageRequest } from './responseData'
 import apiClient from './client'
 
@@ -8,10 +8,11 @@ import apiClient from './client'
  */
 
 export interface SearchParams {
-  startDate?: string
-  endDate?: string
-  status?: number
-  country?: number
+  start_date?: string
+  end_date?: string
+  country_id?: number
+  status?: PENDING_CASE_STATUS
+  keyword?: string
 }
 
 export interface PageInfoRequest extends SearchParams, PageRequest {

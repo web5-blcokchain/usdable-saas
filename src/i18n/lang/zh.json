@@ -80,13 +80,15 @@
     "formDataError": "请填写表单内容",
     "submissionStatusPending": "未提交",
     "submissionStatusApproved": "已提交",
-    "downloadFailed": "下载文件失败"
+    "downloadFailed": "下载文件失败",
+    "fileSizeError": "文件大小不能超过 {{size}}"
   },
   "header": {
     "login": "登录",
     "profile": "个人资料",
     "accountSettings": "账户设置",
     "reportManagement": "报告管理",
+    "case": "案件待办",
     "logout": "退出登录",
     "nav": {
       "home": "首页",
@@ -616,7 +618,11 @@
     "today": "今天",
     "viewCase": "查看案件",
     "readMessages": "已读消息",
-    "loadMore": "加载更多"
+    "loadMore": "加载更多",
+    "userAudit": "审核通知",
+    "assetOnchainSuccess": "资产上链",
+    "propertyDefault": "房产违约",
+    "announcement": "公告"
   },
   "footer": {
     "copyright": "© 2025 报告管理系统. 保留所有权利.",
@@ -1010,6 +1016,8 @@
     "allocating": "分配中",
     "allocationCompleted": "已完成分配",
     "offlineExecutionText": "线下办理执行",
+    "search": "搜索",
+    "searchPlaceholder": "请输入搜索内容",
     "initialReview": {
       "back": "返回",
       "fileReviewArea": "文件审核区",
@@ -1218,7 +1226,8 @@
       "email": "邮箱",
       "emailPlaceholder": "请输入邮箱",
       "introduction": "个人简介",
-      "introductionPlaceholder": "请输入个人简介"
+      "introductionPlaceholder": "请输入个人简介",
+      "saveSuccess": "保存用户信息成功"
     },
     "setting": {
       "title": "账户设置",
@@ -1251,7 +1260,8 @@
       "systemAnnouncement": "系统公告",
       "systemAnnouncementDesc": "接收平台重要公告和更新信息",
       "accountActivityAlert": "账户活动提醒",
-      "accountActivityAlertDesc": "异常登录和敏感操作提醒"
+      "accountActivityAlertDesc": "异常登录和敏感操作提醒",
+      "saveSuccess": "保存账户设置成功"
     }
   },
   "layoutFooter": {
