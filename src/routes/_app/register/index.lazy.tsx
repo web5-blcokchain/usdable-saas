@@ -271,7 +271,7 @@ function RouteComponent() {
           }
         }}
       >
-        <AnimatePresence mode="wait">{selectComponent}</AnimatePresence>
+        <AnimatePresence mode="wait" initial={false}>{selectComponent}</AnimatePresence>
       </ConfigProvider>
       <RegisterStatus
         visible={isSuccess}

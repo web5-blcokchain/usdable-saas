@@ -22,7 +22,15 @@ import FormItem from 'antd/es/form/FormItem'
 import { AnimatePresence, motion } from 'framer-motion'
 import { RegisterStatus } from './registerStatus'
 
-function AnimationComponent({ animKey, children, className }: { animKey: string, children: React.ReactNode, className?: string }) {
+function AnimationComponent({
+  animKey,
+  children,
+  className
+}: {
+  animKey: string
+  children: React.ReactNode
+  className?: string
+}) {
   return (
     <motion.div
       key={animKey}
@@ -52,7 +60,9 @@ export function EvaluatorRegister({ back }: { back: () => void }) {
   const { mutateAsync: userResgiter } = useMutation({
     mutationKey: ['userRegitser'],
     mutationFn: async (values: UserRegisterModel) => {
-      return userData?.user?.audit_status !== USER_AUDIT_STATUS.REJECT ? apiMyInfoApi.regitser(values) : apiMyInfoApi.resubmitRegister(values)
+      return userData?.user?.audit_status !== USER_AUDIT_STATUS.REJECT
+        ? apiMyInfoApi.regitser(values)
+        : apiMyInfoApi.resubmitRegister(values)
     }
   })
 
@@ -79,31 +89,39 @@ export function EvaluatorRegister({ back }: { back: () => void }) {
 
   const formStep = async (step: number, values: any) => {
     switch (step) {
-      case 0: {
-        // 处理表单数据
-        const data = {
-          ...values,
-          year: values.year.$y
+      case 0:
+        {
+          // 处理表单数据
+          const data = {
+            ...values,
+            year: values.year.$y
+          }
+          setSumbitData(data)
+          // 跳转到第二步,并滚动到顶部
+          setStep(1)
+          screenToTop({
+            top: 0,
+            behavior: 'smooth'
+          })
         }
-        setSumbitData(data)
-        // 跳转到第二步,并滚动到顶部
-        setStep(1)
-        screenToTop({
-          top: 0,
-          behavior: 'smooth'
-        })
-      } break
-      case 1: {
-        const data = {
-          ...values,
-          agree_aml_statement: values.agree_aml_statement ? USER_AGREE.YES : USER_AGREE.NO,
-          service_agreement_status: values.service_agreement_status ? USER_AGREE.YES : USER_AGREE.NO
+        break
+      case 1:
+        {
+          const data = {
+            ...values,
+            agree_aml_statement: values.agree_aml_statement
+              ? USER_AGREE.YES
+              : USER_AGREE.NO,
+            service_agreement_status: values.service_agreement_status
+              ? USER_AGREE.YES
+              : USER_AGREE.NO
+          }
+          await onFinish({
+            ...sumbitData,
+            ...data
+          })
         }
-        await onFinish({
-          ...sumbitData,
-          ...data
-        })
-      } break
+        break
       default:
         return null
     }
@@ -117,8 +135,7 @@ export function EvaluatorRegister({ back }: { back: () => void }) {
 
   return (
     <div className="mt-6 fccc px-66 pb-53 max-md:px-4">
-
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" initial={false}>
         <AnimationComponent animKey="firstStep" className="w-full">
           <FirstStep
             className={step === 0 ? 'block' : 'hidden'}
@@ -162,7 +179,12 @@ export function EvaluatorRegister({ back }: { back: () => void }) {
 }
 
 // 第一个表单
-function FirstStep({ form, back, onFinish, className }: {
+function FirstStep({
+  form,
+  back,
+  onFinish,
+  className
+}: {
   form: FormInstance<any>
   back: () => void
   onFinish: (values?: any) => void
@@ -192,17 +214,19 @@ function FirstStep({ form, back, onFinish, className }: {
     queryFn: async () => {
       const data = await getLocation({
         level: selectPid.selectedLocation + 2,
-        parent_id: selectPid.selectedLocation === 1
-          ? selectPid.country
-          : (
-              selectPid.selectedLocation === 2 ? selectPid.province : undefined
-            )
+        parent_id:
+          selectPid.selectedLocation === 1
+            ? selectPid.country
+            : selectPid.selectedLocation === 2
+              ? selectPid.province
+              : undefined
       })
       // 处理数据,
-      const newData = data?.data?.map(item => ({
-        value: item.id,
-        label: item.name
-      })) || [] as LocationData[]
+      const newData
+        = data?.data?.map(item => ({
+          value: item.id,
+          label: item.name
+        })) || ([] as LocationData[])
 
       setLocationData((pre) => {
         if (selectPid.selectedLocation === 0) {
@@ -262,9 +286,9 @@ function FirstStep({ form, back, onFinish, className }: {
           <div>
             {i18n.language === 'en'
               ? item.name_en
-              : (
-                  i18n.language === 'zh' ? item.name_zh_cn : item.name_ja
-                )}
+              : i18n.language === 'zh'
+                ? item.name_zh_cn
+                : item.name_ja}
           </div>
         )
       }))
@@ -279,11 +303,15 @@ function FirstStep({ form, back, onFinish, className }: {
           <div>{t('register.lawOffice.back')}</div>
         </div>
       </div>
-      <div className="text-center text-12 font-600 leading-18 max-md:text-3xl">{t('register.evaluator.title')}</div>
+      <div className="text-center text-12 font-600 leading-18 max-md:text-3xl">
+        {t('register.evaluator.title')}
+      </div>
       <div className="mt-10 w-full b-2 b-#31363c rounded-lg b-solid bg-#161B2199 p-12 max-md:p-4">
         <div className="mb-6 fyc gap-3">
           <img className="h-6" src={componyIcon} alt="" />
-          <div className="text-lg font-600">{t('register.evaluator.basicInfo')}</div>
+          <div className="text-lg font-600">
+            {t('register.evaluator.basicInfo')}
+          </div>
         </div>
         <Form onFinish={onFinish} form={form} layout="vertical" className="">
           <div className="grid grid-cols-2 gap-6 max-md:grid-cols-1 max-md:gap-0">
@@ -292,19 +320,33 @@ function FirstStep({ form, back, onFinish, className }: {
               required
               label={t('register.evaluator.companyName')}
               name="nickname"
-              rules={[{ required: true, message: t('register.evaluator.companyName') }]}
+              rules={[
+                {
+                  required: true,
+                  message: t('register.evaluator.companyName')
+                }
+              ]}
             >
-              <Input placeholder={t('register.evaluator.businessLicenseMatch')} />
+              <Input
+                placeholder={t('register.evaluator.businessLicenseMatch')}
+              />
             </Form.Item>
             {/* 主体类型 */}
             <Form.Item
               required
               label={t('register.evaluator.entityType')}
               name="entity_type_id"
-              rules={[{ required: true, message: t('register.evaluator.selectEntityTypepPlaceholder') }]}
+              rules={[
+                {
+                  required: true,
+                  message: t('register.evaluator.selectEntityTypepPlaceholder')
+                }
+              ]}
             >
               <Select
-                placeholder={t('register.evaluator.selectEntityTypepPlaceholder')}
+                placeholder={t(
+                  'register.evaluator.selectEntityTypepPlaceholder'
+                )}
                 options={entityTypeList}
                 loading={entityTypeListLoading}
               />
@@ -314,21 +356,31 @@ function FirstStep({ form, back, onFinish, className }: {
               required
               label={t('register.asset.creditCode')}
               name="uscc"
-              rules={[{ required: true, message: t('register.asset.creditCodePlaceholder') }]}
+              rules={[
+                {
+                  required: true,
+                  message: t('register.asset.creditCodePlaceholder')
+                }
+              ]}
             >
-              <Input
-                placeholder={t('register.asset.creditCodePlaceholder')}
-              />
+              <Input placeholder={t('register.asset.creditCodePlaceholder')} />
             </Form.Item>
             {/* 联系人姓名 */}
             <Form.Item
               required
               label={t('register.evaluator.contactName')}
               name="contact_name"
-              rules={[{ required: true, message: t('register.evaluator.enterContactNamePlaceholder') }]}
+              rules={[
+                {
+                  required: true,
+                  message: t('register.evaluator.enterContactNamePlaceholder')
+                }
+              ]}
             >
               <Input
-                placeholder={t('register.evaluator.enterContactNamePlaceholder')}
+                placeholder={t(
+                  'register.evaluator.enterContactNamePlaceholder'
+                )}
               />
             </Form.Item>
             {/* 联系人电话 */}
@@ -336,11 +388,14 @@ function FirstStep({ form, back, onFinish, className }: {
               required
               label={t('register.asset.phone')}
               name="mobile"
-              rules={[{ required: true, message: t('register.asset.phonePlaceholder') }]}
+              rules={[
+                {
+                  required: true,
+                  message: t('register.asset.phonePlaceholder')
+                }
+              ]}
             >
-              <Input
-                placeholder={t('register.asset.phonePlaceholder')}
-              />
+              <Input placeholder={t('register.asset.phonePlaceholder')} />
             </Form.Item>
             {/* 联系人邮箱 */}
             <Form.Item
@@ -348,8 +403,14 @@ function FirstStep({ form, back, onFinish, className }: {
               label={t('register.evaluator.email')}
               name="email"
               rules={[
-                { required: true, message: t('register.evaluator.enterEmailPlaceholder') },
-                { pattern: /^[\w.%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i, message: t('register.evaluator.enterEmailErrorPlaceholder') }
+                {
+                  required: true,
+                  message: t('register.evaluator.enterEmailPlaceholder')
+                },
+                {
+                  pattern: /^[\w.%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i,
+                  message: t('register.evaluator.enterEmailErrorPlaceholder')
+                }
               ]}
             >
               <Input
@@ -366,35 +427,60 @@ function FirstStep({ form, back, onFinish, className }: {
             <div className="grid grid-cols-3 gap-3">
               <Form.Item
                 name="country"
-                rules={[{ required: true, message: t('register.evaluator.selectCountryPlaceholder') }]}
+                rules={[
+                  {
+                    required: true,
+                    message: t('register.evaluator.selectCountryPlaceholder')
+                  }
+                ]}
               >
                 <Select
                   placeholder={t('register.evaluator.country')}
-                  loading={locationDataLoading && selectPid.selectedLocation === 0}
+                  loading={
+                    locationDataLoading && selectPid.selectedLocation === 0
+                  }
                   onChange={val => changeCity(val, 0)}
                   options={locationData.country}
                 />
               </Form.Item>
               <Form.Item
                 name="province"
-                rules={[{ required: true, message: t('register.evaluator.selectProvincePlaceholder') }]}
+                rules={[
+                  {
+                    required: true,
+                    message: t('register.evaluator.selectProvincePlaceholder')
+                  }
+                ]}
               >
                 <Select
                   placeholder={t('register.evaluator.province')}
-                  disabled={locationDataLoading && selectPid.selectedLocation === 1}
-                  loading={locationDataLoading && selectPid.selectedLocation === 1}
+                  disabled={
+                    locationDataLoading && selectPid.selectedLocation === 1
+                  }
+                  loading={
+                    locationDataLoading && selectPid.selectedLocation === 1
+                  }
                   onChange={val => changeCity(val, 1)}
                   options={locationData.province}
                 />
               </Form.Item>
               <Form.Item
                 name="city"
-                rules={[{ required: true, message: t('register.evaluator.selectCityPlaceholder') }]}
+                rules={[
+                  {
+                    required: true,
+                    message: t('register.evaluator.selectCityPlaceholder')
+                  }
+                ]}
               >
                 <Select
                   placeholder={t('register.evaluator.city')}
-                  disabled={locationDataLoading && selectPid.selectedLocation === 2}
-                  loading={locationDataLoading && selectPid.selectedLocation === 2}
+                  disabled={
+                    locationDataLoading && selectPid.selectedLocation === 2
+                  }
+                  loading={
+                    locationDataLoading && selectPid.selectedLocation === 2
+                  }
                   onChange={val => changeCity(val, 2)}
                   options={locationData.city}
                 />
@@ -413,14 +499,31 @@ function FirstStep({ form, back, onFinish, className }: {
               required
               label={t('register.evaluator.establishmentYear')}
               name="year"
-              rules={[{ required: true, message: t('register.evaluator.selectEstablishmentYearPlaceholder') }]}
+              rules={[
+                {
+                  required: true,
+                  message: t(
+                    'register.evaluator.selectEstablishmentYearPlaceholder'
+                  )
+                }
+              ]}
             >
-              <DatePicker picker="year" placeholder={t('register.evaluator.selectEstablishmentYearPlaceholder')} className="h-12.5 w-full b-#374151 bg-#1E2328 [&>div>input]:!bg-transparent" />
+              <DatePicker
+                picker="year"
+                placeholder={t(
+                  'register.evaluator.selectEstablishmentYearPlaceholder'
+                )}
+                className="h-12.5 w-full b-#374151 bg-#1E2328 [&>div>input]:!bg-transparent"
+              />
             </Form.Item>
           </div>
           <Form.Item>
             <div className="text-end">
-              <Button type="primary" htmlType="submit" className="h-10.5 px-4 text-base text-black">
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="h-10.5 px-4 text-base text-black"
+              >
                 {t('register.evaluator.next')}
               </Button>
             </div>
@@ -432,7 +535,12 @@ function FirstStep({ form, back, onFinish, className }: {
 }
 
 // 第二个表单
-export function SecondStep({ form, back, onFinish, className }: {
+export function SecondStep({
+  form,
+  back,
+  onFinish,
+  className
+}: {
   form: FormInstance<any>
   back: () => void
   onFinish: (values: any) => Promise<void>
@@ -441,9 +549,18 @@ export function SecondStep({ form, back, onFinish, className }: {
   const { t } = useTranslation()
   const [errorFormItem, setErrorFormItem] = useState<string[]>([])
   const officePhotos = useWatch('officePhotos', form)
-  const antiMoneyLaunderingStatement = useWatch('anti_money_laundering_statement', form)
-  const evaluationQualificationCertificate = useWatch('evaluation_qualification_certificate', form)
-  const chiefAppraiserCertificate = useWatch('chief_appraiser_certificate', form)
+  const antiMoneyLaunderingStatement = useWatch(
+    'anti_money_laundering_statement',
+    form
+  )
+  const evaluationQualificationCertificate = useWatch(
+    'evaluation_qualification_certificate',
+    form
+  )
+  const chiefAppraiserCertificate = useWatch(
+    'chief_appraiser_certificate',
+    form
+  )
   const businessLicense = useWatch('business_license', form)
 
   const { mutateAsync: uploadIdCardFileMutate } = useMutation({
@@ -459,13 +576,15 @@ export function SecondStep({ form, back, onFinish, className }: {
   // 文件上传
   async function uploadIdCardFile(data: File, name: string, index: number) {
     setUploadFileLoading(prev => [...prev, index])
-    await uploadIdCardFileMutate({ file: data }).then((res) => {
-      if (res.code === 1) {
-        form.setFieldValue(name, res.data?.file.full_url)
-      }
-    }).finally(() => {
-      setUploadFileLoading(prev => prev.filter(item => item !== index))
-    })
+    await uploadIdCardFileMutate({ file: data })
+      .then((res) => {
+        if (res.code === 1) {
+          form.setFieldValue(name, res.data?.file.full_url)
+        }
+      })
+      .finally(() => {
+        setUploadFileLoading(prev => prev.filter(item => item !== index))
+      })
   }
 
   // 判断是否为图片
@@ -475,8 +594,8 @@ export function SecondStep({ form, back, onFinish, className }: {
 
   // 验证表单失败列表
   const onFinishFailed = (errorInfo: any) => {
-    let errorList = [] as string[];
-    (errorInfo.errorFields as any[]).forEach((res: any) => {
+    let errorList = [] as string[]
+    ;(errorInfo.errorFields as any[]).forEach((res: any) => {
       errorList = errorList.concat(res.name)
     })
     setErrorFormItem(errorList)
@@ -502,14 +621,28 @@ export function SecondStep({ form, back, onFinish, className }: {
       </div>
       <div className="mt-10 w-full b-2 b-#31363c rounded-lg b-solid bg-#161B2199 p-12 max-md:p-4">
         <div className="mb-6 fyc gap-3">
-          <div className="text-lg font-600">{t('register.evaluator.uploadCredentials')}</div>
+          <div className="text-lg font-600">
+            {t('register.evaluator.uploadCredentials')}
+          </div>
         </div>
         <Form form={form} onFinish={sumbitForm} onFinishFailed={onFinishFailed}>
           {/* 机构营业执照 */}
-          <FormItem name="business_license" rules={[{ required: true, message: <div>{t('register.evaluator.uploadBusinessLicense')}</div> }]}>
+          <FormItem
+            name="business_license"
+            rules={[
+              {
+                required: true,
+                message: (
+                  <div>{t('register.evaluator.uploadBusinessLicense')}</div>
+                )
+              }
+            ]}
+          >
             <div className="upload-card">
               <div>
-                <span className="mr-1 text-4 text-white font-bold">{t('register.evaluator.businessLicense')}</span>
+                <span className="mr-1 text-4 text-white font-bold">
+                  {t('register.evaluator.businessLicense')}
+                </span>
                 <span className="text-#EF4444">*</span>
               </div>
               <div className="mb-4 mt-1 text-sm text-#6B7280">
@@ -518,7 +651,11 @@ export function SecondStep({ form, back, onFinish, className }: {
               <UploadMultifileCard
                 className={cn(
                   'flex gap-3 [&>div>div>div>div]:b-2',
-                  `${(errorFormItem.includes('business_license')) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
+                  `${
+                    errorFormItem.includes('business_license')
+                      ? '[&>div>div>div>div]:b-#dc4446'
+                      : '[&>div>div>div>div]:b-#30363D'
+                  }`
                 )}
                 fileType="image/png,image/jpg,application/pdf"
                 fileUrl={fileIsUrl(businessLicense) ? [businessLicense] : []}
@@ -535,19 +672,42 @@ export function SecondStep({ form, back, onFinish, className }: {
               >
                 <div className="py-3">
                   <div className="fcc pb-2">
-                    <img className="h-8" src={new URL('@/assets/images/register/cloud.png', import.meta.url).href} alt="" />
+                    <img
+                      className="h-8"
+                      src={
+                        new URL(
+                          '@/assets/images/register/cloud.png',
+                          import.meta.url
+                        ).href
+                      }
+                      alt=""
+                    />
                   </div>
-                  <div className="text-center text-sm text-#9CA3AF">{t('register.evaluator.uploadSignedAML')}</div>
-                  <div className="text-center text-xs text-#6B7280">{t('register.evaluator.businessLicense')}</div>
+                  <div className="text-center text-sm text-#9CA3AF">
+                    {t('register.evaluator.uploadSignedAML')}
+                  </div>
+                  <div className="text-center text-xs text-#6B7280">
+                    {t('register.evaluator.businessLicense')}
+                  </div>
                 </div>
               </UploadMultifileCard>
             </div>
           </FormItem>
           {/* 主评估师资格证书 */}
-          <FormItem name="chief_appraiser_certificate" rules={[{ required: true, message: t('register.evaluator.uploadChiefAppraiserCert') }]}>
+          <FormItem
+            name="chief_appraiser_certificate"
+            rules={[
+              {
+                required: true,
+                message: t('register.evaluator.uploadChiefAppraiserCert')
+              }
+            ]}
+          >
             <div className="upload-card">
               <div>
-                <span className="mr-1 text-4 text-white font-bold">{t('register.evaluator.chiefAppraiserCert')}</span>
+                <span className="mr-1 text-4 text-white font-bold">
+                  {t('register.evaluator.chiefAppraiserCert')}
+                </span>
                 <span className="text-#EF4444">*</span>
               </div>
               <div className="mb-4 mt-1 text-sm text-#6B7280">
@@ -556,10 +716,18 @@ export function SecondStep({ form, back, onFinish, className }: {
               <UploadMultifileCard
                 className={cn(
                   'flex gap-3 [&>div>div>div>div]:b-2',
-                  `${(errorFormItem.includes('chief_appraiser_certificate')) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
+                  `${
+                    errorFormItem.includes('chief_appraiser_certificate')
+                      ? '[&>div>div>div>div]:b-#dc4446'
+                      : '[&>div>div>div>div]:b-#30363D'
+                  }`
                 )}
                 fileType="image/png,image/jpg,application/pdf"
-                fileUrl={fileIsUrl(chiefAppraiserCertificate) ? [chiefAppraiserCertificate] : []}
+                fileUrl={
+                  fileIsUrl(chiefAppraiserCertificate)
+                    ? [chiefAppraiserCertificate]
+                    : []
+                }
                 maxLength={1}
                 width="100%"
                 height="auto"
@@ -575,17 +743,31 @@ export function SecondStep({ form, back, onFinish, className }: {
                   <div className="fcc pb-3">
                     <img src={userCardIcon} className="h-9" alt="" />
                   </div>
-                  <div className="text-center text-sm text-#9CA3AF">{t('register.evaluator.uploadSignedAML')}</div>
-                  <div className="text-center text-xs text-#6B7280">{t('register.evaluator.chiefAppraiserCert')}</div>
+                  <div className="text-center text-sm text-#9CA3AF">
+                    {t('register.evaluator.uploadSignedAML')}
+                  </div>
+                  <div className="text-center text-xs text-#6B7280">
+                    {t('register.evaluator.chiefAppraiserCert')}
+                  </div>
                 </div>
               </UploadMultifileCard>
             </div>
           </FormItem>
           {/* 评估资质证书 */}
-          <FormItem name="evaluation_qualification_certificate" rules={[{ required: true, message: t('register.evaluator.uploadAppraisalCert') }]}>
+          <FormItem
+            name="evaluation_qualification_certificate"
+            rules={[
+              {
+                required: true,
+                message: t('register.evaluator.uploadAppraisalCert')
+              }
+            ]}
+          >
             <div className="upload-card">
               <div>
-                <span className="mr-1 text-4 text-white font-bold">{t('register.evaluator.appraisalCert')}</span>
+                <span className="mr-1 text-4 text-white font-bold">
+                  {t('register.evaluator.appraisalCert')}
+                </span>
                 <span className="text-#EF4444">*</span>
               </div>
               <div className="mb-4 mt-1 text-sm text-#6B7280">
@@ -594,10 +776,20 @@ export function SecondStep({ form, back, onFinish, className }: {
               <UploadMultifileCard
                 className={cn(
                   'flex gap-3 [&>div>div>div>div]:b-2',
-                  `${(errorFormItem.includes('evaluation_qualification_certificate')) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
+                  `${
+                    errorFormItem.includes(
+                      'evaluation_qualification_certificate'
+                    )
+                      ? '[&>div>div>div>div]:b-#dc4446'
+                      : '[&>div>div>div>div]:b-#30363D'
+                  }`
                 )}
                 fileType="image/png,image/jpg,application/pdf"
-                fileUrl={fileIsUrl(evaluationQualificationCertificate) ? [evaluationQualificationCertificate] : []}
+                fileUrl={
+                  fileIsUrl(evaluationQualificationCertificate)
+                    ? [evaluationQualificationCertificate]
+                    : []
+                }
                 maxLength={1}
                 width="100%"
                 height="auto"
@@ -606,15 +798,23 @@ export function SecondStep({ form, back, onFinish, className }: {
                   form.setFieldValue(`evaluation_qualification_certificate`, '')
                 }}
                 beforeUpload={(file) => {
-                  uploadIdCardFile(file, `evaluation_qualification_certificate`, 2)
+                  uploadIdCardFile(
+                    file,
+                    `evaluation_qualification_certificate`,
+                    2
+                  )
                 }}
               >
                 <div className="py-3">
                   <div className="fcc pb-2">
                     <img src={fileIcon} className="h-9" alt="" />
                   </div>
-                  <div className="text-center text-sm text-#9CA3AF">{t('register.evaluator.uploadSignedAML')}</div>
-                  <div className="text-center text-xs text-#6B7280">{t('register.evaluator.appraisalCert')}</div>
+                  <div className="text-center text-sm text-#9CA3AF">
+                    {t('register.evaluator.uploadSignedAML')}
+                  </div>
+                  <div className="text-center text-xs text-#6B7280">
+                    {t('register.evaluator.appraisalCert')}
+                  </div>
                 </div>
               </UploadMultifileCard>
             </div>
@@ -622,7 +822,9 @@ export function SecondStep({ form, back, onFinish, className }: {
           {/* 反洗钱声明 */}
           <div className="upload-card mb-6">
             <div>
-              <span className="mr-1 text-4 text-white font-bold">{t('register.evaluator.amlStatement')}</span>
+              <span className="mr-1 text-4 text-white font-bold">
+                {t('register.evaluator.amlStatement')}
+              </span>
               <span className="text-#EF4444">*</span>
             </div>
             <div className="mb-4 mt-1 text-sm text-#6B7280">
@@ -638,11 +840,16 @@ export function SecondStep({ form, back, onFinish, className }: {
                   validator: (_, value) =>
                     value
                       ? Promise.resolve()
-                      : Promise.reject(new Error(t('register.evaluator.readAMLTerms')))
+                      : Promise.reject(
+                          new Error(t('register.evaluator.readAMLTerms'))
+                        )
                 }
               ]}
             >
-              <Checkbox defaultChecked={form.getFieldValue(`agree_asset_compliance`)} className="text-sm text-#D1D5DB">
+              <Checkbox
+                defaultChecked={form.getFieldValue(`agree_asset_compliance`)}
+                className="text-sm text-#D1D5DB"
+              >
                 {t('register.evaluator.agreeAMLTerms')}
                 {' '}
                 <span className="text-#00E5FF">
@@ -653,14 +860,30 @@ export function SecondStep({ form, back, onFinish, className }: {
                 {t('register.evaluator.followLaws')}
               </Checkbox>
             </Form.Item>
-            <FormItem name="anti_money_laundering_statement" rules={[{ required: true, message: t('register.evaluator.uploadAMLStatement') }]}>
+            <FormItem
+              name="anti_money_laundering_statement"
+              rules={[
+                {
+                  required: true,
+                  message: t('register.evaluator.uploadAMLStatement')
+                }
+              ]}
+            >
               <UploadMultifileCard
                 className={cn(
                   'flex gap-3 [&>div>div>div>div]:b-2',
-                  `${(errorFormItem.includes('anti_money_laundering_statement')) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
+                  `${
+                    errorFormItem.includes('anti_money_laundering_statement')
+                      ? '[&>div>div>div>div]:b-#dc4446'
+                      : '[&>div>div>div>div]:b-#30363D'
+                  }`
                 )}
                 fileType="image/png,image/jpg,application/pdf"
-                fileUrl={fileIsUrl(antiMoneyLaunderingStatement) ? [antiMoneyLaunderingStatement] : []}
+                fileUrl={
+                  fileIsUrl(antiMoneyLaunderingStatement)
+                    ? [antiMoneyLaunderingStatement]
+                    : []
+                }
                 maxLength={1}
                 width="100%"
                 height="auto"
@@ -676,7 +899,9 @@ export function SecondStep({ form, back, onFinish, className }: {
                   <div className="fcc pb-2">
                     <img src={signIcom} className="h-9" alt="" />
                   </div>
-                  <div className="text-center text-sm text-#9CA3AF">{t('register.evaluator.uploadSignedAML')}</div>
+                  <div className="text-center text-sm text-#9CA3AF">
+                    {t('register.evaluator.uploadSignedAML')}
+                  </div>
                 </div>
               </UploadMultifileCard>
             </FormItem>
@@ -708,7 +933,9 @@ export function SecondStep({ form, back, onFinish, className }: {
           <FormItem name="officePhotos">
             <div className="upload-card">
               <div>
-                <span className="text-4 text-white font-bold">{t('register.evaluator.officePhotos')}</span>
+                <span className="text-4 text-white font-bold">
+                  {t('register.evaluator.officePhotos')}
+                </span>
               </div>
               <div className="mb-4 mt-1 text-sm text-#6B7280">
                 {t('register.evaluator.officePhotosDesc')}
@@ -716,7 +943,11 @@ export function SecondStep({ form, back, onFinish, className }: {
               <UploadMultifileCard
                 className={cn(
                   'flex gap-3 [&>div>div>div>div]:b-2',
-                  `${(errorFormItem.includes('officePhotos')) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
+                  `${
+                    errorFormItem.includes('officePhotos')
+                      ? '[&>div>div>div>div]:b-#dc4446'
+                      : '[&>div>div>div>div]:b-#30363D'
+                  }`
                 )}
                 fileType="image/png,image/jpg,application/pdf"
                 fileUrl={fileIsUrl(officePhotos) ? [officePhotos] : []}
@@ -735,7 +966,9 @@ export function SecondStep({ form, back, onFinish, className }: {
                   <div className="fcc pb-2">
                     <img src={componyIcom} className="h-9" alt="" />
                   </div>
-                  <div className="text-center text-sm text-#9CA3AF">{t('register.evaluator.uploadSignedAML')}</div>
+                  <div className="text-center text-sm text-#9CA3AF">
+                    {t('register.evaluator.uploadSignedAML')}
+                  </div>
                 </div>
               </UploadMultifileCard>
             </div>
@@ -749,19 +982,28 @@ export function SecondStep({ form, back, onFinish, className }: {
                 validator: (_, value) =>
                   value
                     ? Promise.resolve()
-                    : Promise.reject(new Error(t('register.asset.amlCommitmentPlaceholder')))
+                    : Promise.reject(
+                        new Error(t('register.asset.amlCommitmentPlaceholder'))
+                      )
               }
             ]}
           >
             <div>
               <div className="w-full fyc justify-between text-sm text-primary">
-                <Checkbox defaultChecked={form.getFieldValue(`service_agreement_status`)} className="text-sm text-#D1D5DB">
+                <Checkbox
+                  defaultChecked={form.getFieldValue(
+                    `service_agreement_status`
+                  )}
+                  className="text-sm text-#D1D5DB"
+                >
                   {t('register.asset.agreeAML')}
                   <span className="text-#00E5FF">
                     {t('register.evaluator.serviceAgreementTitle')}
                   </span>
                 </Checkbox>
-                <div className="clickable">{t('register.asset.readAMLTerms')}</div>
+                <div className="clickable">
+                  {t('register.asset.readAMLTerms')}
+                </div>
               </div>
               {/* TODO 显示全文 */}
               {/* 最多两行，超出显示... */}
@@ -779,11 +1021,18 @@ export function SecondStep({ form, back, onFinish, className }: {
                 validator: (_, value) =>
                   value
                     ? Promise.resolve()
-                    : Promise.reject(new Error(t('register.asset.complianceDeclarationPlaceholder')))
+                    : Promise.reject(
+                        new Error(
+                          t('register.asset.complianceDeclarationPlaceholder')
+                        )
+                      )
               }
             ]}
           >
-            <Checkbox defaultChecked={form.getFieldValue(`agreementFirst`)} className="text-sm text-#D1D5DB">
+            <Checkbox
+              defaultChecked={form.getFieldValue(`agreementFirst`)}
+              className="text-sm text-#D1D5DB"
+            >
               {t('register.asset.agreeCompliance')}
               <span className="text-#00E5FF">
                 《
@@ -794,14 +1043,18 @@ export function SecondStep({ form, back, onFinish, className }: {
           </Form.Item>
           <Form.Item>
             <div className="text-end">
-              <Button loading={sumbitLoading} type="primary" htmlType="submit" className="h-10.5 px-4 text-base text-black">
+              <Button
+                loading={sumbitLoading}
+                type="primary"
+                htmlType="submit"
+                className="h-10.5 px-4 text-base text-black"
+              >
                 {t('register.evaluator.submit')}
               </Button>
             </div>
           </Form.Item>
         </Form>
       </div>
-
     </div>
   )
 }

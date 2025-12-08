@@ -300,7 +300,8 @@ export default function MainHeader() {
 
   const { unReadCount, getUnReadMessageCount } = useMessageStore()
   useEffect(() => {
-    getUnReadMessageCount()
+    if (userData?.user?.id)
+      getUnReadMessageCount()
   }, [getUnReadMessageCount])
 
   return (

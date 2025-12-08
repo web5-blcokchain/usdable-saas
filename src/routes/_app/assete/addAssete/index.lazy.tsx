@@ -7,7 +7,6 @@ import { useMutation } from '@tanstack/react-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useForm } from 'antd/es/form/Form'
 import dayjs from 'dayjs'
-import { AnimatePresence } from 'framer-motion'
 import { AddAsseteFrist } from './-components/addAsseteFrist'
 import { AddAsseteSecond } from './-components/addAsseteSecond'
 import { SubmissionStatusStatus } from './-components/submissionStatusDialog'
@@ -154,14 +153,14 @@ function RouteComponent() {
 
   return (
     <div className="addAssete">
-      <AnimatePresence mode="wait">
+      <div>
         <div className={cn(step === 0 ? '' : 'hidden')}>
           <AddAsseteFrist form={firstForm} onFinish={onFinish} />
         </div>
         <div className={cn(step === 1 ? '' : 'hidden')}>
           <AddAsseteSecond form={secondForm} onFinish={onFinish} backStep={backStep} saveDraft={saveDraft} />
         </div>
-      </AnimatePresence>
+      </div>
       {/* 提交成功弹窗口 */}
       <SubmissionStatusStatus
         visible={sumbitDialogVisible.visible}
