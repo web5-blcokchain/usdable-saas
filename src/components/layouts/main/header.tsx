@@ -15,6 +15,7 @@ import { useMutation } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Badge, Button, Dropdown, Menu } from 'antd'
 
+let lastCheckTokenTime = 0
 export default function MainHeader() {
   const { userData } = useUserStore()
   const { t } = useTranslation()
@@ -239,7 +240,6 @@ export default function MainHeader() {
 
   const { refreshUser } = useUser()
 
-  const lastCheckTime = useRef(0)
   // 监测用户token是否过期
   const checkToken = async () => {
     try {
@@ -247,9 +247,9 @@ export default function MainHeader() {
       // 判断token是否过期，并且该函数在5s只触发一次
       if (
         (!token || isTokenExpired(token))
-        && Date.now() - lastCheckTime.current > 5000
+        && Date.now() - lastCheckTokenTime > 5000
       ) {
-        lastCheckTime.current = Date.now()
+        lastCheckTokenTime = Date.now()
         await refreshUser()
         const newToken = await getAccessToken()
         if (newToken) {

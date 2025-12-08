@@ -23,7 +23,7 @@ function RouteComponent() {
   const [step, setStep] = useState(0)
   const [formData, setFormData] = useState<SubmitAssetInfo>({} as any)
   const [sumbitDialogVisible, setSumbitDialogVisible] = useState({
-    visible: true,
+    visible: false,
     type: 1,
     asseteInfo: { code: '', createTime: '' },
     errorMessage: ''
