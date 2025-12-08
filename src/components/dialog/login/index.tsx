@@ -65,7 +65,7 @@ export const LoginDialog: FC<{
           <Button
             type="primary"
             size="large"
-            className="w-180px text-black!"
+            className="min-w-180px text-black!"
             onClick={() => userLogin(1)}
           >
             <div className="fyc gap-2">
@@ -76,7 +76,7 @@ export const LoginDialog: FC<{
           <Button
             type="primary"
             size="large"
-            className="w-180px text-black!"
+            className="min-w-180px text-black!"
             onClick={() => userLogin(2)}
           >
             <div className="fyc gap-2">

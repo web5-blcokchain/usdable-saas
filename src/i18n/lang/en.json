@@ -69,7 +69,8 @@
     "submissionStatusPending": "Pending Submission",
     "submissionStatusApproved": "Approved Submission",
     "downloadFailed": "Download File Failed",
-    "fileSizeError": "File size cannot exceed {{size}}"
+    "fileSizeError": "File size cannot exceed {{size}}",
+    "submitSuccess": "Submit Successful"
   },
   "header": {
     "login": "Login",
@@ -962,6 +963,7 @@
     "reservationDate": "Reservation Date",
     "completionDate": "Completion Date",
     "auctionDate": "Auction Date",
+    "claim": "Claim",
     "region": "Region",
     "action": "Action",
     "review": "Review",
@@ -1124,7 +1126,8 @@
     },
     "confirmClaimDialog": {
       "title": "Confirm Claim",
-      "confirmMessage": "Are you sure you want to claim the preliminary review work for case {{id}}? After claiming, you will be responsible for the preliminary review of this case."
+      "confirmMessage": "Are you sure you want to claim the preliminary review work for case {{id}}? After claiming, you will be responsible for the preliminary review of this case.",
+      "confirmSuccess": "Claim successful"
     },
     "confirmSignDialog": {
       "title": "Confirm Signature",

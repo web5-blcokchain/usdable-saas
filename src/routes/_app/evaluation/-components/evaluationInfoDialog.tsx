@@ -216,7 +216,7 @@ export function EvaluationInfoDialog({
                   <div>
                     <div>{t('evaluation.table.createTime')}</div>
                     <div>
-                      {dayjs(evaluationInfo?.create_time || '').format(
+                      {dayjs(evaluationInfo?.update_time || '').format(
                         'YYYY-MM-DD'
                       )}
                     </div>

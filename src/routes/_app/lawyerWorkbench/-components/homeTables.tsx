@@ -66,7 +66,7 @@ export function CaseTable({
   )
 }
 
-// 待认领案件（初审阶段）
+// 待认领案件(初审阶段)
 export function PendingClaimCasesTable({
   pagination,
   openDialog,
@@ -75,11 +75,15 @@ export function PendingClaimCasesTable({
 }: {
   pagination?: boolean
   openDialog?: () => void
-  openConfirmClaimDialog?: (data: any) => void
+  openConfirmClaimDialog: (data: lawyerWorkbenchApi.PendingCaseList) => void
   searchParams?: SearchParams
 }) {
   const { t } = useTranslation()
-  const columns: ColumnsType<lawyerWorkbenchApi.CaseListData> = [
+  const [pageInfo, setPageInfo] = useState({
+    pageSize: 10,
+    page: 1
+  })
+  const columns: ColumnsType<lawyerWorkbenchApi.PendingCaseList> = [
     {
       title: t('lawyerWorkbench.caseId'),
       dataIndex: 'code',
@@ -91,6 +95,7 @@ export function PendingClaimCasesTable({
       key: 'asset_name'
     },
     {
+      // TODO
       title: t('lawyerWorkbench.applicant'),
       dataIndex: 'user',
       key: 'user'
@@ -116,15 +121,27 @@ export function PendingClaimCasesTable({
       key: 'action',
       render: (_, record) => (
         <div
-          onClick={() =>
-            openConfirmClaimDialog && openConfirmClaimDialog(record)}
+          onClick={() => openConfirmClaimDialog(record)}
           className="clickable"
         >
-          {t('lawyerWorkbench.claimForReview')}
+          {t('lawyerWorkbench.claim')}
         </div>
       )
     }
   ]
+  const { data, isFetching: countIsFetching } = useQuery({
+    queryKey: ['pendingClaimCasesCount', searchParams, pageInfo],
+    queryFn: async () => {
+      const res = await lawyerWorkbenchApi.getPendingCaseList({
+        ...pageInfo,
+        country_id: searchParams?.country_id || undefined,
+        start_date: searchParams?.start_date || undefined,
+        end_date: searchParams?.end_date || undefined,
+        keyword: searchParams?.keyword || undefined
+      })
+      return res.data
+    }
+  })
   return (
     <div>
       <div className="fyc justify-between gap-3">
@@ -137,8 +154,103 @@ export function PendingClaimCasesTable({
           </div>
         )}
       </div>
+      <CommonTable
+        data={data?.list}
+        columns={columns}
+        tableProps={{ loading: countIsFetching }}
+        className="mt-4 overflow-hidden b-t-0 rounded-b-2 text-#E5E7EB"
+        pagination={
+          pagination
+            ? {
+                pageSize: pageInfo.pageSize,
+                total: data?.count || 0,
+                current: pageInfo.page,
+                onChange: page => setPageInfo({ ...pageInfo, page })
+              }
+            : false
+        }
+        tableConfig={
+          {
+            borderColor: '#1f2122'
+          } as any
+        }
+      />
+    </div>
+  )
+}
+
+// 待初审案件
+export function PendingInitialReviewTable({
+  pagination,
+  openDialog,
+  searchParams
+}: {
+  pagination?: boolean
+  openDialog?: () => void
+  searchParams?: SearchParams
+}) {
+  const { t } = useTranslation()
+  const columns: ColumnsType<lawyerWorkbenchApi.PendingCaseList> = [
+    {
+      title: t('lawyerWorkbench.caseId'),
+      dataIndex: 'code',
+      key: 'code'
+    },
+    {
+      title: t('lawyerWorkbench.propertyName'),
+      dataIndex: 'asset_name',
+      key: 'asset_name'
+    },
+    {
+      // TODO
+      title: t('lawyerWorkbench.applicant'),
+      dataIndex: 'user',
+      key: 'user'
+    },
+    {
+      title: t('lawyerWorkbench.uploadDate'),
+      dataIndex: 'update_time',
+      key: 'update_time',
+      render: text => <div>{dayjs(text ?? '').format('YYYY-MM-DD')}</div>
+    },
+    {
+      title: t('lawyerWorkbench.status'),
+      dataIndex: 'status',
+      key: 'status',
+      render: () => (
+        <div className="h-fit w-fit rounded-2 bg-#EB45451A px-2 py-1 text-xs text-#F87171">
+          {t('lawyerWorkbench.pendingClaim')}
+        </div>
+      )
+    },
+    {
+      title: t('lawyerWorkbench.action'),
+      key: 'action',
+      render: (_, record) => (
+        <Link
+          to="/lawyerWorkbench/initialReview/$id"
+          params={{ id: `${record.id}` }}
+          className="clickable"
+        >
+          {t('lawyerWorkbench.review')}
+        </Link>
+      )
+    }
+  ]
+  return (
+    <div>
+      <div className="fyc justify-between gap-3">
+        <div className="text-xl">
+          {t('lawyerWorkbench.pendingInitialReview')}
+        </div>
+        {!pagination && (
+          <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">
+            {t('lawyerWorkbench.viewAll')}
+          </div>
+        )}
+      </div>
       <CaseTable
-        key="PendingClaimCasesTable"
+        key="PendingOfflineExecutionTable"
         pagination={pagination}
         searchParams={searchParams}
         columns={columns}
@@ -249,14 +361,14 @@ export function PendingRightConfirmationTable({
   const dataStatusContent = (status: ASSET_STATUS) => {
     let data = ''
     if (status < 2) {
-      data = 'bg-#00FF8733 text-#00FF85'// 律师确认中
+      data = 'bg-#00FF8733 text-#00FF85' // 律师确认中
     }
     else if (
       [ASSET_STATUS.LAWYER_REJECTED, ASSET_STATUS.ASSESSOR_REJECTED].includes(
         status
       )
     ) {
-      data = 'bg-#CD647833 text-#CF6679'// 驳回
+      data = 'bg-#CD647833 text-#CF6679' // 驳回
     }
     else if (
       [
@@ -265,19 +377,14 @@ export function PendingRightConfirmationTable({
         ASSET_STATUS.LAWYER_UPLOADED_MATERIALS
       ].includes(status)
     ) {
-      data = 'bg-#2E2F1F text-#FFDD00'// 待评估
+      data = 'bg-#2E2F1F text-#FFDD00' // 待评估
     }
     else {
       data = 'bg-#00FF8733 text-#00FF85' // 已上链
     }
 
     return (
-      <div
-        className={cn(
-          data,
-          'h-fit w-fit rounded-2 px-2 py-1 text-xs'
-        )}
-      >
+      <div className={cn(data, 'h-fit w-fit rounded-2 px-2 py-1 text-xs')}>
         {t(
           `common.assetStatus.${
             ASSET_STATUS.DRAFT <= status
@@ -316,9 +423,7 @@ export function PendingRightConfirmationTable({
       title: t('lawyerWorkbench.status'),
       dataIndex: 'status',
       key: 'status',
-      render: status => (
-        dataStatusContent(status)
-      )
+      render: status => dataStatusContent(status)
     },
     {
       title: t('lawyerWorkbench.action'),

@@ -48,8 +48,8 @@ export function RegisterSuccess({ visible, className, back, successButton }:
           <div className="text-#00FF85">{t('register.status.enterpriseVerified')}</div>
         </div>
         <div className="mt-8 fyc gap-4">
-          <Button onClick={back} className="h-13.5 w-45 b-#374151 bg-#000000 text-4 font-600">{t('register.status.backToHome')}</Button>
-          <Button className="h-13.5 w-45 b-#00E5FF80 bg-#00E5FF text-4 text-black font-600" onClick={successButton.onClick}>{successButton.text}</Button>
+          <Button onClick={back} className="h-13.5 min-w-45 b-#374151 bg-#000000 text-4 font-600">{t('register.status.backToHome')}</Button>
+          <Button className="h-13.5 min-w-45 b-#00E5FF80 bg-#00E5FF text-4 text-black font-600" onClick={successButton.onClick}>{successButton.text}</Button>
         </div>
       </div>
     </Modal>
@@ -75,7 +75,7 @@ export function RegisterError({ visible, className, errorMessage, setVisible }: 
         <div className="mt-4.5 text-10 text-white font-600 leading-15">{t('register.status.failed')}</div>
         <div className="mt-2 text-base text-#8B949E">{errorMessage}</div>
         <div className="mt-8 w-full fyc gap-4">
-          <Button onClick={() => setVisible(false)} className="h-13.5 w-45 w-full b-#374151 bg-#000000 text-4 font-600">{t('register.status.retry')}</Button>
+          <Button onClick={() => setVisible(false)} className="h-13.5 min-w-45 w-full b-#374151 bg-#000000 text-4 font-600">{t('register.status.retry')}</Button>
         </div>
         <div className="mt-7.5 text-center text-base text-#00FF85">
           <span className="clickable">{t('register.status.appeal')}</span>
@@ -107,7 +107,7 @@ export function RegisterLoading({ visible, className, back }:
         <div className="mt-4.5 text-10 text-white font-600 leading-15">{t('register.status.success')}</div>
         <div className="mt-2 text-lg text-#D1D5DB">{t('register.status.pending')}</div>
         <div className="mt-8 fyc gap-4">
-          <Button onClick={back} className="h-13.5 w-45 b-#374151 bg-#000000 text-4 font-600">{t('register.status.backToHome')}</Button>
+          <Button onClick={back} className="h-13.5 min-w-45 b-#374151 bg-#000000 text-4 font-600">{t('register.status.backToHome')}</Button>
         </div>
       </div>
     </Modal>

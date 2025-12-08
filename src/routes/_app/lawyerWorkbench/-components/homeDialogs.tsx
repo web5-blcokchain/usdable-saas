@@ -1,5 +1,7 @@
+import * as lawyerWorkbenchApi from '@/api/lawyerWorkbenchApi'
 import { CommonDialog } from '@/components/common/dialog/common'
 import { formatNumberNoRound } from '@/utils/number'
+import { useMutation } from '@tanstack/react-query'
 import { Button, Upload } from 'antd'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
@@ -50,12 +52,36 @@ export function ExecuteCaseDialog({ visible, setvisible }: {
 // 待认领案件（初审阶段) => 确认认领弹窗
 export function ConfirmClaimDialog({
   visible,
-  setvisible
+  setvisible,
+  data,
+  reloadTable
 }: {
   visible: boolean
   setvisible: (visible: boolean) => void
+  data: lawyerWorkbenchApi.PendingCaseList
+  reloadTable: () => void
 }) {
   const { t } = useTranslation()
+  const { mutateAsync: claimSubmission, isPending: claimSubmissionLoading } = useMutation({
+    mutationKey: ['claimSubmission'],
+    mutationFn: async (data: {
+      /**
+       * 资产提交id
+       */
+      submission_id: number
+    }) => {
+      return await lawyerWorkbenchApi.claimSubmission(data)
+    }
+  })
+  const handleConfirm = useCallback(async () => {
+    await claimSubmission({ submission_id: data?.id }).then((res) => {
+      if (res.code === 1) {
+        toast.success(t('lawyerWorkbench.confirmClaimDialog.confirmSuccess'))
+        setvisible(false)
+        reloadTable()
+      }
+    })
+  }, [claimSubmission, data?.id, setvisible])
   return (
     <CommonDialog
       open={visible}
@@ -71,12 +97,12 @@ export function ConfirmClaimDialog({
       footer={(
         <div className="fyc justify-end gap-3">
           <Button className="h-8 b-#0A192F rounded-2 bg-#0A192F px-6 text-sm text-#D1D5DB" onClick={() => setvisible(false)}>{t('common.cancel')}</Button>
-          <Button className="h-8 b-#00E5FF rounded-2 bg-#00E5FF px-6 text-sm text-black" onClick={() => setvisible(false)}>{t('common.confirm')}</Button>
+          <Button onClick={handleConfirm} loading={claimSubmissionLoading} className="h-8 b-#00E5FF rounded-2 bg-#00E5FF px-6 text-sm text-black">{t('common.confirm')}</Button>
         </div>
       )}
     >
       <div className="bg-#171b21 py-6">
-        <div className="text-base text-#9CA3AF">{t('lawyerWorkbench.confirmClaimDialog.confirmMessage', { id: 'PROP20231101' })}</div>
+        <div className="text-base text-#9CA3AF">{t('lawyerWorkbench.confirmClaimDialog.confirmMessage', { id: data?.code })}</div>
       </div>
     </CommonDialog>
   )

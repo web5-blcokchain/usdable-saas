@@ -42,7 +42,7 @@ export function SuccessDialog({ visible, setVisible, asseteId, createTime }:
         <div className="size-24 fcc b-1 b-#00FF85 rounded-full b-solid bg-#00FF891A">
           <div className="i-lucide:check text-10 text-#00FF85"></div>
         </div>
-        <div className="mt-4.5 text-10 leading-15">{t('assete.addAsset.success.title')}</div>
+        <div className="mt-4.5 text-center text-10 leading-15">{t('assete.addAsset.success.title')}</div>
         <div className="mt-2 text-center text-sm text-#D1D5DB">{t('assete.addAsset.success.description')}</div>
         <div className="mt-8 w-full b-1 b-#00E6FF33 rounded-2 b-solid bg-#00000080 p-6 text-base text-#9CA3AF">
           <div className="fyc justify-between gap-2">
@@ -91,7 +91,7 @@ export function ErrorDialog({ visible, setVisible, asseteId, createTime, errorMe
         <div className="size-24 fcc b-1 b-#FF3A3A rounded-full b-solid">
           <div className="i-mingcute:close-fill text-10 text-#FF3A3A"></div>
         </div>
-        <div className="mt-4.5 text-10 leading-15">{t('assete.addAsset.error.title')}</div>
+        <div className="mt-4.5 text-center text-10 leading-15">{t('assete.addAsset.error.title')}</div>
         <div className="mt-2 text-center text-sm text-#D1D5DB">
           {errorMessage}
         </div>

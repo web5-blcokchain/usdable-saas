@@ -69,7 +69,8 @@
     "submissionStatusPending": "提出待ち",
     "submissionStatusApproved": "承認済み",
     "downloadFailed": "ファイルダウンロードに失敗しました",
-    "fileSizeError": "ファイルサイズは {{size}} を超えません"
+    "fileSizeError": "ファイルサイズは {{size}} を超えません",
+    "submitSuccess": "提出成功"
   },
   "header": {
     "login": "ログイン",
@@ -966,6 +967,7 @@
     "action": "操作",
     "review": "審査",
     "execute": "実行",
+    "claim": "認領",
     "view": "表示",
     "viewAll": "すべて表示",
     "uploadDate": "アップロード日",
@@ -1125,7 +1127,8 @@
     },
     "confirmClaimDialog": {
       "title": "認領確認",
-      "confirmMessage": "案件{{id}}の予備審査作業を認領しますか？認領後、この案件の予備審査を担当することになります。"
+      "confirmMessage": "案件{{id}}の予備審査作業を認領しますか？認領後、この案件の予備審査を担当することになります。",
+      "confirmSuccess": "認領成功"
     },
     "confirmSignDialog": {
       "title": "署名確認",

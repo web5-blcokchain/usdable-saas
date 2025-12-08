@@ -38,3 +38,33 @@ export enum APPLICATION_STATUS {
    */
   EXCEPTION = 3
 }
+
+/**
+ * 线下处理步骤 1为材料准备 2：窗口提交 3 信息核验 4盖章确权 5 完成  -1异常
+ */
+export enum PROCESS_STEP {
+  /**
+   * 材料准备
+   */
+  MATERIAL_PREPARATION = 1,
+  /**
+   * 窗口提交
+   */
+  WINDOW_SUBMISSION = 2,
+  /**
+   * 信息核验
+   */
+  INFORMATION_VERIFICATION = 3,
+  /**
+   * 盖章确权
+   */
+  STAMPING_AUTHORIZATION = 4,
+  /**
+   * 完成
+   */
+  COMPLETED = 5,
+  /**
+   * 异常
+   */
+  EXCEPTION = -1
+}

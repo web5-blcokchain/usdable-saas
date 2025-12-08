@@ -332,12 +332,12 @@ function RouteComponent() {
                     {formatSmartTime(item.create_time, t)}
                   </div>
                 </div>
-                <div className="flex justify-end">
+                {/* <div className="flex justify-end">
                   <Button className="mt-2 h-8.5 fcc gap-2 b-#00FF8566 bg-#00FF891A px-3 text-sm text-#00FF85">
                     <div className="i-fa6-solid:eye"></div>
                     <div>{t('message.viewCase')}</div>
                   </Button>
-                </div>
+                </div> */}
               </div>
             ))}
             {messageList?.unReadMessage?.length === 0

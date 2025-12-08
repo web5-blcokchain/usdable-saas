@@ -81,7 +81,8 @@
     "submissionStatusPending": "未提交",
     "submissionStatusApproved": "已提交",
     "downloadFailed": "下载文件失败",
-    "fileSizeError": "文件大小不能超过 {{size}}"
+    "fileSizeError": "文件大小不能超过 {{size}}",
+    "submitSuccess": "提交成功"
   },
   "header": {
     "login": "登录",
@@ -1002,6 +1003,7 @@
     "viewAll": "查看全部",
     "uploadDate": "上传日期",
     "status": "状态",
+    "claim": "认领",
     "pendingClaim": "待认领",
     "claimForReview": "认领初审",
     "evaluator": "评估方",
@@ -1157,7 +1159,8 @@
     },
     "confirmClaimDialog": {
       "title": "确认认领",
-      "confirmMessage": "您确定要认领案件{{id}}的初审工作吗？认领后您将负责该案件的初步审核。"
+      "confirmMessage": "您确定要认领案件{{id}}的初审工作吗？认领后您将负责该案件的初步审核。",
+      "confirmSuccess": "认领成功"
     },
     "confirmSignDialog": {
       "title": "确认签章",

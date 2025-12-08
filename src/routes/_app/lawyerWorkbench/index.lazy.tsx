@@ -15,10 +15,9 @@ import {
 } from './-components/homeDialogs'
 import { HomeForm } from './-components/homeForm'
 import {
-  CompletedAuctionTable,
   CompletedCasesTable,
-  PendingAuctionExecutionTable,
   PendingClaimCasesTable,
+  PendingInitialReviewTable,
   PendingOfflineExecutionTable,
   PendingRightConfirmationTable
 } from './-components/homeTables'
@@ -69,8 +68,11 @@ function RouteComponent() {
     start_date: '',
     end_date: '',
     country_id: 0,
-    keyword: ''
-  } as SearchParams)
+    keyword: '',
+    reload: 0
+  } as SearchParams & {
+    reload?: number
+  })
 
   const [allDialogVisible, setAllDialogVisible] = useState(false)
   const [tableType, setTableType] = useState(0)
@@ -79,23 +81,11 @@ function RouteComponent() {
     setAllDialogVisible(true)
     setTableType(type)
   }
-
-  const DialogContent = useMemo(() => {
-    switch (tableType) {
-      case 1:
-        return PendingOfflineExecutionTable
-      case 2:
-        return CompletedCasesTable
-      case 3:
-        return PendingClaimCasesTable
-      case 4:
-        return PendingRightConfirmationTable
-      case 5:
-        return PendingAuctionExecutionTable
-      default:
-        return CompletedAuctionTable
+  useEffect(() => {
+    if (!allDialogVisible) {
+      setTableType(0)
     }
-  }, [tableType])
+  }, [allDialogVisible])
 
   // 执行案件弹窗 TODO  and 已完成案件查看
   const [executeCaseData, setExecuteCaseData] = useState({
@@ -106,33 +96,99 @@ function RouteComponent() {
   // 确认认领弹窗
   const [confirmClaimDialogData, setConfirmClaimDialogData] = useState({
     visible: false,
-    data: {}
+    data: {} as lawyerWorkbenchApi.PendingCaseList
   })
-
-  // 确认签章弹窗
-  // const [signDialogData, setSignDialogData] = useState({
-  //   visible: false,
-  //   data: {}
-  // })
 
   // 已完成拍卖案件 => 查看详情弹窗
   const [completedCaseData, setCompletedCaseData] = useState({
     visible: false,
-    data: {}
+    data: {} as lawyerWorkbenchApi.CaseListData
   })
 
   // 待执行拍卖 => 查看详情弹窗
   const [auctionCaseData, setAuctionCaseData] = useState({
     visible: false,
-    data: {}
+    data: {} as lawyerWorkbenchApi.CaseListData
   })
 
   // 已完成案件 => 查看详情弹窗
-
   const [completedEndData, setCompletedEndData] = useState({
     visible: false,
-    data: {}
+    data: {} as lawyerWorkbenchApi.CaseListData
   })
+
+  const pendingClaimCasesEvent = {
+    openConfirmClaimDialog: (data: lawyerWorkbenchApi.PendingCaseList) => {
+      // setAllDialogVisible(false)
+      setConfirmClaimDialogData({ visible: true, data })
+    },
+    openDialog: () => {
+      showTableAllDialog(3)
+    },
+    reload: () => {
+      setFilterParams(prev => ({ ...prev, reload: prev.reload ? prev.reload + 1 : 1 }))
+    }
+  }
+
+  const pendingOfflineExecutionEvent = {
+    openDialog: () => {
+      showTableAllDialog(1)
+    }
+  }
+
+  const pendingRightConfirmationEvent = {
+    openDialog: () => {
+      showTableAllDialog(4)
+    }
+  }
+
+  const completedCasesEvent = {
+    openDialog: () => {
+      showTableAllDialog(2)
+    },
+    openCaseDetailDialog: (data: lawyerWorkbenchApi.CaseListData) =>
+      setCompletedEndData({ visible: true, data })
+  }
+
+  const pendingInitialReviewEvent = {
+    openDialog: () => {
+      showTableAllDialog(0)
+    }
+  }
+
+  const DialogContent = useMemo(() => {
+    switch (tableType) {
+      case 1:
+        return {
+          component: PendingOfflineExecutionTable,
+          props: pendingOfflineExecutionEvent
+        }
+      case 2:
+        return {
+          component: CompletedCasesTable,
+          props: completedCasesEvent
+        }
+      case 3:
+        return {
+          component: PendingClaimCasesTable,
+          props: pendingClaimCasesEvent
+        }
+      case 4: //
+        return {
+          component: PendingRightConfirmationTable,
+          props: pendingRightConfirmationEvent
+        }
+      default: // 5
+        return {
+          component: PendingInitialReviewTable,
+          props: pendingInitialReviewEvent
+        }
+    }
+  }, [tableType])
+
+  const reloadTableData = useCallback(() => {
+    setFilterParams(prev => ({ ...prev, reload: prev.reload ? prev.reload + 1 : 1 }))
+  }, [])
 
   return (
     <div className="lawyer-workbench px-22 py-13 pb-24">
@@ -216,27 +272,29 @@ function RouteComponent() {
       <div className="mt-11 flex flex-col gap-8">
         {/* 待认领案件（初审阶段） */}
         <PendingClaimCasesTable
-          openConfirmClaimDialog={data =>
-            setConfirmClaimDialogData({ visible: true, data })}
-          openDialog={() => showTableAllDialog(3)}
+          {...pendingClaimCasesEvent}
+          searchParams={filterParams}
+        />
+
+        {/* 待初审 */}
+        <PendingInitialReviewTable
+          {...pendingInitialReviewEvent}
           searchParams={filterParams}
         />
 
         {/* 待线下执行案件 */}
         <PendingOfflineExecutionTable
-          openDialog={() => showTableAllDialog(1)}
+          {...pendingOfflineExecutionEvent}
           searchParams={filterParams}
         />
         {/* 待确权案件（线下确认阶段） */}
         <PendingRightConfirmationTable
-          openDialog={() => showTableAllDialog(4)}
+          {...pendingRightConfirmationEvent}
           searchParams={filterParams}
         />
         {/* 已完成案件 */}
         <CompletedCasesTable
-          openCaseDetailDialog={data =>
-            setCompletedEndData({ visible: true, data })}
-          openDialog={() => showTableAllDialog(2)}
+          {...completedCasesEvent}
           searchParams={filterParams}
         />
         {/* 待执行拍卖案件 */}
@@ -256,8 +314,9 @@ function RouteComponent() {
       <TableAllDialog
         visible={allDialogVisible}
         setVisible={setAllDialogVisible}
-        component={DialogContent}
+        component={DialogContent.component}
         title={t('lawyerWorkbench.caseList')}
+        {...DialogContent.props}
       />
       {/* 执行案件操作弹窗 */}
       <ExecuteCaseDialog
@@ -267,12 +326,14 @@ function RouteComponent() {
       />
       {/* 确认认领弹窗 */}
       <ConfirmClaimDialog
+        reloadTable={reloadTableData}
         visible={confirmClaimDialogData.visible}
         setvisible={() =>
           setConfirmClaimDialogData(res => ({
             visible: false,
             data: res.data
           }))}
+        data={confirmClaimDialogData.data}
       />
       {/* 确认签章弹窗 */}
       {/* <ConfirmSignDialog visible={signDialogData.visible} setvisible={() => setSignDialogData(res => ({ visible: false, data: res.data }))} /> */}
@@ -303,7 +364,8 @@ function TableAllDialog({
   visible,
   setVisible,
   component: Component,
-  title
+  title,
+  ...props
 }: {
   visible: boolean
   setVisible: (visible: boolean) => void
@@ -348,7 +410,7 @@ function TableAllDialog({
           filterParams={filterParams}
           setFilterParams={setFilterParams}
         />
-        <Component pagination searchParams={filterParams} />
+        <Component pagination searchParams={filterParams} {...props} />
       </div>
     </CommonDialog>
   )

@@ -1,5 +1,5 @@
 import type { ASSET_STATUS } from '@/enum/asset'
-import type { APPLICATION_STATUS, PENDING_CASE_STATUS } from '@/enum/lawyerWorkbench'
+import type { APPLICATION_STATUS, PENDING_CASE_STATUS, PROCESS_STEP } from '@/enum/lawyerWorkbench'
 import type { DataListResponse, PageRequest } from './responseData'
 import apiClient from './client'
 
@@ -113,7 +113,7 @@ export interface PendingCaseList {
  * 获取待处理案件列表
  * @returns
  */
-export function getPendingCaseList(data: PageInfoRequest) {
+export function getPendingCaseList(data: Omit<PageInfoRequest, 'status'>) {
   return apiClient.post<DataListResponse<PendingCaseList>>('/api/lawFirm/pendingCaseList', data)
 }
 
@@ -211,4 +211,183 @@ export interface PendingCaseListData {
 }
 export function getPendingOfflineList(data: PageInfoRequest) {
   return apiClient.post<DataListResponse<PendingCaseListData>>('/api/lawFirm/pendingOfflineList', data)
+}
+
+/**
+ * 资产认领（认领初审）
+ * @param data 资产提交id
+ * @returns
+ */
+export function claimSubmission(data: {
+  /**
+   * 资产提交id
+   */
+  submission_id: number
+}) {
+  return apiClient.post('/api/lawFirm/claimSubmission', data)
+}
+
+export interface PendingOfflineDetailData {
+  /**
+   * 资产信息
+   */
+  case_info: CaseInfo
+  /**
+   * 联系方式
+   */
+  contacts: Contacts
+  /**
+   * 步骤完成情况
+   */
+  process_steps: ProcessStep[]
+}
+
+/**
+ * 资产信息
+ */
+export interface CaseInfo {
+  /**
+   * 资产编码
+   */
+  case_code: string
+  /**
+   * 创建日期
+   */
+  create_time: string
+  /**
+   * 线下记录id
+   */
+  id: number
+  /**
+   * 地址
+   */
+  property_address: string
+  /**
+   * 名称
+   */
+  property_name: string
+  /**
+   * 异常说明
+   */
+  remake: null
+  /**
+   * 状态 0为已认领 1为材料准备 2：窗口提交 3 信息核验 4盖章确权 5 完成  -1异常
+   */
+  status: PROCESS_STEP
+  /**
+   * 状态说明
+   */
+  status_label: string
+  /**
+   * 提交id
+   */
+  submission_id: number
+  /**
+   * 更新日期
+   */
+  update_time: string
+}
+
+/**
+ * 联系方式
+ */
+export interface Contacts {
+  /**
+   * 资产方联系方式
+   */
+  asset_owner: AssetOwner
+  /**
+   * 律师联系方式
+   */
+  lawyer: Lawyer
+}
+
+/**
+ * 资产方联系方式
+ */
+export interface AssetOwner {
+  name: string
+  phone: string
+}
+
+/**
+ * 律师联系方式
+ */
+export interface Lawyer {
+  name: string
+  phone: string
+}
+
+export interface ProcessStep {
+  /**
+   * 完成时间
+   */
+  create_date?: number
+  /**
+   * 线下处理步骤 1为材料准备 2：窗口提交 3 信息核验 4盖章确权 5 完成  -1异常
+   */
+  type?: PROCESS_STEP
+}
+
+/**
+ * 待线下确认案件详情
+ * @param data 资产提交id
+ * @returns
+ */
+export function getPendingOfflineDetail(data: {
+  /**
+   * 资产提交id
+   */
+  id: number
+}) {
+  return apiClient.post<PendingOfflineDetailData>('/api/lawFirm/pendingOfflineDetail', data)
+}
+
+export interface rejectSubmissionModel {
+  /**
+   * 驳回文件列表
+   */
+  reject_files: {
+    /**
+     * 提交文件id
+     */
+    file_id: number
+    /**
+     * 驳回原因
+     */
+    reject_reason: string
+  }[]
+  /**
+   * 整体驳回原因
+   */
+  reject_reason: string
+  /**
+   * 提交资产id
+   */
+  submission_id: number
+}
+
+/**
+ * 律师初审驳回
+ * @param data  驳回信息
+ * @returns
+ */
+export function lawyerRejectSubmission(data: rejectSubmissionModel) {
+  return apiClient.post('/api/lawFirm/rejectSubmission', data)
+}
+
+/**
+ * 律师初审提交到评估方
+ */
+export function submitToAppraiser(data: {
+  /**
+   * 资产提交id
+   */
+  submission_id: number
+  /**
+   * 备注
+   */
+  remark?: string
+}) {
+  return apiClient.post('/api/lawFirm/submitToAppraiser', data)
 }
