@@ -34,11 +34,11 @@ const AppLawyerWorkbenchCasePendingIndexLazyImport = createFileRoute(
 const AppAsseteAddAsseteIndexLazyImport = createFileRoute(
   '/_app/assete/addAssete/',
 )()
-const AppLawyerWorkbenchOfflineExecutionIdLazyImport = createFileRoute(
-  '/_app/lawyerWorkbench/offlineExecution/$id',
-)()
 const AppLawyerWorkbenchOfflineConfirmationIdLazyImport = createFileRoute(
   '/_app/lawyerWorkbench/offlineConfirmation/$id',
+)()
+const AppLawyerWorkbenchOfflineApprovalIdLazyImport = createFileRoute(
+  '/_app/lawyerWorkbench/offlineApproval/$id',
 )()
 const AppLawyerWorkbenchInitialReviewIdLazyImport = createFileRoute(
   '/_app/lawyerWorkbench/initialReview/$id',
@@ -146,17 +146,6 @@ const AppEvaluationReportManagementIndexRoute =
     getParentRoute: () => AppRoute,
   } as any)
 
-const AppLawyerWorkbenchOfflineExecutionIdLazyRoute =
-  AppLawyerWorkbenchOfflineExecutionIdLazyImport.update({
-    id: '/lawyerWorkbench/offlineExecution/$id',
-    path: '/lawyerWorkbench/offlineExecution/$id',
-    getParentRoute: () => AppRoute,
-  } as any).lazy(() =>
-    import('./routes/_app/lawyerWorkbench/offlineExecution/$id.lazy').then(
-      (d) => d.Route,
-    ),
-  )
-
 const AppLawyerWorkbenchOfflineConfirmationIdLazyRoute =
   AppLawyerWorkbenchOfflineConfirmationIdLazyImport.update({
     id: '/lawyerWorkbench/offlineConfirmation/$id',
@@ -164,6 +153,17 @@ const AppLawyerWorkbenchOfflineConfirmationIdLazyRoute =
     getParentRoute: () => AppRoute,
   } as any).lazy(() =>
     import('./routes/_app/lawyerWorkbench/offlineConfirmation/$id.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const AppLawyerWorkbenchOfflineApprovalIdLazyRoute =
+  AppLawyerWorkbenchOfflineApprovalIdLazyImport.update({
+    id: '/lawyerWorkbench/offlineApproval/$id',
+    path: '/lawyerWorkbench/offlineApproval/$id',
+    getParentRoute: () => AppRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/lawyerWorkbench/offlineApproval/$id.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -273,18 +273,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLawyerWorkbenchInitialReviewIdLazyImport
       parentRoute: typeof AppImport
     }
+    '/_app/lawyerWorkbench/offlineApproval/$id': {
+      id: '/_app/lawyerWorkbench/offlineApproval/$id'
+      path: '/lawyerWorkbench/offlineApproval/$id'
+      fullPath: '/lawyerWorkbench/offlineApproval/$id'
+      preLoaderRoute: typeof AppLawyerWorkbenchOfflineApprovalIdLazyImport
+      parentRoute: typeof AppImport
+    }
     '/_app/lawyerWorkbench/offlineConfirmation/$id': {
       id: '/_app/lawyerWorkbench/offlineConfirmation/$id'
       path: '/lawyerWorkbench/offlineConfirmation/$id'
       fullPath: '/lawyerWorkbench/offlineConfirmation/$id'
       preLoaderRoute: typeof AppLawyerWorkbenchOfflineConfirmationIdLazyImport
-      parentRoute: typeof AppImport
-    }
-    '/_app/lawyerWorkbench/offlineExecution/$id': {
-      id: '/_app/lawyerWorkbench/offlineExecution/$id'
-      path: '/lawyerWorkbench/offlineExecution/$id'
-      fullPath: '/lawyerWorkbench/offlineExecution/$id'
-      preLoaderRoute: typeof AppLawyerWorkbenchOfflineExecutionIdLazyImport
       parentRoute: typeof AppImport
     }
     '/_app/evaluation/reportManagement/': {
@@ -350,8 +350,8 @@ interface AppRouteChildren {
   AppAsseteInfoIdLazyRoute: typeof AppAsseteInfoIdLazyRoute
   AppEvaluationInfoIdLazyRoute: typeof AppEvaluationInfoIdLazyRoute
   AppLawyerWorkbenchInitialReviewIdLazyRoute: typeof AppLawyerWorkbenchInitialReviewIdLazyRoute
+  AppLawyerWorkbenchOfflineApprovalIdLazyRoute: typeof AppLawyerWorkbenchOfflineApprovalIdLazyRoute
   AppLawyerWorkbenchOfflineConfirmationIdLazyRoute: typeof AppLawyerWorkbenchOfflineConfirmationIdLazyRoute
-  AppLawyerWorkbenchOfflineExecutionIdLazyRoute: typeof AppLawyerWorkbenchOfflineExecutionIdLazyRoute
   AppEvaluationReportManagementIndexRoute: typeof AppEvaluationReportManagementIndexRoute
   AppAsseteAddAsseteIndexLazyRoute: typeof AppAsseteAddAsseteIndexLazyRoute
   AppLawyerWorkbenchCasePendingIndexLazyRoute: typeof AppLawyerWorkbenchCasePendingIndexLazyRoute
@@ -371,10 +371,10 @@ const AppRouteChildren: AppRouteChildren = {
   AppEvaluationInfoIdLazyRoute: AppEvaluationInfoIdLazyRoute,
   AppLawyerWorkbenchInitialReviewIdLazyRoute:
     AppLawyerWorkbenchInitialReviewIdLazyRoute,
+  AppLawyerWorkbenchOfflineApprovalIdLazyRoute:
+    AppLawyerWorkbenchOfflineApprovalIdLazyRoute,
   AppLawyerWorkbenchOfflineConfirmationIdLazyRoute:
     AppLawyerWorkbenchOfflineConfirmationIdLazyRoute,
-  AppLawyerWorkbenchOfflineExecutionIdLazyRoute:
-    AppLawyerWorkbenchOfflineExecutionIdLazyRoute,
   AppEvaluationReportManagementIndexRoute:
     AppEvaluationReportManagementIndexRoute,
   AppAsseteAddAsseteIndexLazyRoute: AppAsseteAddAsseteIndexLazyRoute,
@@ -399,8 +399,8 @@ export interface FileRoutesByFullPath {
   '/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
   '/evaluation/info/$id': typeof AppEvaluationInfoIdLazyRoute
   '/lawyerWorkbench/initialReview/$id': typeof AppLawyerWorkbenchInitialReviewIdLazyRoute
+  '/lawyerWorkbench/offlineApproval/$id': typeof AppLawyerWorkbenchOfflineApprovalIdLazyRoute
   '/lawyerWorkbench/offlineConfirmation/$id': typeof AppLawyerWorkbenchOfflineConfirmationIdLazyRoute
-  '/lawyerWorkbench/offlineExecution/$id': typeof AppLawyerWorkbenchOfflineExecutionIdLazyRoute
   '/evaluation/reportManagement': typeof AppEvaluationReportManagementIndexRoute
   '/assete/addAssete': typeof AppAsseteAddAsseteIndexLazyRoute
   '/lawyerWorkbench/casePending': typeof AppLawyerWorkbenchCasePendingIndexLazyRoute
@@ -419,8 +419,8 @@ export interface FileRoutesByTo {
   '/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
   '/evaluation/info/$id': typeof AppEvaluationInfoIdLazyRoute
   '/lawyerWorkbench/initialReview/$id': typeof AppLawyerWorkbenchInitialReviewIdLazyRoute
+  '/lawyerWorkbench/offlineApproval/$id': typeof AppLawyerWorkbenchOfflineApprovalIdLazyRoute
   '/lawyerWorkbench/offlineConfirmation/$id': typeof AppLawyerWorkbenchOfflineConfirmationIdLazyRoute
-  '/lawyerWorkbench/offlineExecution/$id': typeof AppLawyerWorkbenchOfflineExecutionIdLazyRoute
   '/evaluation/reportManagement': typeof AppEvaluationReportManagementIndexRoute
   '/assete/addAssete': typeof AppAsseteAddAsseteIndexLazyRoute
   '/lawyerWorkbench/casePending': typeof AppLawyerWorkbenchCasePendingIndexLazyRoute
@@ -441,8 +441,8 @@ export interface FileRoutesById {
   '/_app/assete/info/$id': typeof AppAsseteInfoIdLazyRoute
   '/_app/evaluation/info/$id': typeof AppEvaluationInfoIdLazyRoute
   '/_app/lawyerWorkbench/initialReview/$id': typeof AppLawyerWorkbenchInitialReviewIdLazyRoute
+  '/_app/lawyerWorkbench/offlineApproval/$id': typeof AppLawyerWorkbenchOfflineApprovalIdLazyRoute
   '/_app/lawyerWorkbench/offlineConfirmation/$id': typeof AppLawyerWorkbenchOfflineConfirmationIdLazyRoute
-  '/_app/lawyerWorkbench/offlineExecution/$id': typeof AppLawyerWorkbenchOfflineExecutionIdLazyRoute
   '/_app/evaluation/reportManagement/': typeof AppEvaluationReportManagementIndexRoute
   '/_app/assete/addAssete/': typeof AppAsseteAddAsseteIndexLazyRoute
   '/_app/lawyerWorkbench/casePending/': typeof AppLawyerWorkbenchCasePendingIndexLazyRoute
@@ -464,8 +464,8 @@ export interface FileRouteTypes {
     | '/assete/info/$id'
     | '/evaluation/info/$id'
     | '/lawyerWorkbench/initialReview/$id'
+    | '/lawyerWorkbench/offlineApproval/$id'
     | '/lawyerWorkbench/offlineConfirmation/$id'
-    | '/lawyerWorkbench/offlineExecution/$id'
     | '/evaluation/reportManagement'
     | '/assete/addAssete'
     | '/lawyerWorkbench/casePending'
@@ -483,8 +483,8 @@ export interface FileRouteTypes {
     | '/assete/info/$id'
     | '/evaluation/info/$id'
     | '/lawyerWorkbench/initialReview/$id'
+    | '/lawyerWorkbench/offlineApproval/$id'
     | '/lawyerWorkbench/offlineConfirmation/$id'
-    | '/lawyerWorkbench/offlineExecution/$id'
     | '/evaluation/reportManagement'
     | '/assete/addAssete'
     | '/lawyerWorkbench/casePending'
@@ -503,8 +503,8 @@ export interface FileRouteTypes {
     | '/_app/assete/info/$id'
     | '/_app/evaluation/info/$id'
     | '/_app/lawyerWorkbench/initialReview/$id'
+    | '/_app/lawyerWorkbench/offlineApproval/$id'
     | '/_app/lawyerWorkbench/offlineConfirmation/$id'
-    | '/_app/lawyerWorkbench/offlineExecution/$id'
     | '/_app/evaluation/reportManagement/'
     | '/_app/assete/addAssete/'
     | '/_app/lawyerWorkbench/casePending/'
@@ -547,8 +547,8 @@ export const routeTree = rootRoute
         "/_app/assete/info/$id",
         "/_app/evaluation/info/$id",
         "/_app/lawyerWorkbench/initialReview/$id",
+        "/_app/lawyerWorkbench/offlineApproval/$id",
         "/_app/lawyerWorkbench/offlineConfirmation/$id",
-        "/_app/lawyerWorkbench/offlineExecution/$id",
         "/_app/evaluation/reportManagement/",
         "/_app/assete/addAssete/",
         "/_app/lawyerWorkbench/casePending/",
@@ -590,12 +590,12 @@ export const routeTree = rootRoute
       "filePath": "_app/lawyerWorkbench/initialReview/$id.lazy.tsx",
       "parent": "/_app"
     },
-    "/_app/lawyerWorkbench/offlineConfirmation/$id": {
-      "filePath": "_app/lawyerWorkbench/offlineConfirmation/$id.lazy.tsx",
+    "/_app/lawyerWorkbench/offlineApproval/$id": {
+      "filePath": "_app/lawyerWorkbench/offlineApproval/$id.lazy.tsx",
       "parent": "/_app"
     },
-    "/_app/lawyerWorkbench/offlineExecution/$id": {
-      "filePath": "_app/lawyerWorkbench/offlineExecution/$id.lazy.tsx",
+    "/_app/lawyerWorkbench/offlineConfirmation/$id": {
+      "filePath": "_app/lawyerWorkbench/offlineConfirmation/$id.lazy.tsx",
       "parent": "/_app"
     },
     "/_app/evaluation/reportManagement/": {

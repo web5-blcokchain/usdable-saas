@@ -784,7 +784,9 @@
       "readAMLTerms": "全文を調べます。 ",
       "amlTerms": "本契約は、評価機関(以下「甲」)とプラットフォーム運営者(以下「乙」)の間で締結されます。甲方は国家の関連法律法規を遵守し、真実で効果的な評価サービスを提供することを承諾します。乙は技術サポートとプラットフォームサービスを提供し、評価プロセスの公正性と透明性を保証します。",
       "platformRegistrationServiceAgreement": "プラットフォーム登録サービス協定",
-      "pleaseAgreePlatformRegistrationServiceAgreement": "同意プラットフォーム登録サービス合意してください"
+      "pleaseAgreePlatformRegistrationServiceAgreement": "同意プラットフォーム登録サービス合意してください",
+      "enterEvaluationTaskCenter": "評価タスク中心に入る",
+      "enterLawyerTaskCenter": "弁護士タスク中心に入る"
     },
     "evaluator": {
       "title": "評価機関登録",
@@ -988,6 +990,8 @@
     "offlineExecutionText": "オフラインで行う実行",
     "search": "検索",
     "searchPlaceholder": "検索キーワードを入力",
+    "SignatureSeal": "しょうしょ権",
+    "checkProgress": "進捗を確認",
     "initialReview": {
       "back": "戻る",
       "fileReviewArea": "ファイル審査エリア",
@@ -1047,12 +1051,35 @@
       "photoCount": "+2枚"
     },
     "offlineExecution": {
+      "certificateNumberPlaceholder": "権利証書番号を入力してください",
+      "certificateNumberError": "権利証書番号を入力してください",
+      "appointmentTimePlaceholder": "予約時間を選択してください",
+      "appointmentTimeError": "予約時間を選択してください",
+      "locationPlaceholder": "手続き場所を入力してください",
+      "locationError": "手続き場所を入力してください",
+      "uploadError": "ファイルをアップロードしてください",
+      "offlineRemarksError": "オフライン処理備考を入力してください",
+      "lawyerNameError": "弁護士名を入力してください",
+      "lawyerPhoneError": "弁護士連絡先を入力してください",
+      "complianceSpecialistNameError": "コンプライアンス専門家の名前を入力してください",
+      "complianceSpecialistPhoneError": "コンプライアンス専門家の連絡先を入力してください",
+      "intermediaryNameError": "仲介業者名を入力してください",
+      "intermediaryPhoneError": "仲介業者の連絡先を入力してください",
+      "ownerNameError": "資産家の氏名を入力してください",
+      "ownerContactError": "資産家の連絡先を入力してください",
+      "agreeDeclarationError": "提出宣言に同意してください",
+      "saveSuccess": "一時保存に成功しました",
+      "submitSuccess": "提出に成功しました",
+      "namePlaceholder": "名前を入力してください",
+      "contactPlaceholder": "連絡先を入力してください",
+      "agree": "私は読み、同意しました",
       "back": "戻る",
       "propertyOwner": "不動産 & 所有者",
       "fileUpload": "書類アップロード",
-      "fileUploadStatus": "完了 0/6",
+      "fileUploadStatus": "完了 {{num}}/{{max}}",
       "missingRequiredFiles": "必須書類不足",
       "pendingUpload": "アップロード待ち",
+      "uploaded": "アップロード済み",
       "uploadPlaceholder": "ドラッグまたはクリックしてアップロード（PDF/JPG/PNG）",
       "offlineRemarks": "オフライン処理備考",
       "offlineRemarksPlaceholder": "例：10:12 番号取得、11:05 書類提出、12:30 受付番号 PD2025-001-889；窓口は11/03 15:00に書類受取を推奨。",
@@ -1104,6 +1131,15 @@
       "caseInfo": "案件情報",
       "basicInfo": "基本情報",
       "offlineExecutionProcess": "オフライン実行プロセス",
+      "status": {
+        "0": "認領済み",
+        "1": "資料準備",
+        "2": "窓口提出",
+        "3": "情報検証",
+        "4": "押印確認",
+        "5": "完了",
+        "-1": "例外"
+      },
       "materialPreparation": "資料準備",
       "windowSubmission": "窓口提出",
       "informationVerification": "情報検証",
@@ -1149,6 +1185,13 @@
       "transactionHash": "トランザクションハッシュ",
       "viewBlockchainRecord": "ブロックチェーン記録を表示"
     },
+    "pendingOfflineExecutionDialog": {
+      "title": "オフライン実行待ち案件を受領",
+      "success": "受領に成功しました",
+      "confirmMessage": "案件{{code}}のオフライン権利確認作業を引き受けますか？ 引き受け後は、当該案件の権利確認業務を担当することになります。",
+      "remark": "備考",
+      "remarkPlaceholder": "備考を入力してください"
+    },
     "auctionDetailDialog": {
       "title": "案件詳細",
       "close": "閉じる",
@@ -1176,7 +1219,27 @@
       "evaluationDate": "評価日",
       "reportNumber": "レポート番号",
       "evaluationMethod": "評価方法",
-      "relatedDocuments": "関連書類"
+      "relatedDocuments": "関連書類",
+      "lawyerLicenseVerified": "弁護士执业証認証済み"
+    },
+    "casePending": {
+      "status": {
+        "0": "未申請",
+        "1": "処理中",
+        "2": "承認済み",
+        "3": "例外"
+      },
+      "step": "ステップ {{step}}",
+      "exceptionReport": "異常/障害報告",
+      "exceptionReportDesc": "説明：窓口での受理拒否など、資料に関連する状況の場合、ここで異常状況を報告できます",
+      "exceptionReportPlaceholder": "異常状況を入力してください...",
+      "submitExceptionReport": "異常報告を提出",
+      "contactPersonInfo": "連絡先情報",
+      "taskNumber": "タスク番号",
+      "applicationStatus": "申請ステータス",
+      "enterProcessing": "処理に進む",
+      "title": "保留中の案件",
+      "description": "担当するすべての法務案件の進捗と詳細を管理します"
     }
   },
   "user": {

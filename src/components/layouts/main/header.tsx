@@ -18,7 +18,7 @@ import { Badge, Button, Dropdown, Menu } from 'antd'
 let lastCheckTokenTime = 0
 export default function MainHeader() {
   const { userData } = useUserStore()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
   const { authenticated, user, getAccessToken, logout } = usePrivy()
@@ -115,7 +115,7 @@ export default function MainHeader() {
           ? userData?.user?.type === USER_TYPE.LAWYER
           : true
     )
-  }, [userData])
+  }, [userData, i18n.language])
 
   const [logoutLoading, setLogoutLoading] = useState(false)
   const {

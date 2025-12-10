@@ -1,8 +1,10 @@
 import type { TimelineItemProps } from 'antd/lib'
 import { getPendingOfflineDetail } from '@/api/lawyerWorkbenchApi'
+import { NoContent } from '@/components/common/NoContent'
 import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, Link, useParams } from '@tanstack/react-router'
 import { Timeline } from 'antd'
+import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 
 export const Route = createLazyFileRoute(
@@ -17,73 +19,60 @@ function RouteComponent() {
     from: '/_app/lawyerWorkbench/offlineConfirmation/$id'
   }) as { id: string }
 
-  const { data: _pendingOfflineDetailData, isPending } = useQuery({
+  const { data: pendingOfflineDetailData, isPending } = useQuery({
     queryKey: ['pendingOfflineDetail', caseId],
     queryFn: async () => {
-      const res = await getPendingOfflineDetail({ id: Number(caseId) })
+      const res = await getPendingOfflineDetail({
+        submission_id: Number(caseId)
+      })
       return res.data
     },
     enabled: !!caseId
   })
 
-  const asseteData = [
-    {
-      title: t('lawyerWorkbench.offlineConfirmation.propertyAddress'),
-      value: '上海·花园苑二区 3-1-402'
-    },
-    {
-      title: t('lawyerWorkbench.offlineConfirmation.propertyCertificateNumber'),
-      value: '沪房权证 2024-123456'
-    },
-    {
-      title: t('lawyerWorkbench.offlineConfirmation.assetParty'),
-      value: '张三'
-    },
-    {
-      title: t('lawyerWorkbench.offlineConfirmation.contactNumber'),
-      value: '186-0000-0000'
-    },
-    {
-      title: t('lawyerWorkbench.offlineConfirmation.serviceWindow'),
-      value: '浦东政务服务中心 2号窗口'
-    },
-    {
-      title: t('lawyerWorkbench.offlineConfirmation.appointmentTime'),
-      value: '2025-11-01 10:00'
-    }
-  ]
+  const asseteData = useMemo(() => {
+    return [
+      {
+        title: t('lawyerWorkbench.offlineConfirmation.propertyAddress'),
+        value: pendingOfflineDetailData?.case_info?.property_address || '-'
+      },
+      // {
+      //   title: t(
+      //     'lawyerWorkbench.offlineConfirmation.propertyCertificateNumber'
+      //   ),
+      //   value: '沪房权证 2024-123456',
+      // },
+      {
+        title: t('lawyerWorkbench.offlineConfirmation.assetParty'),
+        value: pendingOfflineDetailData?.contacts?.asset_owner?.name || '-'
+      },
+      {
+        title: t('lawyerWorkbench.offlineConfirmation.contactNumber'),
+        value: pendingOfflineDetailData?.contacts?.asset_owner?.phone || '-'
+      },
+      // {
+      //   title: t('lawyerWorkbench.offlineConfirmation.serviceWindow'),
+      //   value: pendingOfflineDetailData?.service_window?.name || '-',
+      // },
+      {
+        title: t('lawyerWorkbench.completedCaseDetailDialog.submissionTime'),
+        value: pendingOfflineDetailData?.case_info?.create_time || '-'
+      }
+    ]
+  }, [pendingOfflineDetailData])
 
-  const stepData = [
-    {
-      title: t('lawyerWorkbench.offlineConfirmation.materialPreparation'),
-      content: t(
-        'lawyerWorkbench.offlineConfirmation.materialPreparationContent'
-      ),
-      endTime: '2025-10-28 15:30'
-    },
-    {
-      title: t('lawyerWorkbench.offlineConfirmation.windowSubmission'),
-      content: t('lawyerWorkbench.offlineConfirmation.windowSubmissionContent'),
-      endTime: ''
-    },
-    {
-      title: t('lawyerWorkbench.offlineConfirmation.informationVerification'),
-      content: t(
-        'lawyerWorkbench.offlineConfirmation.informationVerificationContent'
-      ),
-      endTime: ''
-    },
-    {
-      title: t('lawyerWorkbench.offlineConfirmation.sealConfirmation'),
-      content: t('lawyerWorkbench.offlineConfirmation.sealConfirmationContent'),
-      endTime: ''
-    },
-    {
-      title: t('lawyerWorkbench.offlineConfirmation.completion'),
-      content: t('lawyerWorkbench.offlineConfirmation.completionContent'),
-      endTime: ''
-    }
-  ]
+  const stepData = useMemo(() => {
+    return (
+      pendingOfflineDetailData?.process_steps?.map(item => ({
+        title: t(
+          `lawyerWorkbench.offlineConfirmation.status.${item.type || '-1'}`
+        ),
+        endTime: item?.create_date
+          ? dayjs((item?.create_date || 0) * 1000).format('YYYY-MM-DD HH:mm')
+          : ''
+      })) || []
+    )
+  }, [pendingOfflineDetailData, t])
 
   const stepIcon = (step: number, status: number) => {
     switch (status) {
@@ -127,7 +116,7 @@ function RouteComponent() {
             >
               {item.title}
             </div>
-            <div
+            {/* <div
               className={cn(
                 'text-sm mt-1',
                 item.endTime || (index > 0 && !!stepData[index - 1].endTime)
@@ -136,7 +125,7 @@ function RouteComponent() {
               )}
             >
               {item.content}
-            </div>
+            </div> */}
             {item.endTime && (
               <div className="mt-1 text-xs text-#00E5FF font-400">
                 {t('lawyerWorkbench.offlineConfirmation.completionTime')}
@@ -161,28 +150,31 @@ function RouteComponent() {
   }, [stepData])
 
   if (isPending) {
-    return <Waiting for={!isPending} className="h-200 fcc" />
+    return <Waiting for={!isPending} className="h-100 fcc" />
   }
 
   return (
     <div className="px-22 py-13">
       <div className="w-full">
-        <Link to="/lawyerWorkbench" className="w-fit fcc gap-1 clickable">
+        <Link
+          to="/lawyerWorkbench/casePending"
+          className="w-fit fcc gap-1 clickable"
+        >
           <div className="i-ic:round-arrow-back text-6 text-white"></div>
           <div>{t('lawyerWorkbench.offlineConfirmation.backToList')}</div>
         </Link>
       </div>
       <div className="mt-2">
         <div className="fyc gap-2 text-10 font-600">
-          <div>上海花园苑二区</div>
+          <div>{pendingOfflineDetailData?.case_info?.property_name || '-'}</div>
           <div className="text-#00E5FF">
-            {t('lawyerWorkbench.offlineConfirmation.executing')}
+            {t(`lawyerWorkbench.casePending.status.${pendingOfflineDetailData?.case_info?.status || 0}`)}
           </div>
         </div>
         <div className="mt-1 text-sm text-#9CA3AF">
-          {' '}
-          {t('lawyerWorkbench.offlineConfirmation.task')}
-          -2025-XXX-001
+          {/* {' '}
+          {t('lawyerWorkbench.offlineConfirmation.task')} */}
+          {pendingOfflineDetailData?.case_info?.case_code || '-'}
         </div>
       </div>
       <div className="mt-8 rounded-3 bg-#161B22 p-6">
@@ -209,6 +201,7 @@ function RouteComponent() {
         </div>
         <div className="mt-9">
           <Timeline items={timeLine}></Timeline>
+          {stepData.length === 0 && <NoContent />}
         </div>
       </div>
     </div>

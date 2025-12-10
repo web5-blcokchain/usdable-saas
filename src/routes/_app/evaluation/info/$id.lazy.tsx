@@ -27,7 +27,7 @@ function RouteComponent() {
   const { t } = useTranslation()
 
   // 资产详情
-  const { data: assetInfo, isFetching } = useQuery({
+  const { data: assetInfo, isPending } = useQuery({
     queryKey: ['getEvaluationDetail', assetId],
     queryFn: async () => {
       const res = await assetsApi.getAssetInfo(assetId)
@@ -63,9 +63,9 @@ function RouteComponent() {
           <div className="i-ic:round-arrow-back text-6 text-white"></div>
           <div className="text-2xl font-600">{t('evaluation.info.back')}</div>
         </div>
-        {false
+        {isPending
           ? (
-              <Spin spinning={isFetching} className="h-200 fcc"></Spin>
+              <Spin spinning={isPending} className="h-200 fcc"></Spin>
             )
           : (
               <div>

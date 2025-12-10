@@ -22,8 +22,8 @@ export const useMessageStore = create<MessageStore>(set => ({
       pageSize: '10'
     })
     set({
-      messages: res.data?.list || [],
-      unReadCount: res.data?.unread || 0
+      messages: res?.data?.list || [],
+      unReadCount: res?.data?.unread || 0
     })
   }
 }))

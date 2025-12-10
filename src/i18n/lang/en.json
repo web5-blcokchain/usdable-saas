@@ -784,7 +784,9 @@
       "readAMLTerms": "Read",
       "amlTerms": "This agreement is jointly signed by the evaluation institution (hereinafter referred to as \"Party A\") and the platform operator (hereinafter referred to as \"Party B\")... Party A undertakes to comply with relevant national laws and regulations and provide true and effective evaluation services... Party B is responsible for providing technical support and platform services to ensure the fairness and transparency of the evaluation process...",
       "platformRegistrationServiceAgreement": "Platform Registration Service Agreement",
-      "pleaseAgreePlatformRegistrationServiceAgreement": "Please agree to the Platform Registration Service Agreement"
+      "pleaseAgreePlatformRegistrationServiceAgreement": "Please agree to the Platform Registration Service Agreement",
+      "enterEvaluationTaskCenter": "Enter Evaluation Task Center",
+      "enterLawyerTaskCenter": "Enter Lawyer Task Center"
     },
     "evaluator": {
       "title": "Evaluator Institution Registration",
@@ -988,6 +990,8 @@
     "offlineExecutionText": "Offline Execution",
     "search": "Search",
     "searchPlaceholder": "Search for cases",
+    "SignatureSeal": "Signature and seal",
+    "checkProgress": "Check Progress",
     "initialReview": {
       "back": "Back",
       "fileReviewArea": "File Review Area",
@@ -1046,12 +1050,35 @@
       "photoCount": "+2 photos"
     },
     "offlineExecution": {
+      "certificateNumberPlaceholder": "Please enter certificate number",
+      "certificateNumberError": "Please enter certificate number",
+      "appointmentTimePlaceholder": "Please select appointment time",
+      "appointmentTimeError": "Please select appointment time",
+      "locationPlaceholder": "Please enter location",
+      "locationError": "Please enter location",
+      "uploadError": "Please upload file",
+      "offlineRemarksError": "Please enter offline remarks",
+      "lawyerNameError": "Please enter lawyer name",
+      "lawyerPhoneError": "Please enter lawyer contact info",
+      "complianceSpecialistNameError": "Please enter compliance specialist name",
+      "complianceSpecialistPhoneError": "Please enter compliance specialist contact info",
+      "intermediaryNameError": "Please enter intermediary name",
+      "intermediaryPhoneError": "Please enter intermediary contact info",
+      "ownerNameError": "Please enter asset party name",
+      "ownerContactError": "Please enter asset party contact info",
+      "agreeDeclarationError": "Please agree to the submission declaration",
+      "saveSuccess": "Saved successfully",
+      "submitSuccess": "Submitted successfully",
+      "namePlaceholder": "Please enter name",
+      "contactPlaceholder": "Please enter contact info",
+      "agree": "I have read and agree to",
       "back": "Back",
       "propertyOwner": "Property & Owner",
       "fileUpload": "File Upload for Processing",
-      "fileUploadStatus": "Completed 0/6",
+      "fileUploadStatus": "Completed {{num}}/{{max}}",
       "missingRequiredFiles": "Missing Required Files",
       "pendingUpload": "Pending Upload",
+      "uploaded": "Uploaded",
       "uploadPlaceholder": "Drag or click to upload (PDF/JPG/PNG)",
       "offlineRemarks": "Offline Processing Remarks",
       "offlineRemarksPlaceholder": "Example: 10:12 Get queue number, 11:05 Submit materials, 12:30 Receipt number PD2025-001-889; Window suggests picking up documents on 11/03 at 15:00.",
@@ -1103,6 +1130,15 @@
       "caseInfo": "Case Information",
       "basicInfo": "Basic Information",
       "offlineExecutionProcess": "Offline Execution Process",
+      "status": {
+        "0": "Claimed",
+        "1": "Material Preparation",
+        "2": "Window Submission",
+        "3": "Information Verification",
+        "4": "Seal Confirmation",
+        "5": "Completion",
+        "-1": "Exception"
+      },
       "materialPreparation": "Material Preparation",
       "windowSubmission": "Window Submission",
       "informationVerification": "Information Verification",
@@ -1148,6 +1184,13 @@
       "transactionHash": "Transaction Hash",
       "viewBlockchainRecord": "View Blockchain Record"
     },
+    "pendingOfflineExecutionDialog": {
+      "title": "Claim Pending Offline Execution Case",
+      "success": "Claimed Successfully",
+      "confirmMessage": "Are you sure you want to claim the offline verification work for case {{code}}? After claiming, you will be responsible for the verification operations of this case.",
+      "remark": "Remark",
+      "remarkPlaceholder": "Enter remark"
+    },
     "auctionDetailDialog": {
       "title": "Case Details",
       "close": "Close",
@@ -1175,7 +1218,27 @@
       "evaluationDate": "Evaluation Date",
       "reportNumber": "Report Number",
       "evaluationMethod": "Evaluation Method",
-      "relatedDocuments": "Related Documents"
+      "relatedDocuments": "Related Documents",
+      "lawyerLicenseVerified": "Lawyer License Verified"
+    },
+    "casePending": {
+      "status": {
+        "0": "Not Applied",
+        "1": "Processing",
+        "2": "Approved",
+        "3": "Exception"
+      },
+      "step": "Step {{step}}",
+      "exceptionReport": "Exception/Obstruction Report",
+      "exceptionReportDesc": "Note: Report exceptions here, such as refusal of acceptance by the window or other material-related issues.",
+      "exceptionReportPlaceholder": "Please enter exception details...",
+      "submitExceptionReport": "Submit Exception Report",
+      "contactPersonInfo": "Contact Information",
+      "taskNumber": "Task Number",
+      "applicationStatus": "Application Status",
+      "enterProcessing": "Process",
+      "title": "Pending Cases",
+      "description": "Manage progress and details of all legal cases you are responsible for"
     }
   },
   "user": {

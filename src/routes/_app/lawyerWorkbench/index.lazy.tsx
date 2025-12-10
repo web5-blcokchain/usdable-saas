@@ -7,11 +7,10 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  AuctionDetailDialog,
-  CaseDetailDialog,
   CompletedCaseDetailDialog,
   ConfirmClaimDialog,
-  ExecuteCaseDialog
+  ExecuteCaseDialog,
+  PendingOfflineExecutionDialog
 } from './-components/homeDialogs'
 import { HomeForm } from './-components/homeForm'
 import {
@@ -99,20 +98,17 @@ function RouteComponent() {
     data: {} as lawyerWorkbenchApi.PendingCaseList
   })
 
-  // 已完成拍卖案件 => 查看详情弹窗
-  const [completedCaseData, setCompletedCaseData] = useState({
-    visible: false,
-    data: {} as lawyerWorkbenchApi.CaseListData
-  })
-
-  // 待执行拍卖 => 查看详情弹窗
-  const [auctionCaseData, setAuctionCaseData] = useState({
-    visible: false,
-    data: {} as lawyerWorkbenchApi.CaseListData
-  })
-
   // 已完成案件 => 查看详情弹窗
   const [completedEndData, setCompletedEndData] = useState({
+    visible: false,
+    data: {} as lawyerWorkbenchApi.CaseListData
+  })
+
+  // 待线下执行案件 => 领取弹窗
+  const [
+    pendingOfflineExecutionDialogData,
+    setPendingOfflineExecutionDialogData
+  ] = useState({
     visible: false,
     data: {} as lawyerWorkbenchApi.CaseListData
   })
@@ -126,13 +122,19 @@ function RouteComponent() {
       showTableAllDialog(3)
     },
     reload: () => {
-      setFilterParams(prev => ({ ...prev, reload: prev.reload ? prev.reload + 1 : 1 }))
+      setFilterParams(prev => ({
+        ...prev,
+        reload: prev.reload ? prev.reload + 1 : 1
+      }))
     }
   }
 
   const pendingOfflineExecutionEvent = {
     openDialog: () => {
       showTableAllDialog(1)
+    },
+    openClaimDialog: (data: lawyerWorkbenchApi.CaseListData) => {
+      setPendingOfflineExecutionDialogData({ visible: true, data })
     }
   }
 
@@ -187,7 +189,10 @@ function RouteComponent() {
   }, [tableType])
 
   const reloadTableData = useCallback(() => {
-    setFilterParams(prev => ({ ...prev, reload: prev.reload ? prev.reload + 1 : 1 }))
+    setFilterParams(prev => ({
+      ...prev,
+      reload: prev.reload ? prev.reload + 1 : 1
+    }))
   }, [])
 
   return (
@@ -297,18 +302,6 @@ function RouteComponent() {
           {...completedCasesEvent}
           searchParams={filterParams}
         />
-        {/* 待执行拍卖案件 */}
-        {/* <PendingAuctionExecutionTable
-          openAuctionDetailDialog={data =>
-            setAuctionCaseData({ visible: true, data })}
-          openDialog={() => showTableAllDialog(5)}
-        /> */}
-        {/* 已完成拍卖案件 */}
-        {/* <CompletedAuctionTable
-          openCaseDetailDialog={data =>
-            setCompletedCaseData({ visible: true, data })}
-          openDialog={() => showTableAllDialog(6)}
-        /> */}
       </div>
       {/* 展示所有的案件分类全部列表弹窗 */}
       <TableAllDialog
@@ -335,25 +328,23 @@ function RouteComponent() {
           }))}
         data={confirmClaimDialogData.data}
       />
-      {/* 确认签章弹窗 */}
-      {/* <ConfirmSignDialog visible={signDialogData.visible} setvisible={() => setSignDialogData(res => ({ visible: false, data: res.data }))} /> */}
-      {/* 已完成拍卖案件 => 查看详情弹窗 */}
-      <CaseDetailDialog
-        visible={completedCaseData.visible}
+      {/* 待线下执行案件 => 确认认领弹窗 */}
+      <PendingOfflineExecutionDialog
+        visible={pendingOfflineExecutionDialogData.visible}
         setvisible={() =>
-          setCompletedCaseData(res => ({ visible: false, data: res.data }))}
-      />
-      {/* 待执行拍卖案件 => 查看详情弹窗 */}
-      <AuctionDetailDialog
-        visible={auctionCaseData.visible}
-        setvisible={() =>
-          setAuctionCaseData(res => ({ visible: false, data: res.data }))}
+          setPendingOfflineExecutionDialogData(res => ({
+            visible: false,
+            data: res.data
+          }))}
+        data={pendingOfflineExecutionDialogData.data}
+        reloadTable={reloadTableData}
       />
       {/* 已完成案件 => 查看详情弹窗 */}
       <CompletedCaseDetailDialog
         visible={completedEndData.visible}
         setvisible={() =>
           setCompletedEndData(res => ({ visible: false, data: res.data }))}
+        data={completedEndData.data}
       />
     </div>
   )
@@ -377,8 +368,11 @@ function TableAllDialog({
     start_date: '',
     end_date: '',
     country_id: 0,
-    keyword: ''
-  } as SearchParams)
+    keyword: '',
+    reload: 0
+  } as SearchParams & {
+    reload?: number
+  })
 
   const onCancel = () => {
     setVisible(false)
@@ -389,6 +383,13 @@ function TableAllDialog({
       keyword: ''
     })
   }
+
+  const reloadTableData = useCallback(() => {
+    setFilterParams(prev => ({
+      ...prev,
+      reload: prev.reload ? prev.reload + 1 : 1
+    }))
+  }, [])
 
   return (
     <CommonDialog
@@ -410,7 +411,11 @@ function TableAllDialog({
           filterParams={filterParams}
           setFilterParams={setFilterParams}
         />
-        <Component pagination searchParams={filterParams} {...props} />
+        <Component
+          pagination
+          searchParams={filterParams}
+          {...{ ...props, reloadTable: reloadTableData }}
+        />
       </div>
     </CommonDialog>
   )

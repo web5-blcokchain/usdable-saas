@@ -34,6 +34,10 @@ export function getDashboardStatistics() {
  */
 export interface CaseListResponse {
   /**
+   * 联系人
+   */
+  appraiser: string
+  /**
    * 图片
    */
   asset_image?: string[]

@@ -1,6 +1,13 @@
 import type { TimelineItemProps } from 'antd/lib'
-import { createLazyFileRoute, Link } from '@tanstack/react-router'
+import {
+  getPendingOfflineDetail,
+  submitOfflineIssue
+} from '@/api/lawyerWorkbenchApi'
+import { NoContent } from '@/components/common/NoContent'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { createLazyFileRoute, Link, useNavigate, useParams } from '@tanstack/react-router'
 import { Button, Card, Input, Timeline } from 'antd'
+import dayjs from 'dayjs'
 
 export const Route = createLazyFileRoute(
   '/_app/lawyerWorkbench/casePending/info/$id'
@@ -10,38 +17,37 @@ export const Route = createLazyFileRoute(
 
 function RouteComponent() {
   const { t } = useTranslation()
+  const { id: caseId } = useParams({
+    from: '/_app/lawyerWorkbench/casePending/info/$id'
+  }) as { id: string }
+  const navigate = useNavigate()
 
-  const stepData = [
-    {
-      title: t('lawyerWorkbench.offlineConfirmation.materialPreparation'),
-      content: t(
-        'lawyerWorkbench.offlineConfirmation.materialPreparationContent'
-      ),
-      endTime: '2025-10-28 15:30'
-    },
-    {
-      title: t('lawyerWorkbench.offlineConfirmation.windowSubmission'),
-      content: t('lawyerWorkbench.offlineConfirmation.windowSubmissionContent'),
-      endTime: ''
-    },
-    {
-      title: t('lawyerWorkbench.offlineConfirmation.informationVerification'),
-      content: t(
-        'lawyerWorkbench.offlineConfirmation.informationVerificationContent'
-      ),
-      endTime: ''
-    },
-    {
-      title: t('lawyerWorkbench.offlineConfirmation.sealConfirmation'),
-      content: t('lawyerWorkbench.offlineConfirmation.sealConfirmationContent'),
-      endTime: ''
-    },
-    {
-      title: t('lawyerWorkbench.offlineConfirmation.completion'),
-      content: t('lawyerWorkbench.offlineConfirmation.completionContent'),
-      endTime: ''
+  useEffect(() => {
+    if (!caseId) {
+      navigate({ to: '/lawyerWorkbench' })
     }
-  ]
+  }, [caseId])
+
+  const { data: pendingOfflineDetailData, isPending } = useQuery({
+    queryKey: ['pendingOfflineDetail', caseId],
+    queryFn: async () => {
+      const res = await getPendingOfflineDetail({
+        submission_id: Number(caseId)
+      })
+      return res.data
+    },
+    enabled: !!caseId
+  })
+  const stepData = useMemo(() => {
+    return (
+      pendingOfflineDetailData?.process_steps?.map(item => ({
+        title: t(`lawyerWorkbench.offlineConfirmation.status.${item.type || '-1'}`),
+        endTime: item?.create_date
+          ? dayjs((item?.create_date || 0) * 1000).format('YYYY-MM-DD HH:mm')
+          : ''
+      })) || []
+    )
+  }, [pendingOfflineDetailData, t])
 
   const stepIcon = (step: number, status: number) => {
     switch (status) {
@@ -65,7 +71,7 @@ function RouteComponent() {
         )
     }
   }
-
+  // 时间线
   const timeLine: TimelineItemProps[] = useMemo(() => {
     return stepData.map((item, index) => {
       return {
@@ -85,7 +91,7 @@ function RouteComponent() {
             >
               {item.title}
             </div>
-            <div
+            {/* <div
               className={cn(
                 'text-sm mt-2',
                 item.endTime || (index > 0 && !!stepData[index - 1].endTime)
@@ -94,7 +100,7 @@ function RouteComponent() {
               )}
             >
               {item.content}
-            </div>
+            </div> */}
             {item.endTime && (
               <div className="mt-2 text-xs text-#00E5FF font-400">
                 {t('lawyerWorkbench.offlineConfirmation.completionTime')}
@@ -118,68 +124,125 @@ function RouteComponent() {
     })
   }, [stepData])
 
+  // 手机号隐藏，展示前三位和后三位
+  const hidePhone = (phone: string) => {
+    if (!phone) {
+      return '-'
+    }
+    return phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
+  }
+
+  const [errorContent, setErrorContent] = useState('')
+  const { mutateAsync: submitOfflineIssueData, isPending: isSubmitPending }
+    = useMutation({
+      mutationKey: ['submitOfflineIssue', caseId],
+      mutationFn: async () => {
+        return await submitOfflineIssue({
+          id: Number(pendingOfflineDetailData?.case_info.id || 0),
+          remark: errorContent
+        })
+      },
+      onSuccess: (res) => {
+        if (res?.code === 1) {
+          toast.success(t('lawyerWorkbench.offlineExecution.submitSuccess'))
+        }
+      }
+    })
+
+  if (isPending) {
+    return <Waiting for={!isPending} className="h-100 fccc" />
+  }
+
   return (
     <div className="px-22 py-13 text-white">
       {/* 返回 */}
-      <Link
-        to="/lawyerWorkbench/casePending"
-        className="w-fit fcc gap-1 clickable"
-      >
+      <Link to="/lawyerWorkbench" className="w-fit fcc gap-1 clickable">
         <div className="i-ic:round-arrow-back text-6 text-white"></div>
-        <span>返回案件列表</span>
+        <span>{t('lawyerWorkbench.offlineConfirmation.backToList')}</span>
       </Link>
 
       {/* 标题 */}
       <h2 className="mb-1 mt-7 text-2xl font-600">
-        上海花园苑二区 · 线下执行中
+        {pendingOfflineDetailData?.case_info?.property_name || ''}
+        {' '}
+        ·
+        {' '}
+        {t('lawyerWorkbench.offlineConfirmation.executing')}
       </h2>
-      <p className="text-base text-#8B949E font-400">任务号：2025-XXX-001</p>
+      <p className="text-base text-#8B949E font-400">
+        {t('lawyerWorkbench.casePending.taskNumber')}
+        ：
+        {pendingOfflineDetailData?.case_info?.case_code || '-'}
+      </p>
 
       {/* 案件信息 */}
       <Card className="mb-8 mt-8 border border-[#30363D] bg-[#0D1117] text-#E5E7EB">
-        <div className="text-xl text-white font-600">案件信息</div>
+        <div className="text-xl text-white font-600">
+          {t('lawyerWorkbench.offlineConfirmation.caseInfo')}
+        </div>
         <div className="grid grid-cols-3 mt-6 gap-4">
           <div>
-            <div className="mb-1 text-#8B949E">房产地址</div>
-            <div>上海 · 花园苑二区 3—1—402</div>
+            <div className="mb-1 text-#8B949E">
+              {t('lawyerWorkbench.offlineConfirmation.propertyAddress')}
+            </div>
+            <div>
+              {pendingOfflineDetailData?.case_info?.property_address || '-'}
+            </div>
           </div>
-          <div>
+          {/* <div>
             <div className="mb-1 text-#8B949E">产权证号</div>
-            <div>沪房权证 2024-123456</div>
-          </div>
+            <div>{'-'}</div>
+          </div> */}
           <div>
-            <div className="mb-1 text-#8B949E">资产方</div>
-            <div>张三</div>
+            <div className="mb-1 text-#8B949E">
+              {t('lawyerWorkbench.offlineConfirmation.assetParty')}
+            </div>
+            <div>
+              {pendingOfflineDetailData?.contacts?.asset_owner?.name || '-'}
+            </div>
           </div>
         </div>
       </Card>
 
       {/* 线下执行流程 */}
       <Card className="mt-8 border border-[#30363D] bg-[#0D1117] text-#D1D5DB">
-        <div className="mb-6 text-xl font-600">线下执行流程</div>
+        <div className="mb-6 text-xl font-600">
+          {t('lawyerWorkbench.offlineConfirmation.offlineExecutionProcess')}
+        </div>
         <Timeline items={timeLine}></Timeline>
+        {stepData.length === 0 && <NoContent />}
       </Card>
 
       {/* 异常/阻碍上报 */}
       <Card className="mb-6 mt-16 border border-[#30363D] bg-[#0D1117] text-gray-300">
         <div className="mb-3 flex items-center gap-2">
           <div className="i-mdi:alert text-xl text-red-400" />
-          <span className="text-lg font-bold">异常/阻碍上报</span>
+          <span className="text-lg font-bold">
+            {t('lawyerWorkbench.casePending.exceptionReport')}
+          </span>
         </div>
 
         <p className="mb-3 text-gray-400">
-          说明：如窗口拒绝受理等材料相关情况，可在此上报异常情况
+          {t('lawyerWorkbench.casePending.exceptionReportDesc')}
         </p>
 
         <Input.TextArea
           rows={5}
-          placeholder="请输入异常情况..."
+          placeholder={t(
+            'lawyerWorkbench.casePending.exceptionReportPlaceholder'
+          )}
+          value={errorContent}
+          onChange={e => setErrorContent(e.currentTarget?.value)}
           className="border border-[#2a2d33] text-white !bg-#161B22"
           autoSize={{ minRows: 3, maxRows: 5 }}
         />
 
-        <Button className="mt-4 h-10 w-full rounded border-none bg-red-600 text-base text-white hover:bg-red-700">
-          提交异常报告
+        <Button
+          onClick={() => submitOfflineIssueData?.()}
+          loading={isSubmitPending}
+          className="mt-4 h-10 w-full rounded border-none bg-red-600 text-base text-white hover:bg-red-700"
+        >
+          {t('lawyerWorkbench.casePending.submitExceptionReport')}
         </Button>
       </Card>
 
@@ -187,17 +250,31 @@ function RouteComponent() {
       <Card className="border border-[#2a2d33] bg-[#111418] text-gray-300">
         <div className="mb-3 flex items-center gap-2">
           <div className="i-mdi:account-box text-xl text-[#00E4FF]" />
-          <span className="text-lg font-bold">联系人信息</span>
+          <span className="text-lg font-bold">
+            {t('lawyerWorkbench.casePending.contactPersonInfo')}
+          </span>
         </div>
 
         <div>
           <div className="flex justify-between border-b border-[#2a2d33] py-4">
-            <span>资产方</span>
-            <span>张三 139xxxx898</span>
+            <span>{t('lawyerWorkbench.offlineConfirmation.assetParty')}</span>
+            <span>
+              {pendingOfflineDetailData?.contacts?.asset_owner?.name || '-'}
+              {' '}
+              {hidePhone(
+                pendingOfflineDetailData?.contacts?.asset_owner?.phone || ''
+              )}
+            </span>
           </div>
           <div className="flex justify-between py-4">
-            <span>律师</span>
-            <span>王工 137xxxx2233</span>
+            <span>{t('lawyerWorkbench.offlineExecution.lawyer')}</span>
+            <span>
+              {pendingOfflineDetailData?.contacts?.lawyer?.name || '-'}
+              {' '}
+              {hidePhone(
+                pendingOfflineDetailData?.contacts?.lawyer?.phone || ''
+              )}
+            </span>
           </div>
         </div>
       </Card>

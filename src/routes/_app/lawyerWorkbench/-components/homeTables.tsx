@@ -4,9 +4,9 @@ import * as lawyerWorkbenchApi from '@/api/lawyerWorkbenchApi'
 import { CommonTable } from '@/components/common/common-table'
 import { ASSET_STATUS } from '@/enum/asset'
 import { PENDING_CASE_STATUS } from '@/enum/lawyerWorkbench'
-import { formatNumberNoRound } from '@/utils/number'
+import { useCommonStore } from '@/stores/common'
 import { useQuery } from '@tanstack/react-query'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 
 // 1为待初审 6为待线下认领 7线下已认领 8 已提交线下资料
@@ -208,7 +208,7 @@ export function PendingInitialReviewTable({
       key: 'user'
     },
     {
-      title: t('lawyerWorkbench.uploadDate'),
+      title: t('lawyerWorkbench.submitDate'),
       dataIndex: 'update_time',
       key: 'update_time',
       render: text => <div>{dayjs(text ?? '').format('YYYY-MM-DD')}</div>
@@ -264,13 +264,14 @@ export function PendingInitialReviewTable({
 export function PendingOfflineExecutionTable({
   pagination,
   openDialog,
-  searchParams
+  searchParams,
+  openClaimDialog
 }: // openExecuteCase
 {
   pagination?: boolean
   openDialog?: () => void
   searchParams?: SearchParams
-  // openExecuteCase?: (data: any) => void
+  openClaimDialog: (data: lawyerWorkbenchApi.CaseListData) => void
 }) {
   const { t } = useTranslation()
   const columns: ColumnsType<lawyerWorkbenchApi.CaseListData> = [
@@ -291,8 +292,8 @@ export function PendingOfflineExecutionTable({
     },
     {
       title: t('lawyerWorkbench.reservationDate'),
-      dataIndex: 'create_time',
-      key: 'create_time',
+      dataIndex: 'update_time',
+      key: 'update_time',
       render: text => <div>{dayjs(text).format('YYYY-MM-DD')}</div>
     },
     {
@@ -305,20 +306,9 @@ export function PendingOfflineExecutionTable({
       key: 'action',
       render: (_, record) => (
         <div className="fyc gap-2">
-          <Link
-            to="/lawyerWorkbench/offlineExecution/$id"
-            params={{ id: `${record.id}` }}
-          >
-            <div className="c lickable">
-              {t('lawyerWorkbench.offlineExecutionText')}
-            </div>
-          </Link>
-          <Link
-            to="/lawyerWorkbench/offlineConfirmation/$id"
-            params={{ id: `${record.id}` }}
-          >
-            <div>{t('lawyerWorkbench.view')}</div>
-          </Link>
+          <div onClick={() => openClaimDialog(record)} className="clickable">
+            {t('lawyerWorkbench.execute')}
+          </div>
         </div>
       )
     }
@@ -397,6 +387,16 @@ export function PendingRightConfirmationTable({
     )
   }
 
+  const { setCaseListData } = useCommonStore()
+  const navigate = useNavigate()
+  const toCasePendingInfo = (record: lawyerWorkbenchApi.CaseListData) => {
+    setCaseListData(record)
+    navigate({
+      to: '/lawyerWorkbench/offlineApproval/$id',
+      params: { id: `${record.id}` }
+    })
+  }
+
   const columns: ColumnsType<lawyerWorkbenchApi.CaseListData> = [
     {
       title: t('lawyerWorkbench.caseId'),
@@ -415,8 +415,8 @@ export function PendingRightConfirmationTable({
     },
     {
       title: t('lawyerWorkbench.submitDate'),
-      dataIndex: 'create_time',
-      key: 'create_time',
+      dataIndex: 'update_time',
+      key: 'update_time',
       render: text => <div>{dayjs(text).format('YYYY-MM-DD')}</div>
     },
     {
@@ -429,12 +429,19 @@ export function PendingRightConfirmationTable({
       title: t('lawyerWorkbench.action'),
       key: 'action',
       render: (_, record) => (
-        <Link
-          to="/lawyerWorkbench/offlineConfirmation/$id"
-          params={{ id: `${record.id}` }}
-        >
-          <div className="clickable">{t('lawyerWorkbench.signAndConfirm')}</div>
-        </Link>
+        <div className="fcc gap-2">
+          <div onClick={() => toCasePendingInfo(record)} className="clickable">
+            {t('lawyerWorkbench.SignatureSeal')}
+          </div>
+          <Link
+            to="/lawyerWorkbench/casePending/info/$id"
+            params={{ id: `${record.id}` }}
+          >
+            <div className="clickable">
+              {t('lawyerWorkbench.checkProgress')}
+            </div>
+          </Link>
+        </div>
       )
     }
   ]
@@ -470,7 +477,7 @@ export function CompletedCasesTable({
 }: {
   pagination?: boolean
   openDialog?: () => void
-  openCaseDetailDialog?: (data: any) => void
+  openCaseDetailDialog?: (data: lawyerWorkbenchApi.CaseListData) => void
   searchParams?: SearchParams
 }) {
   const { t } = useTranslation()
@@ -530,268 +537,7 @@ export function CompletedCasesTable({
         pagination={pagination}
         searchParams={searchParams}
         columns={columns}
-        status={PENDING_CASE_STATUS.OFFLINE_DOCUMENT_SUBMITTED}
-      />
-    </div>
-  )
-}
-
-// 待执行拍卖案件
-export function PendingAuctionExecutionTable({
-  pagination,
-  openDialog,
-  openAuctionDetailDialog
-}: {
-  pagination?: boolean
-  openDialog?: () => void
-  openAuctionDetailDialog?: (data: any) => void
-}) {
-  const { t } = useTranslation()
-  const data = [
-    {
-      id: '#CAS20230567',
-      address: '北京朝阳区',
-      user: '李华',
-      createTime: '2025-05-06',
-      province: '北京',
-      status: 2
-    },
-    {
-      id: '#CAS20230566',
-      address: '北京朝阳区',
-      user: '李华',
-      createTime: '2025-05-06',
-      province: '北京',
-      status: 3
-    },
-    {
-      id: '#CAS20230565',
-      address: '北京朝阳区',
-      user: '李华',
-      createTime: '2025-05-06',
-      province: '北京',
-      status: 3
-    }
-  ]
-  const pageInfo = {
-    pageSize: 10,
-    total: 100,
-    show: true
-  }
-  const columns: ColumnsType<(typeof data)[0]> = [
-    {
-      title: t('lawyerWorkbench.caseId'),
-      dataIndex: 'id',
-      key: 'id'
-    },
-    {
-      title: t('lawyerWorkbench.propertyName'),
-      dataIndex: 'address',
-      key: 'address'
-    },
-    {
-      title: t('lawyerWorkbench.submitter'),
-      dataIndex: 'user',
-      key: 'user'
-    },
-    {
-      title: t('lawyerWorkbench.submitDate'),
-      dataIndex: 'createTime',
-      key: 'createTime',
-      render: text => <div>{dayjs(text).format('YYYY-MM-DD')}</div>
-    },
-    {
-      title: t('lawyerWorkbench.status'),
-      dataIndex: 'status',
-      key: 'status',
-      render: status => (
-        <div
-          className={cn(
-            'w-fit h-fit px-2 py-1 rounded-2 text-xs ',
-            status === 2
-              ? 'bg-#EB45451A text-#F87171'
-              : 'bg-#3B7FF51A text-#60A5FA'
-          )}
-        >
-          {status === 2
-            ? t('lawyerWorkbench.pendingExecution')
-            : t('lawyerWorkbench.executing')}
-        </div>
-      )
-    },
-    {
-      title: t('lawyerWorkbench.action'),
-      key: 'action',
-      render: (_, record) => (
-        <div className="fyc gap-3">
-          <div className="clickable">
-            {record.status === 2
-              ? t('lawyerWorkbench.claimTask')
-              : t('lawyerWorkbench.uploadContract')}
-          </div>
-          <div
-            className="clickable"
-            onClick={() =>
-              openAuctionDetailDialog && openAuctionDetailDialog(record.status)}
-          >
-            {t('lawyerWorkbench.viewDetails')}
-          </div>
-        </div>
-      )
-    }
-  ]
-  return (
-    <div>
-      <div className="fyc justify-between gap-3">
-        <div className="text-xl">{t('lawyerWorkbench.auctionTasks')}</div>
-        {!pagination && (
-          <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">
-            {t('lawyerWorkbench.viewAll')}
-          </div>
-        )}
-      </div>
-      <CommonTable
-        data={data}
-        columns={columns}
-        className="mt-4 overflow-hidden b-t-0 rounded-b-2 text-#E5E7EB"
-        pagination={pagination ? pageInfo : false}
-        tableConfig={
-          {
-            borderColor: '#1f2122'
-          } as any
-        }
-      />
-    </div>
-  )
-}
-
-// 已完成拍卖案件
-export function CompletedAuctionTable({
-  pagination,
-  openDialog,
-  openCaseDetailDialog
-}: {
-  pagination?: boolean
-  openDialog?: () => void
-  openCaseDetailDialog?: (data: any) => void
-}) {
-  const { t } = useTranslation()
-  const data = [
-    {
-      id: '#CAS20230567',
-      address: '北京朝阳区',
-      user: '李华',
-      createTime: '2025-05-06',
-      province: '北京',
-      status: 4,
-      price: 12500000
-    },
-    {
-      id: '#CAS20230566',
-      address: '北京朝阳区',
-      user: '李华',
-      createTime: '2025-05-06',
-      province: '北京',
-      status: 5,
-      price: 12500000
-    },
-    {
-      id: '#CAS20230565',
-      address: '北京朝阳区',
-      user: '李华',
-      createTime: '2025-05-06',
-      province: '北京',
-      status: 5,
-      price: 12500000
-    }
-  ]
-  const pageInfo = {
-    pageSize: 10,
-    total: 100,
-    show: true
-  }
-  const columns: ColumnsType<(typeof data)[0]> = [
-    {
-      title: t('lawyerWorkbench.caseId'),
-      dataIndex: 'id',
-      key: 'id'
-    },
-    {
-      title: t('lawyerWorkbench.propertyName'),
-      dataIndex: 'address',
-      key: 'address'
-    },
-    {
-      title: t('lawyerWorkbench.auctionPrice'),
-      dataIndex: 'price',
-      key: 'price',
-      render: text => (
-        <div>
-          $
-          {formatNumberNoRound(text, 6, 0)}
-        </div>
-      )
-    },
-    {
-      title: t('lawyerWorkbench.auctionDate'),
-      dataIndex: 'createTime',
-      key: 'createTime',
-      render: text => <div>{dayjs(text).format('YYYY-MM-DD')}</div>
-    },
-    {
-      title: t('lawyerWorkbench.status'),
-      dataIndex: 'status',
-      key: 'status',
-      render: status => (
-        <div
-          className={cn(
-            'w-fit h-fit px-2 py-1 rounded-2 text-xs ',
-            status === 4
-              ? 'bg-#EB45451A text-#F87171'
-              : 'bg-#3B7FF51A text-#60A5FA'
-          )}
-        >
-          {status === 4
-            ? t('lawyerWorkbench.allocating')
-            : t('lawyerWorkbench.allocationCompleted')}
-        </div>
-      )
-    },
-    {
-      title: t('lawyerWorkbench.action'),
-      key: 'action',
-      render: (_, record) => (
-        <div
-          className="clickable"
-          onClick={() => openCaseDetailDialog && openCaseDetailDialog(record)}
-        >
-          查看详情
-        </div>
-      )
-    }
-  ]
-  return (
-    <div>
-      <div className="fyc justify-between gap-3">
-        <div className="text-xl">
-          {t('lawyerWorkbench.completedAuctionCases')}
-        </div>
-        {!pagination && (
-          <div onClick={openDialog} className="text-xs text-#E5E7EB clickable">
-            {t('lawyerWorkbench.viewAll')}
-          </div>
-        )}
-      </div>
-      <CommonTable
-        data={data}
-        columns={columns}
-        className="mt-4 overflow-hidden b-t-0 rounded-b-2 text-#E5E7EB"
-        pagination={pagination ? pageInfo : false}
-        tableConfig={
-          {
-            borderColor: '#1f2122'
-          } as any
-        }
+        status={PENDING_CASE_STATUS.COMPLETED}
       />
     </div>
   )

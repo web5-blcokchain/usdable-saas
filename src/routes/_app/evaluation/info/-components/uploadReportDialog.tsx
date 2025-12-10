@@ -181,11 +181,11 @@ export function UploadReportDialog({
     const checkForm = await formData
       .validateFields()
       .then(() => {
-        return true
+        return Promise.resolve(true)
       })
       .catch(() => {
         toast.error(t('common.formDataError'))
-        return false
+        return Promise.resolve(false)
       })
     // 手动调用表单检测
     if (type === 1 && !checkForm) {

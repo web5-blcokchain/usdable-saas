@@ -1020,6 +1020,8 @@
     "offlineExecutionText": "线下办理执行",
     "search": "搜索",
     "searchPlaceholder": "请输入搜索内容",
+    "SignatureSeal": "签章确权",
+    "checkProgress": "查看进度",
     "initialReview": {
       "back": "返回",
       "fileReviewArea": "文件审核区",
@@ -1078,12 +1080,35 @@
       "photoCount": "张"
     },
     "offlineExecution": {
+      "certificateNumberPlaceholder": "请输入权属证号",
+      "certificateNumberError": "请输入权属证号",
+      "appointmentTimePlaceholder": "请选择预约时间",
+      "appointmentTimeError": "请选择预约时间",
+      "locationPlaceholder": "请输入办理地点",
+      "locationError": "请输入办理地点",
+      "uploadError": "请上传文件",
+      "offlineRemarksError": "请输入办理备注",
+      "lawyerNameError": "请输入律师姓名",
+      "lawyerPhoneError": "请输入律师联系方式",
+      "complianceSpecialistNameError": "请输入合规专员姓名",
+      "complianceSpecialistPhoneError": "请输入合规专员联系方式",
+      "intermediaryNameError": "请输入中介姓名",
+      "intermediaryPhoneError": "请输入中介联系方式",
+      "ownerNameError": "请输入资产方姓名",
+      "ownerContactError": "请输入资产方联系方式",
+      "agreeDeclarationError": "请同意提交声明",
+      "saveSuccess": "暂存成功",
+      "submitSuccess": "提交成功",
+      "namePlaceholder": "请输入姓名",
+      "contactPlaceholder": "请输入联系方式",
+      "agree": "我已阅读并同意",
       "back": "返回",
       "propertyOwner": "不动产 & 业主",
       "fileUpload": "办理文件上传",
-      "fileUploadStatus": "已完成 0/6",
+      "fileUploadStatus": "已完成 {{num}}/{{max}}",
       "missingRequiredFiles": "缺少必需文件",
       "pendingUpload": "待上传",
+      "uploaded": "已上传",
       "uploadPlaceholder": "拖拽或点击上传 （PDF/JPG/PNG）",
       "offlineRemarks": "线下办理备注",
       "offlineRemarksPlaceholder": "示例:10:12 取号，11:05 提交材料，12:30 受理回执号 PD2025-001-889;窗口建议 11/03 15:00 领取证件。",
@@ -1136,6 +1161,15 @@
       "caseInfo": "案件信息",
       "basicInfo": "基本信息",
       "offlineExecutionProcess": "线下执行流程",
+      "status": {
+        "0": "已认领",
+        "1": "材料准备",
+        "2": "窗口递交",
+        "3": "信息核验",
+        "4": "盖章确权",
+        "5": "完成",
+        "-1": "异常"
+      },
       "materialPreparation": "材料准备",
       "windowSubmission": "窗口递交",
       "informationVerification": "信息核验",
@@ -1181,6 +1215,13 @@
       "transactionHash": "交易哈希",
       "viewBlockchainRecord": "查看区块链记录"
     },
+    "pendingOfflineExecutionDialog": {
+      "title": "领取待线下执行案件",
+      "success": "领取成功",
+      "confirmMessage": "您确定要认领案件{{code}}的线下确权工作吗？认领后您将负责该案件的确权操作。",
+      "remark": "备注",
+      "remarkPlaceholder": "请输入备注"
+    },
     "auctionDetailDialog": {
       "title": "案件详情",
       "close": "关闭",
@@ -1208,7 +1249,27 @@
       "evaluationDate": "评估日期",
       "reportNumber": "报告编号",
       "evaluationMethod": "评估方法",
-      "relatedDocuments": "相关文件"
+      "relatedDocuments": "相关文件",
+      "lawyerLicenseVerified": "执业证已验证"
+    },
+    "casePending": {
+      "status": {
+        "0": "未申请",
+        "1": "处理中",
+        "2": "已通过",
+        "3": "异常"
+      },
+      "step": "第{{step}}步",
+      "exceptionReport": "异常/阻碍上报",
+      "exceptionReportDesc": "说明：如窗口拒绝受理等材料相关情况，可在此上报异常情况",
+      "exceptionReportPlaceholder": "请输入异常情况...",
+      "submitExceptionReport": "提交异常报告",
+      "contactPersonInfo": "联系人信息",
+      "taskNumber": "任务号",
+      "applicationStatus": "申请状态",
+      "enterProcessing": "进入处理",
+      "title": "案件待办",
+      "description": "管理您负责的所有法律案件进度和详情"
     }
   },
   "user": {

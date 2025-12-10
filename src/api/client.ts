@@ -38,13 +38,13 @@ axios.interceptors.response.use(async (res: ResponseData<any>) => {
   let fullUrl = ''
   const config = (res as any).config
   // 不需要验证的api
-  // const noAuthApiList = ['/api/user/getRegisterInfo', '/api/appraiser/reportDetail']
+  const noAuthApiList = ['/api/lawFirm/viewOfflineMaterials', '/api/appraiser/reportDetail']
   if (config)
     fullUrl = config.url
   if ((code === 401 && fullUrl.includes('/api/user/getRegisterInfo'))) {
     return res.data
   }
-  else if ((code === 0 && fullUrl.includes('/api/appraiser/reportDetail'))) {
+  else if (code === 0 && noAuthApiList.some(item => fullUrl.includes(item))) {
     return res.data
   }
   else if (code === 401 || res?.data?.msg === 'Expired token') {

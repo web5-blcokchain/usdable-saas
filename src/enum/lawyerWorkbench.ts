@@ -15,7 +15,11 @@ export enum PENDING_CASE_STATUS {
   /**
    * 已提交线下资料
    */
-  OFFLINE_DOCUMENT_SUBMITTED = 8
+  OFFLINE_DOCUMENT_SUBMITTED = 8,
+  /**
+   * 已完成
+   */
+  COMPLETED = 9
 }
 /**
  * 申请状态 0为未申请 1为处理中 2为已通过 3为异常

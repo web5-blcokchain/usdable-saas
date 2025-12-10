@@ -119,6 +119,14 @@ export function getPendingCaseList(data: Omit<PageInfoRequest, 'status'>) {
 
 export interface CaseListData {
   /**
+   * 申请人
+   */
+  proposer: string
+  /**
+   * 申请人手机号
+   */
+  proposer_mobile: string
+  /**
    * 图片
    */
   asset_image: string[]
@@ -338,7 +346,8 @@ export function getPendingOfflineDetail(data: {
   /**
    * 资产提交id
    */
-  id: number
+  id?: number | string
+  submission_id?: number | string
 }) {
   return apiClient.post<PendingOfflineDetailData>('/api/lawFirm/pendingOfflineDetail', data)
 }
@@ -390,4 +399,295 @@ export function submitToAppraiser(data: {
   remark?: string
 }) {
   return apiClient.post('/api/lawFirm/submitToAppraiser', data)
+}
+
+/**
+ * 领取线下执行案件
+ */
+export function claimOfflineSubmission(data: {
+  /**
+   * 资产提交id
+   */
+  submission_id: number
+  /**
+   * 备注
+   */
+  remark: string
+}) {
+  return apiClient.post('/api/lawFirm/claimOfflineSubmission', data)
+}
+
+export interface SubmitOfflineMaterialsModel {
+  /**
+   * 异常/阻塞上报 ✅
+   */
+  anomaly_report?: string
+  /**
+   * 预约时间 ✅
+   */
+  appointment_time?: string
+  /**
+   * 合规专员姓名 ✅
+   */
+  compliance_specialist_name?: string
+  /**
+   * 合规专员电话 ✅
+   */
+  compliance_specialist_phone?: string
+  /**
+   * 业主联系方式 ✅
+   */
+  contact_method?: string
+  /**
+   * 合同盖章版本文件 ✅
+   */
+  contract_with_seal?: string
+  /**
+   * 费用发票/缴费凭证 ✅
+   */
+  expense_invoice?: string
+  /**
+   * 中介名称 ✅
+   */
+  intermediary_name?: string
+  /**
+   * 中介联系方式 ✅
+   */
+  intermediary_phone?: string
+  /**
+   * 律师姓名 ✅
+   */
+  lawyer_name?: string
+  /**
+   * 律师联系方式 ✅
+   */
+  lawyer_phone?: string
+  /**
+   * 线下办理备注 ✅
+   */
+  offline_processing_notes?: string
+  /**
+   * 线下办理现场照片 ✅
+   */
+  offline_processing_photos?: string
+  /**
+   * 他项权证/登记证明文件 ✅
+   */
+  other_rights_certificate?: string
+  /**
+   * 业主复印件 ✅
+   */
+  owner_id_copy?: string
+  /**
+   * 业主名称 ✅
+   */
+  owner_name?: string
+  /**
+   * 办理地点 ✅
+   */
+  processing_location?: string
+  /**
+   * 权属证号 ✅
+   */
+  property_certificate_number?: string
+  /**
+   * 登记受理回执文件 ✅
+   */
+  registration_acceptance_receipt?: string
+  /**
+   * 妆台 传0或者不传为暂存 1为提交
+   */
+  status?: string
+  /**
+   * 提交资产id
+   */
+  submission_id?: string
+}
+export function submitOfflineMaterials(data: SubmitOfflineMaterialsModel) {
+  return apiClient.post('/api/lawFirm/submitOfflineMaterials', data)
+}
+
+export interface ViewOfflineMaterialsData {
+  completed_documents_count: number
+  /**
+   * 联系人
+   */
+  contacts: Contacts
+  /**
+   * 文件
+   */
+  files: File[]
+  /**
+   * 备注
+   */
+  notes: Notes
+  /**
+   * 资产信息
+   */
+  property: Property
+  /**
+   * 状态 0为暂存 1为已提交
+   */
+  status: number
+  /**
+   * 提交资产Id
+   */
+  submission_id: number
+  total_documents_count: number
+
+}
+
+/**
+ * 联系人
+ */
+export interface Contacts {
+  /**
+   * 资产方
+   */
+  asset_contact: AssetContact
+  /**
+   * 合规专员
+   */
+  compliance_specialist: ComplianceSpecialist
+  /**
+   * 中介
+   */
+  intermediary: Intermediary
+  /**
+   * 律师
+   */
+  lawyer: Lawyer
+
+}
+
+/**
+ * 资产方
+ */
+export interface AssetContact {
+  id: number
+  name: string
+  phone: string
+
+}
+
+/**
+ * 合规专员
+ */
+export interface ComplianceSpecialist {
+  id: number
+  /**
+   * 名称
+   */
+  name: string
+  /**
+   * 联系方式
+   */
+  phone: string
+
+}
+
+/**
+ * 中介
+ */
+export interface Intermediary {
+  id: number
+  name: string
+  phone: string
+
+}
+
+/**
+ * 律师
+ */
+export interface Lawyer {
+  id: number
+  /**
+   * 名称
+   */
+  name: string
+  /**
+   * 联系方式
+   */
+  phone: string
+}
+
+export interface File {
+  files: string[]
+  key: string
+  label: string
+  status: number
+
+}
+
+/**
+ * 备注
+ */
+export interface Notes {
+  /**
+   * 异常/阻塞上报
+   */
+  anomaly_report: string
+  /**
+   * 线下办理备注
+   */
+  offline_processing_notes: string
+
+}
+
+/**
+ * 资产信息
+ */
+export interface Property {
+  /**
+   * 预约时间
+   */
+  appointment_time: number
+  /**
+   * 预约时间
+   */
+  appointment_time_text: string
+  /**
+   * 联系方式
+   */
+  contact_method: string
+  /**
+   * 名称
+   */
+  name: string
+  /**
+   * 业主名称
+   */
+  owner_name: string
+  /**
+   * 办理地点
+   */
+  processing_location: string
+  /**
+   * 权属证号
+   */
+  property_certificate_number: string
+
+}
+/**
+ * 获取线下执行案件详情
+ * @param data
+ * @returns
+ */
+export function getViewOfflineMaterials(data: {
+  submission_id: string | number
+}) {
+  return apiClient.post<ViewOfflineMaterialsData>('/api/lawFirm/viewOfflineMaterials', data)
+}
+
+export function submitOfflineIssue(data: {
+  /**
+   * 资产提交id
+   */
+  id: number
+  /**
+   * 备注
+   */
+  remark: string
+}) {
+  return apiClient.post('/api/lawFirm/submitOfflineIssue', data)
 }

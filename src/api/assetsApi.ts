@@ -419,6 +419,64 @@ export interface AssetInfo {
    * 模板文件相关信息
    */
   template_files: TemplateFile[]
+  /**
+   * 评估报告
+   */
+  appraiser_report_info: AppraiserReportInfo[]
+  /**
+   * 律师信息
+   */
+  law_info: LawInfo[]
+}
+
+export interface LawInfo {
+  /**
+   * 律师名称
+   */
+  law_name: string
+  /**
+   * 执业证编号
+   */
+  lawyer_license_no: string
+  /**
+   * 事务所名称
+   */
+  lawyer_name: string
+  /**
+   * 执业年限
+   */
+  lawyer_practice_years: string
+  /**
+   * 专业领域
+   */
+  specialty: string
+}
+
+export interface AppraiserReportInfo {
+  /**
+   * 评估日期
+   */
+  appraise_date: string
+  /**
+   * 评估方法
+   */
+  appraise_method: string
+  /**
+   * 评估价
+   */
+  appraise_value_cny: string
+  /**
+   * 机构名称
+   */
+  appraiser_company: string
+  /**
+   * 评估师名称
+   */
+  appraiser_name: string
+  /**
+   * 编号
+   */
+  asset_code: string
 }
 
 /**
