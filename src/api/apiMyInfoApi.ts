@@ -332,7 +332,7 @@ export interface UserRegisterModel {
   /**
    * 姓名/企业全称/机构名称 /主办律师名称
    */
-  nickname?: string[]
+  nickname?: string
   /**
    * 机构介绍/办公场所照片 （type=4 必填）
    */

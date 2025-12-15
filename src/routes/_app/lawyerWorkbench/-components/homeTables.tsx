@@ -95,10 +95,9 @@ export function PendingClaimCasesTable({
       key: 'asset_name'
     },
     {
-      // TODO
       title: t('lawyerWorkbench.applicant'),
-      dataIndex: 'user',
-      key: 'user'
+      dataIndex: 'proposer',
+      key: 'proposer'
     },
     {
       title: t('lawyerWorkbench.uploadDate'),
@@ -202,10 +201,9 @@ export function PendingInitialReviewTable({
       key: 'asset_name'
     },
     {
-      // TODO
       title: t('lawyerWorkbench.applicant'),
-      dataIndex: 'user',
-      key: 'user'
+      dataIndex: 'proposer',
+      key: 'proposer'
     },
     {
       title: t('lawyerWorkbench.submitDate'),
@@ -287,8 +285,8 @@ export function PendingOfflineExecutionTable({
     },
     {
       title: t('lawyerWorkbench.applicant'),
-      dataIndex: 'user',
-      key: 'user'
+      dataIndex: 'proposer',
+      key: 'proposer'
     },
     {
       title: t('lawyerWorkbench.reservationDate'),
@@ -410,8 +408,8 @@ export function PendingRightConfirmationTable({
     },
     {
       title: t('lawyerWorkbench.applicant'),
-      dataIndex: 'user',
-      key: 'user'
+      dataIndex: 'proposer',
+      key: 'proposer'
     },
     {
       title: t('lawyerWorkbench.submitDate'),
@@ -495,8 +493,8 @@ export function CompletedCasesTable({
     },
     {
       title: t('lawyerWorkbench.applicant'),
-      dataIndex: 'user',
-      key: 'user'
+      dataIndex: 'proposer',
+      key: 'proposer'
     },
     {
       title: t('lawyerWorkbench.completionDate'),

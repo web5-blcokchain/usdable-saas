@@ -72,6 +72,11 @@
     "fileSizeError": "ファイルサイズは {{size}} を超えません",
     "submitSuccess": "提出成功"
   },
+  "contract": {
+    "insufficient_balance": "現在の USDC 残高が不足しています",
+    "wallet_not_connected": "ウォレットを接続してください",
+    "contract_call_failed": "コントラクト呼び出しに失敗しました"
+  },
   "header": {
     "login": "ログイン",
     "profile": "プロフィール",
@@ -1153,7 +1158,8 @@
       "completionTime": "完了時間",
       "currentStep": "現在のステップ",
       "executing": "オフライン実行中",
-      "task": "タスク"
+      "task": "タスク",
+      "applicationProgressSteps": "申請推進手順です"
     },
     "executeCaseDialog": {
       "title": "案件実行操作",

@@ -10,7 +10,7 @@ import { useMessageStore } from '@/stores/message'
 import { useUserStore } from '@/stores/user'
 import { showToastOnce } from '@/utils/toast'
 import { clearToken, getToken, setToken } from '@/utils/user'
-import { usePrivy, useUser } from '@privy-io/react-auth'
+import { usePrivy, useUser, useWallets } from '@privy-io/react-auth'
 import { useMutation } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Badge, Button, Dropdown, Menu } from 'antd'
@@ -260,19 +260,19 @@ export default function MainHeader() {
         else {
           // 获取失败退出登陆
           handleLogout()
-          showToastOnce(t('common.token_expired'), 'warning')
+          showToastOnce(t('common.tokenExpired'), 'warning')
         }
       }
       else if (!token) {
         handleLogout()
-        showToastOnce(t('common.token_expired'), 'warning')
+        showToastOnce(t('common.tokenExpired'), 'warning')
       }
     }
     catch (error) {
       console.log('获取token失败', error)
       // 重新获取token失败，重新登录
       handleLogout()
-      showToastOnce(t('common.token_expired'), 'warning')
+      showToastOnce(t('common.tokenExpired'), 'warning')
     }
   }
   useEffect(() => {
@@ -303,6 +303,12 @@ export default function MainHeader() {
     if (userData?.user?.id)
       getUnReadMessageCount()
   }, [getUnReadMessageCount])
+
+  const { connectWallet } = usePrivy()
+  const { wallets } = useWallets()
+  const userWallet = useMemo(() => {
+    return wallets.find(wallet => wallet.walletClientType !== 'privy')
+  }, [wallets])
 
   return (
     <header className="sticky left-0 top-0 z-99 bg-#0c0f13">
@@ -364,6 +370,23 @@ export default function MainHeader() {
                         </div>
                       </div>
                     </Dropdown>
+                    {/* 连接钱包 */}
+                    {!userWallet?.address
+                      ? (
+                          <Button className="ml-2" onClick={connectWallet}>
+                            {t('user.setting.connectWallet')}
+                          </Button>
+                        )
+                      : (
+                          <div className="ml-2 fcc gap-1">
+                            <div className="i-humbleicons:link bg-white"></div>
+                            <div>
+                              {userWallet?.address.slice(0, 6)}
+                              ...
+                              {userWallet?.address.slice(-6)}
+                            </div>
+                          </div>
+                        )}
                   </div>
                 )}
             {authenticated && !userData?.user?.id && (

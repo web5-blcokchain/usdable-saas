@@ -679,6 +679,11 @@ export function getViewOfflineMaterials(data: {
   return apiClient.post<ViewOfflineMaterialsData>('/api/lawFirm/viewOfflineMaterials', data)
 }
 
+/**
+ * 提交异常
+ * @param data 异常内容
+ * @returns
+ */
 export function submitOfflineIssue(data: {
   /**
    * 资产提交id
@@ -690,4 +695,16 @@ export function submitOfflineIssue(data: {
   remark: string
 }) {
   return apiClient.post('/api/lawFirm/submitOfflineIssue', data)
+}
+
+/**
+ * 修改案件处理步骤
+ * @param data 修改内容
+ * @returns
+ */
+export function updateOfflineStep(data: {
+  id: number
+  status: PROCESS_STEP
+}) {
+  return apiClient.post('/api/lawFirm/updateOfflineStep', data)
 }

@@ -34,7 +34,7 @@ axios.interceptors.request.use(
 let errorList: { message: string, time: number }[] = []
 axios.interceptors.response.use(async (res: ResponseData<any>) => {
   const code = res.data.code || 0
-  // 401 账户不存在不需要提示，因为是强制跳转创建账号页面 TODO Expired token
+  // 401 账户不存在不需要提示，因为是强制跳转创建账号页面
   let fullUrl = ''
   const config = (res as any).config
   // 不需要验证的api

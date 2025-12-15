@@ -31,12 +31,12 @@ export const envConfig = {
   blockExplorerUrl: import.meta.env.VITE_PUBLIC_WEB_BLOCK_URL,
 
   // USDC 合约地址
-  usdcAddress: import.meta.env.VITE_APP_USDC_ADDRESS,
+  mockUsdcAddress: import.meta.env.VITE_PUBLIC_MOCK_USDC,
+  usdcAddress: import.meta.env.VITE_PUBLIC_ARBITRUM_SEPOLIA_USDC,
 
   // 合约地址
-  rentCustodyAddress: import.meta.env.VITE_PUBLIC_RENT_CUSTODY_CONTRACT_ADDRESS,
-  redemptionManagerAddress: import.meta.env.VITE_PUBLIC_REDEMPTION_MANAGER_ADDRESS, // 赎回合约
-  treasuryAddress: import.meta.env.VITE_PUBLIC_TREASURY_ADDRESS, // 国库合约
-  tradeContract: import.meta.env.VITE_PUBLIC_TRADE_CONTRACT_ADDRESS, // 交易合约
-  defaultPayTokenName: import.meta.env.VITE_APP_PAY_TOKEN_NAME // 默认支付代币名称
+  rentCustodyAddress: import.meta.env.VITE_PUBLIC_RENT_CUSTODY_CONTRACT,
+
+  // 是否切换正式USDC地址
+  checkOfficial: import.meta.env.VITE_PUBLIC_CHECK_OFFICIAL
 }

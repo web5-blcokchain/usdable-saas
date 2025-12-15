@@ -837,7 +837,7 @@ export interface Properties {
   /**
    * 资产图片
    */
-  image_urls: null
+  image_urls: string
   /**
    * 初始份额
    */
@@ -1007,6 +1007,10 @@ export interface RentPaymentDetails {
    */
   next_rent_date: string
   /**
+   * 下一个交租月份
+   */
+  next_rent_month: string
+  /**
    * 历史缴纳记录
    */
   payment_history: string[]
@@ -1175,7 +1179,7 @@ export default {
        * 总房产
        */
       total_properties: number
-    }>('/api/assetsinfo/saveRentIncome', data)
+    }>('/api/assetsInfo/saveRentIncome', data)
   },
   /**
    * 资产租金支付详情

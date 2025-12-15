@@ -303,6 +303,13 @@ function RouteComponent() {
         return []
     }
   }
+
+  // 查看上传文件是否是图片
+  function isFileOrImg(formName: string) {
+    const file = getFileUrl(formName)?.[0]
+    return ['.png', '.jpg', '.jpge'].includes(file)
+  }
+
   // 文件是否上传全部
   const isUploadAll = useMemo(() => {
     return fileNameList.every(item => getFileUrl(item.name).length > 0)
@@ -398,7 +405,7 @@ function RouteComponent() {
     }).then((res) => {
       if (res.code === 1) {
         toast.success(
-          !status
+          status === undefined
             ? t('lawyerWorkbench.offlineExecution.saveSuccess')
             : t('lawyerWorkbench.offlineExecution.submitSuccess')
         )
@@ -532,7 +539,11 @@ function RouteComponent() {
                       maxLength={1}
                       width="100%"
                       height={
-                        getFileUrl(item.name).length === 0 ? '9rem' : '20rem'
+                        getFileUrl(item.name).length === 0
+                          ? '9rem'
+                          : isFileOrImg(item.name)
+                            ? '20rem'
+                            : '6rem'
                       }
                       loading={uploadFileLoading.includes(item.name)}
                       removeFile={(_index) => {
@@ -790,7 +801,7 @@ function RouteComponent() {
           </Checkbox>
           <div className="mt-4 flex flex-col gap-3 [&>button]:h-12 [&>button]:w-full [&>button]:text-base [&>button]:text-white">
             <Button
-              loading={sumbitLoading}
+              loading={sumbitLoading && !stashLoading}
               htmlType="submit"
               className="b-#059669 bg-#059669"
             >

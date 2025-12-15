@@ -63,14 +63,17 @@ function RouteComponent() {
 
   const stepData = useMemo(() => {
     return (
-      pendingOfflineDetailData?.process_steps?.map(item => ({
-        title: t(
-          `lawyerWorkbench.offlineConfirmation.status.${item.type || '-1'}`
-        ),
-        endTime: item?.create_date
-          ? dayjs((item?.create_date || 0) * 1000).format('YYYY-MM-DD HH:mm')
-          : ''
-      })) || []
+      Array.from({ length: 5 }, (_, i) => i).map((item) => {
+        const data = pendingOfflineDetailData?.process_steps.find(
+          step => step.type === item
+        )
+        return {
+          title: t(`lawyerWorkbench.offlineConfirmation.status.${item}`),
+          endTime: data?.create_date
+            ? dayjs((data?.create_date || 0) * 1000).format('YYYY-MM-DD HH:mm')
+            : ''
+        }
+      }) || []
     )
   }, [pendingOfflineDetailData, t])
 
@@ -98,18 +101,19 @@ function RouteComponent() {
   }
 
   const timeLine: TimelineItemProps[] = useMemo(() => {
+    const maxStep = Math.max(...(pendingOfflineDetailData?.process_steps?.map(item => item.type || -1) || []), 0)
     return stepData.map((item, index) => {
       return {
         dot: stepIcon(
           index,
-          item.endTime ? 0 : index > 0 && !!stepData[index - 1].endTime ? 1 : 2
+          maxStep > index ? 0 : maxStep === index ? 1 : 2
         ),
         children: (
-          <div className="pl-6">
+          <div className="b b-#30363D rounded-2 bg-#161B22 p-4">
             <div
               className={cn(
-                'text-base',
-                item.endTime || (index > 0 && !!stepData[index - 1].endTime)
+                'text-lg font-600',
+                maxStep >= index
                   ? 'text-white'
                   : 'text-#6B7280'
               )}
@@ -118,7 +122,7 @@ function RouteComponent() {
             </div>
             {/* <div
               className={cn(
-                'text-sm mt-1',
+                'text-sm mt-2',
                 item.endTime || (index > 0 && !!stepData[index - 1].endTime)
                   ? 'text-#9CA3AF'
                   : 'text-#6B7280'
@@ -126,15 +130,15 @@ function RouteComponent() {
             >
               {item.content}
             </div> */}
-            {item.endTime && (
-              <div className="mt-1 text-xs text-#00E5FF font-400">
+            {maxStep > index && (
+              <div className="mt-2 text-xs text-#00E5FF font-400">
                 {t('lawyerWorkbench.offlineConfirmation.completionTime')}
                 :
                 {' '}
-                {item.endTime}
+                {item.endTime || '-'}
               </div>
             )}
-            {index > 0 && !!stepData[index - 1].endTime && (
+            {maxStep === index && (
               <div className="mt-1 text-xs text-#00FF85 font-400">
                 {t('lawyerWorkbench.offlineConfirmation.currentStep')}
                 : Step

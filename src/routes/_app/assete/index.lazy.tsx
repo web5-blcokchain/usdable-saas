@@ -149,6 +149,7 @@ function RouteComponent() {
     })
   const [searchText, setSearchText] = useState('')
   const [selectAssetId, setSelectAssetId] = useState('')
+  // 获取缴纳租金详情
   const { data: rentPaymentDetails, isFetching: paymentLoading } = useQuery({
     queryKey: ['getRentPaymentDetails', selectAssetId],
     queryFn: async () => {
@@ -176,6 +177,14 @@ function RouteComponent() {
         })
         break
     }
+  }
+  const [assetOperatingReload, setAssetOperatingReload] = useState(0)
+  function payRentSuccess() {
+    setAssetOperatingReload(prev => prev + 1)
+    setPayRentDialogVisible(prev => ({
+      value: false,
+      data: prev.data
+    }))
   }
 
   useEffect(() => {
@@ -274,6 +283,7 @@ function RouteComponent() {
             </div>
           </div>
           <AssetOperatingTable
+            reload={assetOperatingReload}
             openPayDialog={data => onChangeDialog(data, 1)}
             openDefaultDetailsDialog={data => onChangeDialog(data, 2)}
           />
@@ -287,8 +297,8 @@ function RouteComponent() {
         }}
         message={asseteErrorDialogVisible.data}
       />
-      {/* TODO 缴纳租金 */}
       <PayRentDialog
+        payRentSuccess={payRentSuccess}
         visible={payRentDialogVisible.value}
         data={{
           asset: payRentDialogVisible.data,
@@ -411,7 +421,7 @@ function AssetsTable({
       dataIndex: 'asset_name',
       key: 'asset_name',
       render: (_, record) => (
-        <div className="fcc gap-3">
+        <div className="fyc gap-3">
           <img
             className="size-10 rounded-6px object-cover"
             src={record.asset_image[0]}
@@ -519,18 +529,19 @@ function AssetsTable({
 // 资产运营状态
 function AssetOperatingTable({
   openPayDialog,
-  openDefaultDetailsDialog
+  openDefaultDetailsDialog,
+  reload
 }: {
   // 支付房租
   openPayDialog: (record: AssetsOperationData) => void
   openDefaultDetailsDialog: (record: AssetsOperationData) => void
+  reload: number
 }) {
   const { t } = useTranslation()
-
   const [pageInfo, setPageInfo] = useState({ page: 1, pageSize: 10 })
 
   const { data, isFetching: isDataLoading } = useQuery({
-    queryKey: ['getAssetsOperationList', pageInfo],
+    queryKey: ['getAssetsOperationList', pageInfo, reload],
     queryFn: async () => {
       const res = await assetsApi.getAssetsOperationList({
         ...pageInfo
@@ -610,7 +621,7 @@ function AssetOperatingTable({
       dataIndex: 'assetInfo',
       key: 'assetInfo',
       render: (_, record) => (
-        <div className="fcc gap-3">
+        <div className="fyc gap-3">
           <img
             className="size-10 rounded-6px object-cover"
             src={record?.image_urls || ''}
@@ -810,7 +821,7 @@ function AsseteErrorDialog({
         </div>
         <div>
           <div>{t('assete.rejectedReasonDialog.reason')}</div>
-          <div className="b b-#1D2738 rounded-1.5 b-solid bg-#0D1117 p-4 text-400 text-sm text-#D1D5DB">
+          <div className="b b-#1D2738 rounded-1.5 b-solid bg-#0D1117 p-4 text-4 text-sm text-#D1D5DB">
             {message.review_remark}
           </div>
         </div>

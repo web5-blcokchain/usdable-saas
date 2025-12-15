@@ -72,6 +72,11 @@
     "fileSizeError": "File size cannot exceed {{size}}",
     "submitSuccess": "Submit Successful"
   },
+  "contract": {
+    "insufficient_balance": "Insufficient USDC balance",
+    "wallet_not_connected": "Please connect your wallet",
+    "contract_call_failed": "Failed to call the contract"
+  },
   "header": {
     "login": "Login",
     "profile": "Profile",
@@ -1152,7 +1157,8 @@
       "completionTime": "Completion Time",
       "currentStep": "Current Step",
       "executing": "Offline Execution in Progress",
-      "task": "Task"
+      "task": "Task",
+      "applicationProgressSteps": "Application Progress Steps"
     },
     "executeCaseDialog": {
       "title": "Execute Case Operation",

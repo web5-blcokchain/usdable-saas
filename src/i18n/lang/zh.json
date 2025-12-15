@@ -38,7 +38,7 @@
       "platformAdminContent": "平台管理员"
     },
     "noContent": "暂无内容",
-    "token_expired": "登录已过期，请重新登录",
+    "tokenExpired": "登录已过期，请重新登录",
     "assetStatus": {
       "-1": "草稿",
       "0": "待审核",
@@ -83,6 +83,11 @@
     "downloadFailed": "下载文件失败",
     "fileSizeError": "文件大小不能超过 {{size}}",
     "submitSuccess": "提交成功"
+  },
+  "contract": {
+    "insufficient_balance": "当前 USDC 余额不足",
+    "wallet_not_connected": "请连接钱包",
+    "contract_call_failed": "调用合约失败"
   },
   "header": {
     "login": "登录",
@@ -1183,7 +1188,8 @@
       "completionTime": "完成时间",
       "currentStep": "当前步骤",
       "executing": "线下执行中",
-      "task": "任务"
+      "task": "任务",
+      "applicationProgressSteps": "申请推进步骤"
     },
     "executeCaseDialog": {
       "title": "执行案件操作",

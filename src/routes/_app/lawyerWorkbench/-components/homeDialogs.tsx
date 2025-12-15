@@ -385,7 +385,7 @@ export function CompletedCaseDetailDialog({
           <div className="mt-1 text-base text-#9CA3AF">
             {t('lawyerWorkbench.completedCaseDetailDialog.assetNumber')}
             :
-            ASSET-9876
+            {assetInfo?.submission?.code || '-'}
           </div>
         </div>
       )}
@@ -396,8 +396,8 @@ export function CompletedCaseDetailDialog({
           <div className="flex gap-6">
             <div className="flex-1">
               <img
-                className="szie-full h-64"
-                src={new URL('@/assets/test/test.png', import.meta.url).href}
+                className="size-full min-h-64"
+                src={assetInfo?.properties?.image_urls || new URL('@/assets/test/test.png', import.meta.url).href}
                 alt=""
               />
             </div>
@@ -454,7 +454,7 @@ export function CompletedCaseDetailDialog({
             <div className="text-lg font-600">
               {t('lawyerWorkbench.completedCaseDetailDialog.assetDetails')}
             </div>
-            <div className="mt-4 b b-#30363D rounded-2 bg-#1E2328 p-5 text-400 text-base text-#D1D5DB">
+            <div className="mt-4 b b-#30363D rounded-2 bg-#1E2328 p-5 text-4 text-base text-#D1D5DB">
               {assetInfo?.properties?.property_description || '-'}
             </div>
           </div>

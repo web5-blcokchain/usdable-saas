@@ -76,9 +76,9 @@ export function AsseteRgister({ back }: { back: () => void }) {
     const data = values
     const sumbitData = {
       ...data,
-      nickname: [data.nickname],
-      id_card_back_url: `https:${idCardBackUrl}`,
-      id_card_front_url: `https:${idCardFrontUrl}`,
+      nickname: data.nickname,
+      id_card_back_url: `${idCardBackUrl}`,
+      id_card_front_url: `${idCardFrontUrl}`,
       type: '3',
       token: getToken() || '',
       agree_asset_compliance: USER_AGREE.YES,
@@ -325,7 +325,6 @@ export function AsseteRgister({ back }: { back: () => void }) {
         successButton={{
           text: t('register.asset.enterAssetCenter'),
           onClick: () => {
-            // TODO 跳转进入资产上传中心
             navigate({ to: '/assete' })
           }
         }}

@@ -1,14 +1,25 @@
-import type { AssetsOperationData, RentPaymentDetails } from '@/api/assetsApi'
+import type {
+  AssetsOperationData,
+  RentPaymentDetails,
+  SaveRentIncome
+} from '@/api/assetsApi'
+import assetsApi from '@/api/assetsApi'
 import { CommonDialog } from '@/components/common/dialog/common'
+import { userPayRent } from '@/contract/composables/RentCustodyUtils'
+import { getUsdcContractInstance } from '@/contract/composables/UsdcUtils'
 import { formatNumberNoRound } from '@/utils/number'
+import { useWallets } from '@privy-io/react-auth'
+import { useMutation } from '@tanstack/react-query'
 import { Button, Radio, Spin } from 'antd'
 import dayjs from 'dayjs'
+import { ethers } from 'ethers'
 
 export function PayRentDialog({
   visible,
   setVisible,
   data,
-  loading
+  loading,
+  payRentSuccess
 }: {
   visible: boolean
   setVisible: (visible: boolean) => void
@@ -17,11 +28,80 @@ export function PayRentDialog({
     payment?: RentPaymentDetails
   }
   loading: boolean
+  payRentSuccess: () => void
 }) {
   const { t } = useTranslation()
   const copyText = (text: string) => {
     navigator.clipboard.writeText(text)
     toast.success(t('common.copySuccess'))
+  }
+
+  const { wallets } = useWallets()
+  // 链上交租
+  async function rentPaymentOnChain() {
+    const userWallet = wallets.find(
+      wallet => wallet.walletClientType !== 'privy'
+    )
+    if (!userWallet?.address) {
+      toast.error(t('contract.wallet_not_connected'))
+      return null
+    }
+    const ethProvider = await userWallet.getEthereumProvider()
+    const provider = new ethers.BrowserProvider(ethProvider)
+    const signer = await provider.getSigner()
+    const usdcAddress = getUsdcContractInstance(signer)
+    // 检查usdc余额
+    const usdcBanlance = await usdcAddress.balanceOf(userWallet?.address)
+    if (usdcBanlance < (data.payment?.monthly_rent || 0)) {
+      toast.error(t('contract.insufficient_balance'))
+      return null
+    }
+    return (await userPayRent(signer, {
+      depositId: data.payment?.properties_id || 0,
+      amount: data.payment?.monthly_rent || 0,
+      wallet_address: userWallet?.address || ''
+    })) as Promise<string>
+  }
+
+  const { mutateAsync: saveRentIncomeMutate } = useMutation({
+    mutationKey: ['saveRentIncome'],
+    mutationFn: (data: SaveRentIncome) => {
+      return assetsApi.saveRentIncome(data)
+    }
+  })
+
+  const [payRentLoading, setRayRentLoading] = useState(false)
+  async function sumbitPayment() {
+    if (!data.payment?.properties_id)
+      return
+    setRayRentLoading(true)
+    let hash
+    try {
+      hash = await rentPaymentOnChain()
+    }
+    catch {
+      toast.error(t('contract.contract_call_failed'))
+      setRayRentLoading(false)
+    }
+
+    if (!hash)
+      return
+    saveRentIncomeMutate({
+      submission_id: data.payment?.submission_id.toString(),
+      income_date: data.payment?.next_rent_month,
+      income_amount: `${data.payment?.monthly_rent || 0}`,
+      tx_hash: hash
+    })
+      .then((res) => {
+        if (res.code === 1) {
+          toast.success(`缴纳${data.payment?.next_rent_month}月份成功`)
+          // 刷新表格
+          payRentSuccess()
+        }
+      })
+      .finally(() => {
+        setRayRentLoading(false)
+      })
   }
 
   return (
@@ -48,8 +128,8 @@ export function PayRentDialog({
           </Button>
           <Button
             disabled={loading}
-            // loading={isPending}
-            onClick={() => setVisible(false)}
+            loading={payRentLoading}
+            onClick={sumbitPayment}
             className="h-10.5 b-#00E5FF bg-#00E2FF1A px-4 text-base text-#00E5FF"
           >
             {t('common.surePay')}

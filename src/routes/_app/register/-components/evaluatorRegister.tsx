@@ -169,7 +169,6 @@ export function EvaluatorRegister({ back }: { back: () => void }) {
         successButton={{
           text: t('register.asset.enterEvaluationTaskCenter'),
           onClick: () => {
-            // TODO 跳转进入资产上传中心
             navigate({ to: '/evaluation' })
           }
         }}
@@ -930,7 +929,7 @@ export function SecondStep({
             </div>
           </FormItem> */}
           {/* 办公室照片 */}
-          <FormItem name="officePhotos">
+          <FormItem name="office_photo">
             <div className="upload-card">
               <div>
                 <span className="text-4 text-white font-bold">

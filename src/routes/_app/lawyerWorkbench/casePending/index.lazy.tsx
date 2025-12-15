@@ -37,7 +37,7 @@ function RouteComponent() {
       dataIndex: 'case_code',
       key: 'case_code',
       render: (text: string) => (
-        <span className="text-400 text-base">{text}</span>
+        <span className="text-4 text-base">{text}</span>
       )
     },
     {
@@ -45,7 +45,7 @@ function RouteComponent() {
       key: 'address',
       render: (_: any, record) => (
         <div>
-          <div className="text-400 text-base">{record?.property_name}</div>
+          <div className="text-4 text-base">{record?.property_name}</div>
           <div className="text-xs text-#8B949E font-400">
             {record?.property_address}
           </div>
