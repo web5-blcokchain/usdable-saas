@@ -6,6 +6,7 @@ import UploadMultifileCard from '@/components/common/upload/uploa-multifile-card
 import { ASSET_AUDITOR_ROLE, ASSET_SUBMISSION_STATUS } from '@/enum/asset'
 import { REVIEW_STATUS } from '@/enum/common'
 import { getFileExtension } from '@/utils/file'
+import { addHttpsPrefix } from '@/utils/url'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
   createLazyFileRoute,
@@ -467,34 +468,35 @@ function RouteComponent() {
               <div key={item.name}>
                 <div>{t(item.title)}</div>
                 {isSwitchModify && !item.disable
-                  ? (['area'].includes(item.name)
-                      ? (
-                          <InputNumber
-                            onChange={e => changeCorrectionAssetData(e, item.name)}
-                            controls={false}
-                            defaultValue={Number(item.value || '')}
-                            className="h-12.5 w-full b-#374151 bg-#1E2328 [&>.ant-input-number-input-wrap]:h-full! [&>.ant-input-number-input-wrap>input]:!h-full"
-                          >
-                          </InputNumber>
-                        )
-                      : item.name === 'property_type'
+                  ? (
+                      ['area'].includes(item.name)
                         ? (
-                            <Select
-                              options={assetHouseTypeData}
+                            <InputNumber
                               onChange={e => changeCorrectionAssetData(e, item.name)}
-                              defaultValue={item.value || ''}
-                              placeholder={t('assete.addAsset.propertyTypePlaceholder')}
-                            />
-                          )
-                        : (
-                            <Input
-                              onChange={e =>
-                                changeCorrectionAssetData(e.target.value, item.name)}
-                              defaultValue={item.value || ''}
-                              className="h-12.5 b-#374151 bg-#1E2328"
+                              controls={false}
+                              defaultValue={Number(item.value || '')}
+                              className="h-12.5 w-full b-#374151 bg-#1E2328 [&>.ant-input-number-input-wrap]:h-full! [&>.ant-input-number-input-wrap>input]:!h-full"
                             >
-                            </Input>
+                            </InputNumber>
                           )
+                        : item.name === 'property_type'
+                          ? (
+                              <Select
+                                options={assetHouseTypeData}
+                                onChange={e => changeCorrectionAssetData(e, item.name)}
+                                defaultValue={item.value || ''}
+                                placeholder={t('assete.addAsset.propertyTypePlaceholder')}
+                              />
+                            )
+                          : (
+                              <Input
+                                onChange={e =>
+                                  changeCorrectionAssetData(e.target.value, item.name)}
+                                defaultValue={item.value || ''}
+                                className="h-12.5 b-#374151 bg-#1E2328"
+                              >
+                              </Input>
+                            )
                     )
                   : (
                       <div>
@@ -576,9 +578,7 @@ function RouteComponent() {
 
           {/* 不合格文件 */}
           <Collapse
-            defaultActiveKey={classifyFiles.rejected.length > 0
-              ? ['1']
-              : []}
+            defaultActiveKey={classifyFiles.rejected.length > 0 ? ['1'] : []}
             expandIconPosition="end"
             className="mt-8 b-#1b1f28 bg-#1b1f28 p-2 [&>div]:flex-1 [&>div>.ant-collapse-content]:bg-#1b1f28 [&>div>.ant-collapse-header]:items-center!"
             expandIcon={val => (
@@ -883,7 +883,7 @@ function RouteComponent() {
         }}
       >
         {showImage.url.map(url => (
-          <Image key={url} src={url} />
+          <Image key={url} src={addHttpsPrefix(url)} />
         ))}
       </Image.PreviewGroup>
     </div>

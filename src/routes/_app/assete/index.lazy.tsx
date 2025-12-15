@@ -5,6 +5,7 @@ import { CommonTable } from '@/components/common/common-table'
 import { CommonDialog } from '@/components/common/dialog/common'
 import { ASSET_STATUS, RISK_STATUS } from '@/enum/asset'
 import { formatNumberNoRound } from '@/utils/number'
+import { addHttpsPrefix } from '@/utils/url'
 import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { Button, Input, Modal } from 'antd'
@@ -424,7 +425,7 @@ function AssetsTable({
         <div className="fyc gap-3">
           <img
             className="size-10 rounded-6px object-cover"
-            src={record.asset_image[0]}
+            src={addHttpsPrefix(record.asset_image[0])}
             alt=""
           />
           <div>
@@ -624,7 +625,7 @@ function AssetOperatingTable({
         <div className="fyc gap-3">
           <img
             className="size-10 rounded-6px object-cover"
-            src={record?.image_urls || ''}
+            src={addHttpsPrefix(record?.image_urls || '')}
             alt=""
           />
           <div>

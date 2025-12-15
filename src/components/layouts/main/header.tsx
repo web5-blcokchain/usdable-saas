@@ -9,6 +9,7 @@ import { eventBus } from '@/hooks/EventBus'
 import { useMessageStore } from '@/stores/message'
 import { useUserStore } from '@/stores/user'
 import { showToastOnce } from '@/utils/toast'
+import { addHttpsPrefix } from '@/utils/url'
 import { clearToken, getToken, setToken } from '@/utils/user'
 import { usePrivy, useUser, useWallets } from '@privy-io/react-auth'
 import { useMutation } from '@tanstack/react-query'
@@ -353,7 +354,7 @@ export default function MainHeader() {
                           <img
                             className="size-full object-cover"
                             src={
-                              userData?.user?.avatar
+                              addHttpsPrefix(userData?.user?.avatar)
                               || new URL('@/assets/test/avatar.png', import.meta.url)
                                 .href
                             }

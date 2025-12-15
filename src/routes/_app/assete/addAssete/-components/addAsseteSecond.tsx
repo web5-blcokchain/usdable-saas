@@ -5,6 +5,7 @@ import { uploadFile } from '@/api/common'
 import UploadMultifileCard from '@/components/common/upload/uploa-multifile-card'
 import { INPUT_FORMAT_TYPE } from '@/enum/common'
 import { formatNumberNoRound } from '@/utils/number'
+import { addHttpsPrefix } from '@/utils/url'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button, DatePicker, Form, Image, Input, InputNumber, Spin } from 'antd'
 import dayjs from 'dayjs'
@@ -450,13 +451,13 @@ export function AddAsseteSecond({
       <Image
         width={200}
         style={{ display: 'none' }}
-        src={fileDialog.url}
+        src={addHttpsPrefix(fileDialog.url)}
         preview={{
           visible: fileDialog.visible,
           scaleStep: 0.5,
-          src: fileDialog.url,
+          src: addHttpsPrefix(fileDialog.url),
           onVisibleChange: (value) => {
-            setFileDialog({ visible: value, url: fileDialog.url })
+            setFileDialog({ visible: value, url: addHttpsPrefix(fileDialog.url) })
           }
         }}
       />

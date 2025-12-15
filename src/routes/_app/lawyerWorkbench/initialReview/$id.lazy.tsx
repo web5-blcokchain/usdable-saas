@@ -10,6 +10,7 @@ import {
 import { CommonDialog } from '@/components/common/dialog/common'
 import { NoContent } from '@/components/common/NoContent'
 import { IS_REQUIRED, REVIEW_STATUS } from '@/enum/common'
+import { addHttpsPrefix } from '@/utils/url'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
   createLazyFileRoute,
@@ -423,7 +424,7 @@ function ImagePreview({
     <div className="size-full object-cover [&>div]:!size-full">
       <Image
         className="object-cover !size-full"
-        src={file}
+        src={addHttpsPrefix(file)}
         preview={{ visible: false }}
         onClick={() => setVisible(true)}
       />
@@ -432,7 +433,7 @@ function ImagePreview({
           preview={{ visible, onVisibleChange: vis => setVisible(vis) }}
         >
           {fileUrls.map((fileItem, index) => (
-            <Image key={fileItem + index} className="size-full object-cover" src={fileItem} />
+            <Image key={fileItem + index} className="size-full object-cover" src={addHttpsPrefix(fileItem)} />
           ))}
         </Image.PreviewGroup>
       </div>

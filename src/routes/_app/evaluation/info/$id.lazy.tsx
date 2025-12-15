@@ -3,6 +3,7 @@ import assetsApi from '@/api/assetsApi'
 import * as evaluationApi from '@/api/evaluationApi'
 import { CommonDialog } from '@/components/common/dialog/common'
 import { downloadFile } from '@/utils/file'
+import { addHttpsPrefix } from '@/utils/url'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
   createLazyFileRoute,
@@ -122,7 +123,7 @@ function RouteComponent() {
                           ? (
                               <img
                                 className="aspect-[5/3] min-h-48 w-full"
-                                src={item?.file_urls?.fileUrls?.[0]}
+                                src={addHttpsPrefix(item?.file_urls?.fileUrls?.[0])}
                                 alt=""
                               />
                             )
@@ -209,7 +210,7 @@ function RouteComponent() {
           }}
         >
           {imgVisible.images.map(url => (
-            <Image key={url} src={url} />
+            <Image key={url} src={addHttpsPrefix(url)} />
           ))}
         </Image.PreviewGroup>
       </div>

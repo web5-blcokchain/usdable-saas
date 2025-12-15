@@ -3,6 +3,7 @@ import apiMyInfoApi from '@/api/apiMyInfoApi'
 import { uploadFile } from '@/api/common'
 import UploadMultifileCard from '@/components/common/upload/uploa-multifile-card'
 import { useUserStore } from '@/stores/user'
+import { addHttpsPrefix } from '@/utils/url'
 import { useMutation } from '@tanstack/react-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Button, Form, Input } from 'antd'
@@ -166,7 +167,7 @@ function RouteComponent() {
                 <img
                   className="size-full"
                   src={
-                    avatar
+                    addHttpsPrefix(avatar)
                     || new URL('@/assets/test/avatar.png', import.meta.url).href
                   }
                   alt=""

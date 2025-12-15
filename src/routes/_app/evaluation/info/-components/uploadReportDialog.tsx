@@ -14,6 +14,7 @@ import UploadMultifileCard from '@/components/common/upload/uploa-multifile-card
 import { FileContent } from '@/routes/_app/assete/addAssete/-components/addAsseteSecond'
 import { formatNumberNoRound } from '@/utils/number'
 import { cn } from '@/utils/style'
+import { addHttpsPrefix } from '@/utils/url'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import {
@@ -587,7 +588,7 @@ export function UploadReportDialog({
           }}
         >
           {showImage.url.map(url => (
-            <Image key={url} src={url} />
+            <Image key={url} src={addHttpsPrefix(url)} />
           ))}
         </Image.PreviewGroup>
       </div>

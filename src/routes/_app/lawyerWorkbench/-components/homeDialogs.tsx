@@ -2,6 +2,7 @@ import assetsApi from '@/api/assetsApi'
 import * as lawyerWorkbenchApi from '@/api/lawyerWorkbenchApi'
 import { CommonDialog } from '@/components/common/dialog/common'
 import { formatNumberNoRound } from '@/utils/number'
+import { addHttpsPrefix } from '@/utils/url'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button, Input, Spin, Upload } from 'antd'
 import dayjs from 'dayjs'
@@ -397,7 +398,7 @@ export function CompletedCaseDetailDialog({
             <div className="flex-1">
               <img
                 className="size-full min-h-64"
-                src={assetInfo?.properties?.image_urls || new URL('@/assets/test/test.png', import.meta.url).href}
+                src={addHttpsPrefix(assetInfo?.properties?.image_urls) || new URL('@/assets/test/test.png', import.meta.url).href}
                 alt=""
               />
             </div>

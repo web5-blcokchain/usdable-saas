@@ -1,6 +1,7 @@
 import { FilePreview } from '@/components/common/file-preview'
 import { UploadFileType } from '@/enums/file'
 import { formatNumberNoRound } from '@/utils/number'
+import { addHttpsPrefix } from '@/utils/url'
 import { Image, Spin, Upload } from 'antd'
 import { UploadIcon } from './upload-card'
 
@@ -65,6 +66,7 @@ function UploadMultifileCard({
   const [previewVisible, setPreviewVisible] = useState(false)
   const [previewCurrent, setPreviewCurrent] = useState(0)
   const { t } = useTranslation()
+  fileUrl = fileUrl.map(item => addHttpsPrefix(item))
   return (
     <div>
       <Upload
