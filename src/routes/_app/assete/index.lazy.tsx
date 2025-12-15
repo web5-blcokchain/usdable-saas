@@ -639,11 +639,10 @@ function AssetOperatingTable({
       title: t('assete.operatingTable.tenant'),
       dataIndex: 'tenant',
       key: 'tenant',
-      render: data => (
+      render: (_, record) => (
         <div>
-          {/* TODO */}
-          <div className="text-sm text-#D1D5DB">{data?.name}</div>
-          <div className="text-xs text-#9CA3AF">
+          <div className="text-sm text-#D1D5DB">{record?.name}</div>
+          {/* <div className="text-xs text-#9CA3AF">
             {t('assete.operatingTable.contractPeriod')}
             :
             {new Date(data?.startDate || '').getFullYear()}
@@ -651,7 +650,7 @@ function AssetOperatingTable({
             -
             {' '}
             {new Date(data?.endDate || '').getFullYear()}
-          </div>
+          </div> */}
         </div>
       )
     },
@@ -863,7 +862,7 @@ function PropertyOperatingStatusDetailsDialog({
     >
       <div className="fol gap-6 py-6">
         <img
-          src={new URL('@/assets/test/test.png', import.meta.url).href}
+          src={addHttpsPrefix(data?.image_urls || '')}
           className="h-64 w-full rounded-2"
           alt=""
         />
@@ -886,8 +885,7 @@ function PropertyOperatingStatusDetailsDialog({
                 'assete.propertyOperatingStatusDetailsDialog.managementMethod'
               )}
             </div>
-            {/* TODO */}
-            <div>科技未来租赁方案</div>
+            <div>{data?.hosting_method || '-'}</div>
           </div>
           <div>
             <div>{t('assete.propertyOperatingStatusDetailsDialog.rent')}</div>

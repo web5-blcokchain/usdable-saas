@@ -78,7 +78,7 @@ function RouteComponent() {
     isLoading,
     isFetching
   } = useQuery({
-    queryKey: ['getMessageList', pageInfo, DEFAULT_PAGE_SIZE],
+    queryKey: ['getMessageList', pageInfo.page, pageInfo.pageSize, pageInfo.isReload, pageInfo.type, DEFAULT_PAGE_SIZE],
     queryFn: async () => {
       const res = await getMessageList({
         page: pageInfo.isReload ? 1 : pageInfo.page,

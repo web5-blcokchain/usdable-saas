@@ -68,16 +68,11 @@ export function DefaultDetailsDialog({
               )}
             </div>
           </div>
-          {/* TODO */}
           <div className="grid cols-2 mt-6 gap-6 text-sm [&>div>div:first-child]:text-#9CA3AF">
             {/* <div>
-            <div>{t('assete.defaultDetails.tenant')}</div>
-            <div>环球零售连锁</div>
-          </div> */}
-            {/* <div>
-            <div>{t('assete.defaultDetails.contact')}</div>
-            <div>张三（138****8776）</div>
-          </div> */}
+              <div>{t('assete.defaultDetails.contact')}</div>
+              <div>张三（138****8776）</div>
+            </div> */}
             <div>
               <div>{t('assete.defaultDetails.payDate')}</div>
               <div>
@@ -182,9 +177,7 @@ export function DefaultDetailsDialog({
               ))}
 
               {data.payment?.payment_reminder_records?.length === 0 && (
-                <div>
-                  {t('common.noContent')}
-                </div>
+                <div>{t('common.noContent')}</div>
               )}
             </div>
           </div>

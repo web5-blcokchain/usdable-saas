@@ -233,6 +233,10 @@ export interface AssetsOperationData {
   tx_hash: string
   updated_date: number
   valuation_report: string
+  /**
+   * 托管方式
+   */
+  hosting_method: string
 }
 
 // 提交资产信息
