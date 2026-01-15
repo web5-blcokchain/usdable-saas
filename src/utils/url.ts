@@ -1,11 +1,9 @@
-import { envConfig } from './envConfig.ts'
-
 export function joinImagePath(path: string) {
   if (!path) {
     return ''
   }
 
-  return `${envConfig.apiUrl}${path}`
+  return `${path}`
 }
 
 export function joinImagesPath(paths?: string) {
