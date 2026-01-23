@@ -1,7 +1,7 @@
 import type { SubmitAssetInfo } from '@/api/assetsApi'
 import type { FristFormData } from './-components/formDataType'
 import assetsApi from '@/api/assetsApi'
-import { INPUT_FORMAT_TYPE } from '@/enum/common'
+import { INPUT_FORMAT_TYPE } from '@/enums/common'
 import { extractFirstBraces, screenToTop } from '@/utils'
 import { useMutation } from '@tanstack/react-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
@@ -89,7 +89,7 @@ function RouteComponent() {
             ...data
           },
           template_id: templateId || 2,
-          status: (status || status === undefined) ? 1 : undefined
+          status: status || status === undefined ? 1 : undefined
         }
         setFormData(newData)
         await saveAssetInfo(newData).then((res) => {
@@ -98,7 +98,10 @@ function RouteComponent() {
             setSumbitDialogVisible({
               visible: true,
               type: 1,
-              asseteInfo: { code: res.data?.submission_id || '', createTime: dayjs().format('YYYY-MM-DD HH:mm:ss') },
+              asseteInfo: {
+                code: res.data?.submission_id || '',
+                createTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
+              },
               errorMessage: ''
             })
           }
@@ -114,10 +117,13 @@ function RouteComponent() {
   }
 
   const saveDraft = () => {
-    localStorage.setItem('draft', JSON.stringify({
-      firstForm: firstForm.getFieldsValue(),
-      secondForm: secondForm.getFieldsValue()
-    }))
+    localStorage.setItem(
+      'draft',
+      JSON.stringify({
+        firstForm: firstForm.getFieldsValue(),
+        secondForm: secondForm.getFieldsValue()
+      })
+    )
     toast.success('保存草稿成功')
   }
 
@@ -129,7 +135,12 @@ function RouteComponent() {
 
       Object.keys(draftData.secondForm).forEach((key: string) => {
         const data = extractFirstBraces(key)
-        if (Array.isArray(data) && [INPUT_FORMAT_TYPE.DATE, INPUT_FORMAT_TYPE.DATETIME].includes(data[1] as any)) {
+        if (
+          Array.isArray(data)
+          && [INPUT_FORMAT_TYPE.DATE, INPUT_FORMAT_TYPE.DATETIME].includes(
+            data[1] as any
+          )
+        ) {
           secondFormData[key] = dayjs(draftData.secondForm[key])
         }
         else {
@@ -158,13 +169,19 @@ function RouteComponent() {
           <AddAsseteFrist form={firstForm} onFinish={onFinish} />
         </div>
         <div className={cn(step === 1 ? '' : 'hidden')}>
-          <AddAsseteSecond form={secondForm} onFinish={onFinish} backStep={backStep} saveDraft={saveDraft} />
+          <AddAsseteSecond
+            form={secondForm}
+            onFinish={onFinish}
+            backStep={backStep}
+            saveDraft={saveDraft}
+          />
         </div>
       </div>
       {/* 提交成功弹窗口 */}
       <SubmissionStatusStatus
         visible={sumbitDialogVisible.visible}
-        setVisible={visible => setSumbitDialogVisible({ ...sumbitDialogVisible, visible })}
+        setVisible={visible =>
+          setSumbitDialogVisible({ ...sumbitDialogVisible, visible })}
         type={sumbitDialogVisible.type}
         asseteInfo={sumbitDialogVisible.asseteInfo}
         errorMessage={sumbitDialogVisible.errorMessage}

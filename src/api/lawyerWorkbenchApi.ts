@@ -1,5 +1,5 @@
-import type { ASSET_STATUS } from '@/enum/asset'
-import type { APPLICATION_STATUS, PENDING_CASE_STATUS, PROCESS_STEP } from '@/enum/lawyerWorkbench'
+import type { ASSET_STATUS } from '@/enums/asset'
+import type { APPLICATION_STATUS, PENDING_CASE_STATUS, PROCESS_STEP } from '@/enums/lawyerWorkbench'
 import type { DataListResponse, PageRequest } from './responseData'
 import apiClient from './client'
 

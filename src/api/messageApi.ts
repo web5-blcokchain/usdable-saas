@@ -1,4 +1,4 @@
-import type { MESSAGE_STATUS, MESSAGE_TYPE } from '@/enum/message'
+import type { MESSAGE_STATUS, MESSAGE_TYPE } from '@/enums/message'
 import type { DataListResponse } from './responseData'
 import apiClient from './client'
 

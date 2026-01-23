@@ -32,7 +32,7 @@
     "clsx": "^2.1.1",
     "copy-to-clipboard": "^3.3.3",
     "dayjs": "^1.11.13",
-    "ethers": "^6.13.5",
+    "ethers": "^6.16.0",
     "framer-motion": "^12.23.24",
     "i18next": "^24.2.2",
     "ky": "^1.7.5",

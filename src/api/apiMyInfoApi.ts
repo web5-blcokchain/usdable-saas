@@ -1,6 +1,6 @@
-import type { USER_AGREE } from '@/enum/common'
-import type { ASSET_TYPE, USER_AUDIT_STATUS, USER_TYPE } from '@/enum/user'
+import type { USER_AGREE } from '@/enums/common'
 import type { AccountType } from '@/enums/create-account.ts'
+import type { ASSET_TYPE, USER_AUDIT_STATUS, USER_TYPE } from '@/enums/user'
 import apiClient from './client'
 
 // 用户

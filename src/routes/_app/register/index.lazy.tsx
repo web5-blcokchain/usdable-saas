@@ -1,7 +1,7 @@
 import balanceIcon from '@/assets/images/balance.png'
 import componyIcon from '@/assets/images/compony.png'
 import homeIcon from '@/assets/images/home.png'
-import { USER_AUDIT_STATUS, USER_TYPE } from '@/enum/user'
+import { USER_AUDIT_STATUS, USER_TYPE } from '@/enums/user'
 import { useUserStore } from '@/stores/user'
 import { screenToTop } from '@/utils'
 import { usePrivy } from '@privy-io/react-auth'
@@ -271,7 +271,9 @@ function RouteComponent() {
           }
         }}
       >
-        <AnimatePresence mode="wait" initial={false}>{selectComponent}</AnimatePresence>
+        <AnimatePresence mode="wait" initial={false}>
+          {selectComponent}
+        </AnimatePresence>
       </ConfigProvider>
       <RegisterStatus
         visible={isSuccess}

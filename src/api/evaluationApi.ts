@@ -1,5 +1,5 @@
-import type { SUBMISSION_STATUS } from '@/enum/common'
-import type { ASSET_EVALUATIO_STATUS } from '@/enum/evaluation'
+import type { SUBMISSION_STATUS } from '@/enums/common'
+import type { ASSET_EVALUATIO_STATUS } from '@/enums/evaluation'
 import type { DataListResponse } from './responseData'
 import apiClient from './client'
 // 评估方

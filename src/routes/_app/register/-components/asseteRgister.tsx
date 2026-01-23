@@ -4,8 +4,8 @@ import { uploadFile } from '@/api/common'
 import componyIcon from '@/assets/images/compony-green.png'
 import userIcon from '@/assets/images/user.png'
 import UploadMultifileCard from '@/components/common/upload/uploa-multifile-card'
-import { USER_AGREE } from '@/enum/common'
-import { ASSET_TYPE, USER_AUDIT_STATUS } from '@/enum/user'
+import { USER_AGREE } from '@/enums/common'
+import { ASSET_TYPE, USER_AUDIT_STATUS } from '@/enums/user'
 import { useUserStore } from '@/stores/user'
 import { envConfig } from '@/utils/envConfig'
 import { getToken } from '@/utils/user'
@@ -41,7 +41,9 @@ export function AsseteRgister({ back }: { back: () => void }) {
   const { mutateAsync: userResgiter, isPending: isLoading } = useMutation({
     mutationKey: ['userRegitser'],
     mutationFn: async (values: UserRegisterModel) => {
-      return userData?.user?.audit_status !== USER_AUDIT_STATUS.REJECT ? apiMyInfoApi.regitser(values) : apiMyInfoApi.resubmitRegister(values)
+      return userData?.user?.audit_status !== USER_AUDIT_STATUS.REJECT
+        ? apiMyInfoApi.regitser(values)
+        : apiMyInfoApi.resubmitRegister(values)
     }
   })
 
@@ -57,15 +59,17 @@ export function AsseteRgister({ back }: { back: () => void }) {
   const [uploadFileLoading, setUploadFileLoading] = useState([] as number[])
   async function uploadIdCardFile(data: File, index: number) {
     setUploadFileLoading(prev => [...prev, index])
-    await uploadIdCardFileMutate({ file: data }).then((res) => {
-      if (res.code === 1) {
-        if (index === 0)
-          form.setFieldValue(`id_card_front_url`, res.data?.file.full_url)
-        else form.setFieldValue(`id_card_back_url`, res.data?.file.full_url)
-      }
-    }).finally(() => {
-      setUploadFileLoading(prev => prev.filter(item => item !== index))
-    })
+    await uploadIdCardFileMutate({ file: data })
+      .then((res) => {
+        if (res.code === 1) {
+          if (index === 0)
+            form.setFieldValue(`id_card_front_url`, res.data?.file.full_url)
+          else form.setFieldValue(`id_card_back_url`, res.data?.file.full_url)
+        }
+      })
+      .finally(() => {
+        setUploadFileLoading(prev => prev.filter(item => item !== index))
+      })
   }
 
   const fileIsUrl = (url: string) => {
@@ -95,8 +99,8 @@ export function AsseteRgister({ back }: { back: () => void }) {
 
   const [errorFormItem, setErrorFormItem] = useState<string[]>([])
   const onFinishFailed = (errorInfo: any) => {
-    let errorList = [] as string[];
-    (errorInfo.errorFields as any[]).forEach((res: any) => {
+    let errorList = [] as string[]
+    ;(errorInfo.errorFields as any[]).forEach((res: any) => {
       errorList = errorList.concat(res.name)
     })
     setErrorFormItem(errorList)
@@ -117,79 +121,178 @@ export function AsseteRgister({ back }: { back: () => void }) {
           <div>{t('register.asset.back')}</div>
         </div>
       </div>
-      <div className="text-12 font-600 leading-18 max-md:text-3xl">{t('register.asset.title')}</div>
+      <div className="text-12 font-600 leading-18 max-md:text-3xl">
+        {t('register.asset.title')}
+      </div>
       <div className="mt-10 w-full b-2 b-#31363c rounded-lg b-solid bg-#161B2199 p-12 max-md:p-4">
-        <div className="text-lg font-600">{t('register.asset.accountType')}</div>
-        <Form initialValues={{ p_type: ASSET_TYPE.PERSON }} form={form} layout="vertical" className="" onFinish={onFinish} onFinishFailed={onFinishFailed}>
+        <div className="text-lg font-600">
+          {t('register.asset.accountType')}
+        </div>
+        <Form
+          initialValues={{ p_type: ASSET_TYPE.PERSON }}
+          form={form}
+          layout="vertical"
+          className=""
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+        >
           {/* 账户类型 1为个人  2为企业 */}
           <Form.Item required name="p_type">
             <Radio.Group className="mt-4 w-full flex gap-x-6 max-md:grid max-md:grid-cols-1 max-md:gap-6">
-              {
-                [ASSET_TYPE.PERSON, ASSET_TYPE.COMPANY].map(item => (
-                  <div key={item} onClick={() => form.setFieldValue('p_type', item)} className="flex flex-1 items-start justify-between gap-4 b-1 b-#374151 rounded-2 b-solid px-5 py-6 clickable">
-                    <div className="fcc flex-1 gap-4">
-                      <div className="size-12 fcc b-1 b-#374151 rounded-2 b-solid bg-#0D1117">
-                        <img className="h-7" src={item === ASSET_TYPE.PERSON ? userIcon : componyIcon} alt="" />
+              {[ASSET_TYPE.PERSON, ASSET_TYPE.COMPANY].map(item => (
+                <div
+                  key={item}
+                  onClick={() => form.setFieldValue('p_type', item)}
+                  className="flex flex-1 items-start justify-between gap-4 b-1 b-#374151 rounded-2 b-solid px-5 py-6 clickable"
+                >
+                  <div className="fcc flex-1 gap-4">
+                    <div className="size-12 fcc b-1 b-#374151 rounded-2 b-solid bg-#0D1117">
+                      <img
+                        className="h-7"
+                        src={
+                          item === ASSET_TYPE.PERSON ? userIcon : componyIcon
+                        }
+                        alt=""
+                      />
+                    </div>
+                    <div className="leading-full h-full w-full flex-1">
+                      <div className="text-lg font-500">
+                        {item === 1
+                          ? t('register.asset.individual')
+                          : t('register.asset.enterprise')}
+                        {t('register.asset.user')}
                       </div>
-                      <div className="leading-full h-full w-full flex-1">
-                        <div className="text-lg font-500">
-                          {item === 1 ? t('register.asset.individual') : t('register.asset.enterprise')}
-                          {t('register.asset.user')}
-                        </div>
-                        <div className="mt-1.5 text-sm text-#9CA3AF">{item === 1 ? t('register.asset.individualDesc') : t('register.asset.enterpriseDesc')}</div>
+                      <div className="mt-1.5 text-sm text-#9CA3AF">
+                        {item === 1
+                          ? t('register.asset.individualDesc')
+                          : t('register.asset.enterpriseDesc')}
                       </div>
                     </div>
-                    <Radio className="[&>span>.ant-radio-inner]:!b-2 [&>span>.ant-radio-inner]:!b-#6B7280 [&>span>.ant-radio-inner]:!bg-transparent" value={item} />
                   </div>
-                ))
-              }
+                  <Radio
+                    className="[&>span>.ant-radio-inner]:!b-2 [&>span>.ant-radio-inner]:!b-#6B7280 [&>span>.ant-radio-inner]:!bg-transparent"
+                    value={item}
+                  />
+                </div>
+              ))}
             </Radio.Group>
           </Form.Item>
           <div className="grid grid-cols-2 gap-x-6 max-md:grid-cols-1 max-md:gap-0">
             {/* 姓名 */}
-            <Form.Item required name="nickname" label={t('register.asset.name')} rules={[{ required: true, message: t('register.asset.namePlaceholder') }]}>
-              <Input className="h-12.5 b-#374151 bg-#1E2328" placeholder={t('register.asset.namePlaceholder')} />
+            <Form.Item
+              required
+              name="nickname"
+              label={t('register.asset.name')}
+              rules={[
+                {
+                  required: true,
+                  message: t('register.asset.namePlaceholder')
+                }
+              ]}
+            >
+              <Input
+                className="h-12.5 b-#374151 bg-#1E2328"
+                placeholder={t('register.asset.namePlaceholder')}
+              />
             </Form.Item>
             {/* 邮箱 */}
-            <Form.Item required name="email" label={t('register.asset.email')} rules={[{ required: true, message: t('register.asset.emailPlaceholder') }]}>
-              <Input className="h-12.5 b-#374151 bg-#1E2328" placeholder={t('register.asset.emailPlaceholder')} />
+            <Form.Item
+              required
+              name="email"
+              label={t('register.asset.email')}
+              rules={[
+                {
+                  required: true,
+                  message: t('register.asset.emailPlaceholder')
+                }
+              ]}
+            >
+              <Input
+                className="h-12.5 b-#374151 bg-#1E2328"
+                placeholder={t('register.asset.emailPlaceholder')}
+              />
             </Form.Item>
             {/* 手机号 */}
             <Form.Item
               required
               name="mobile"
               label={t('register.asset.phone')}
-              rules={
-                [{ required: true, message: t('register.asset.phonePlaceholder') }, { pattern: /^\d*$/, message: t('register.asset.phoneErrorPlaceholder') }]
-              }
+              rules={[
+                {
+                  required: true,
+                  message: t('register.asset.phonePlaceholder')
+                },
+                {
+                  pattern: /^\d*$/,
+                  message: t('register.asset.phoneErrorPlaceholder')
+                }
+              ]}
             >
-              <Input className="h-12.5 b-#374151 bg-#1E2328" placeholder={t('register.asset.phonePlaceholder')} />
+              <Input
+                className="h-12.5 b-#374151 bg-#1E2328"
+                placeholder={t('register.asset.phonePlaceholder')}
+              />
             </Form.Item>
-            <Form.Item required name="id_number" label={t('register.asset.idNumber')} rules={[{ required: true, message: t('register.asset.idNumberPlaceholder') }]}>
-              <Input className="h-12.5 b-#374151 bg-#1E2328" placeholder={t('register.asset.idNumberPlaceholder')} />
+            <Form.Item
+              required
+              name="id_number"
+              label={t('register.asset.idNumber')}
+              rules={[
+                {
+                  required: true,
+                  message: t('register.asset.idNumberPlaceholder')
+                }
+              ]}
+            >
+              <Input
+                className="h-12.5 b-#374151 bg-#1E2328"
+                placeholder={t('register.asset.idNumberPlaceholder')}
+              />
             </Form.Item>
             {
               //  社会统一信用代码
               type === 2 && (
-                <Form.Item required name="uscc" label={t('register.asset.creditCode')} rules={[{ required: true, message: t('register.asset.creditCodePlaceholder') }]}>
-                  <Input className="h-12.5 b-#374151 bg-#1E2328" placeholder={t('register.asset.creditCodePlaceholder')} />
+                <Form.Item
+                  required
+                  name="uscc"
+                  label={t('register.asset.creditCode')}
+                  rules={[
+                    {
+                      required: true,
+                      message: t('register.asset.creditCodePlaceholder')
+                    }
+                  ]}
+                >
+                  <Input
+                    className="h-12.5 b-#374151 bg-#1E2328"
+                    placeholder={t('register.asset.creditCodePlaceholder')}
+                  />
                 </Form.Item>
-
               )
             }
             {
               // 法定代表人姓名
               type === 2 && (
-                <Form.Item required name="legal_rep_name" label={t('register.asset.legalPersonName')} rules={[{ required: true, message: t('register.asset.legalPersonNamePlaceholder') }]}>
-                  <Input className="h-12.5 b-#374151 bg-#1E2328" placeholder={t('register.asset.legalPersonNamePlaceholder')} />
+                <Form.Item
+                  required
+                  name="legal_rep_name"
+                  label={t('register.asset.legalPersonName')}
+                  rules={[
+                    {
+                      required: true,
+                      message: t('register.asset.legalPersonNamePlaceholder')
+                    }
+                  ]}
+                >
+                  <Input
+                    className="h-12.5 b-#374151 bg-#1E2328"
+                    placeholder={t('register.asset.legalPersonNamePlaceholder')}
+                  />
                 </Form.Item>
               )
             }
           </div>
-          <Form.Item
-            required
-            label={t('register.asset.idFrontAndBack')}
-          >
+          <Form.Item required label={t('register.asset.idFrontAndBack')}>
             <div className="grid grid-cols-2 gap-4 max-md:grid-cols-1">
               <Form.Item
                 name="id_card_front_url"
@@ -201,7 +304,7 @@ export function AsseteRgister({ back }: { back: () => void }) {
                   <UploadMultifileCard
                     className={cn(
                       'flex gap-3 [&>div>div>div>div]:b-2',
-                      `${(errorFormItem.includes('id_card_front_url') && !idCardFrontUrl) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
+                      `${errorFormItem.includes('id_card_front_url') && !idCardFrontUrl ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
                     )}
                     loading={uploadFileLoading.includes(0)}
                     fileType="image/png,image/jpg"
@@ -218,10 +321,23 @@ export function AsseteRgister({ back }: { back: () => void }) {
                   >
                     <div className="py-3">
                       <div className="fcc pb-2">
-                        <img className="!h-8" src={new URL('@/assets/images/register/cloud.png', import.meta.url).href} alt="" />
+                        <img
+                          className="!h-8"
+                          src={
+                            new URL(
+                              '@/assets/images/register/cloud.png',
+                              import.meta.url
+                            ).href
+                          }
+                          alt=""
+                        />
                       </div>
-                      <div className="w-full overflow-hidden text-center text-sm text-#9CA3AF">{t('register.asset.uploadIdFront')}</div>
-                      <div className="w-full overflow-hidden text-center text-xs text-#6B7280">{t('register.asset.fileSupport')}</div>
+                      <div className="w-full overflow-hidden text-center text-sm text-#9CA3AF">
+                        {t('register.asset.uploadIdFront')}
+                      </div>
+                      <div className="w-full overflow-hidden text-center text-xs text-#6B7280">
+                        {t('register.asset.fileSupport')}
+                      </div>
                     </div>
                   </UploadMultifileCard>
                 </div>
@@ -235,7 +351,7 @@ export function AsseteRgister({ back }: { back: () => void }) {
                 <UploadMultifileCard
                   className={cn(
                     'flex gap-3 [&>div>div>div>div]:b-2',
-                    `${(errorFormItem.includes('id_card_back_url') && !idCardBackUrl) ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
+                    `${errorFormItem.includes('id_card_back_url') && !idCardBackUrl ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
                   )}
                   loading={uploadFileLoading.includes(1)}
                   fileUrl={fileIsUrl(idCardBackUrl) ? [idCardBackUrl] : []}
@@ -252,10 +368,23 @@ export function AsseteRgister({ back }: { back: () => void }) {
                 >
                   <div className="py-3">
                     <div className="fcc pb-2">
-                      <img className="!h-8" src={new URL('@/assets/images/register/cloud.png', import.meta.url).href} alt="" />
+                      <img
+                        className="!h-8"
+                        src={
+                          new URL(
+                            '@/assets/images/register/cloud.png',
+                            import.meta.url
+                          ).href
+                        }
+                        alt=""
+                      />
                     </div>
-                    <div className="w-full overflow-hidden text-center text-sm text-#9CA3AF">{t('register.asset.uploadIdBack')}</div>
-                    <div className="w-full overflow-hidden text-center text-xs text-#6B7280">{t('register.asset.fileSupport')}</div>
+                    <div className="w-full overflow-hidden text-center text-sm text-#9CA3AF">
+                      {t('register.asset.uploadIdBack')}
+                    </div>
+                    <div className="w-full overflow-hidden text-center text-xs text-#6B7280">
+                      {t('register.asset.fileSupport')}
+                    </div>
                   </div>
                 </UploadMultifileCard>
               </Form.Item>
@@ -270,7 +399,11 @@ export function AsseteRgister({ back }: { back: () => void }) {
                 validator: (_, value) =>
                   value
                     ? Promise.resolve()
-                    : Promise.reject(new Error(t('register.asset.complianceDeclarationPlaceholder')))
+                    : Promise.reject(
+                        new Error(
+                          t('register.asset.complianceDeclarationPlaceholder')
+                        )
+                      )
               }
             ]}
           >
@@ -291,7 +424,9 @@ export function AsseteRgister({ back }: { back: () => void }) {
                 validator: (_, value) =>
                   value
                     ? Promise.resolve()
-                    : Promise.reject(new Error(t('register.asset.amlCommitmentPlaceholder')))
+                    : Promise.reject(
+                        new Error(t('register.asset.amlCommitmentPlaceholder'))
+                      )
               }
             ]}
           >
@@ -306,7 +441,12 @@ export function AsseteRgister({ back }: { back: () => void }) {
           </Form.Item>
           <Form.Item>
             <div className="text-end">
-              <Button loading={isLoading} type="primary" htmlType="submit" className="h-10.5 px-4 text-base text-black">
+              <Button
+                loading={isLoading}
+                type="primary"
+                htmlType="submit"
+                className="h-10.5 px-4 text-base text-black"
+              >
                 {t('register.asset.submit')}
               </Button>
             </div>

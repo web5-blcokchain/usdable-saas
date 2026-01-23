@@ -1,4 +1,4 @@
-import type { PROCESS_STEP } from '@/enum/lawyerWorkbench'
+import type { PROCESS_STEP } from '@/enums/lawyerWorkbench'
 import type { TimelineItemProps } from 'antd/lib'
 import {
   getPendingOfflineDetail,
@@ -35,7 +35,12 @@ function RouteComponent() {
     }
   }, [caseId])
 
-  const { data: pendingOfflineDetailData, isPending, isFetching, refetch } = useQuery({
+  const {
+    data: pendingOfflineDetailData,
+    isPending,
+    isFetching,
+    refetch
+  } = useQuery({
     queryKey: ['pendingOfflineDetail', caseId],
     queryFn: async () => {
       const res = await getPendingOfflineDetail({
@@ -85,7 +90,10 @@ function RouteComponent() {
   }
 
   // 修改案件处理步骤
-  const { mutateAsync: updateOfflineStepMutate, isPending: updateOfflineStepLoading } = useMutation({
+  const {
+    mutateAsync: updateOfflineStepMutate,
+    isPending: updateOfflineStepLoading
+  } = useMutation({
     mutationKey: ['updateOfflineStep'],
     mutationFn: (data: { status: PROCESS_STEP }) => {
       return updateOfflineStep({

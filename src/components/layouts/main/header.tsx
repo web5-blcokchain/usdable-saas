@@ -3,8 +3,7 @@ import apiMyInfoApi from '@/api/apiMyInfoApi'
 import logo from '@/assets/images/logo.png'
 import { LoginDialog } from '@/components/dialog/login'
 import { USER_INFO_KEY } from '@/constants/user'
-import { USER_AUDIT_STATUS, USER_TYPE } from '@/enum/user'
-import { UserCode } from '@/enums/user'
+import { USER_AUDIT_STATUS, USER_TYPE, UserCode } from '@/enums/user'
 import { eventBus } from '@/hooks/EventBus'
 import { useMessageStore } from '@/stores/message'
 import { useUserStore } from '@/stores/user'
@@ -17,28 +16,54 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { Badge, Button, Dropdown, Menu } from 'antd'
 
 let lastCheckTokenTime = 0
+
+// function parseJwt(token: string) {
+//   const base64Url = token.split('.')[1]
+//   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+
+//   const decoded = Buffer.from(base64, 'base64').toString('utf-8')
+//   return JSON.parse(decoded)
+// }
+// 判断token是否过期
+// function isTokenExpired(token: string) {
+//   const { exp } = parseJwt(token)
+//   const now = Math.floor(Date.now() / 1000)
+//   return now > exp
+// }
+
 export default function MainHeader() {
-  const { userData } = useUserStore()
+  const {
+    userData,
+    clearUserData,
+    refreshUserInfo,
+    setCode,
+    setUserData,
+    getUserInfo,
+    clearRegisterData
+  } = useUserStore()
   const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
   const { authenticated, user, getAccessToken, logout } = usePrivy()
 
   // 用户登出
-  async function handleLogout(isShowToast?: boolean) {
-    logout().finally(() => {
-      clearUserData()
-      clearToken()
-      clearRegisterData()
-      setCode(UserCode.NotExist)
-      isShowToast && toast.success(t('common.logoutSuccess'))
-      setTimeout(() => {
-        navigate({
-          to: '/register'
-        })
-      }, 100)
-    })
-  }
+  const handleLogout = useCallback(
+    async (isShowToast?: boolean) => {
+      logout().finally(() => {
+        clearUserData()
+        clearToken()
+        clearRegisterData()
+        setCode(UserCode.NotExist)
+        isShowToast && toast.success(t('common.logoutSuccess'))
+        setTimeout(() => {
+          navigate({
+            to: '/register'
+          })
+        }, 100)
+      })
+    },
+    [logout, clearUserData, clearRegisterData, setCode, t, navigate]
+  )
   const menuList: MenuProps['items'] = useMemo(() => {
     return [
       {
@@ -119,14 +144,7 @@ export default function MainHeader() {
   }, [userData, i18n.language])
 
   const [logoutLoading, setLogoutLoading] = useState(false)
-  const {
-    clearUserData,
-    refreshUserInfo,
-    setCode,
-    setUserData,
-    getUserInfo,
-    clearRegisterData
-  } = useUserStore()
+
   const [openLoginDialog, setOpenLoginDialog] = useState(false)
   const isFirst = useRef(true)
 
@@ -242,7 +260,7 @@ export default function MainHeader() {
   const { refreshUser } = useUser()
 
   // 监测用户token是否过期
-  const checkToken = async () => {
+  const checkToken = useCallback(async () => {
     try {
       const token = getToken()
       // 判断token是否过期，并且该函数在5s只触发一次
@@ -275,11 +293,15 @@ export default function MainHeader() {
       handleLogout()
       showToastOnce(t('common.tokenExpired'), 'warning')
     }
-  }
+  }, [refreshUser, getAccessToken, getUserInfo, handleLogout, t])
+
   useEffect(() => {
     // 全局事件总线监听token失效
     eventBus.on('tokenExpired', checkToken)
-  }, [])
+    return () => {
+      eventBus.off('tokenExpired', checkToken)
+    }
+  }, [checkToken])
 
   const linkIdentityHome = useMemo(() => {
     const isRegister
