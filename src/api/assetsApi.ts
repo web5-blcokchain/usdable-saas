@@ -1,5 +1,5 @@
-import type { ASSET_AUDIT_SUBMISSION_STATUS, ASSET_AUDITOR_ROLE, ASSET_STATUS, ASSET_SUBMISSION_STATUS, RISK_STATUS, SALE_STATUS } from '@/enum/asset'
-import type { INPUT_FORMAT_TYPE, INPUT_UI_TYPE, IS_REQUIRED, REVIEW_STATUS } from '@/enum/common'
+import type { ASSET_AUDIT_SUBMISSION_STATUS, ASSET_AUDITOR_ROLE, ASSET_STATUS, ASSET_SUBMISSION_STATUS, RISK_STATUS, SALE_STATUS } from '@/enums/asset'
+import type { INPUT_FORMAT_TYPE, INPUT_UI_TYPE, IS_REQUIRED, REVIEW_STATUS } from '@/enums/common'
 import type { DataListResponse } from './responseData'
 import apiClient from './client'
 

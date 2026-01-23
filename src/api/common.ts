@@ -49,3 +49,16 @@ export function getLocation(data: {
 }) {
   return apiClient.post<Region[]>('/api/EntityType/location', data)
 }
+
+/**
+ * 加载rpc配置
+ * @returns rpc配置
+ */
+export async function loadRpcConfig() {
+  const res = await fetch('https://oss.tgkey.vip/rpc.json')
+  if (!res.ok) {
+    throw new Error('Failed to load rpc.json')
+  }
+  const data = await res.json()
+  return data
+}

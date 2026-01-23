@@ -3,7 +3,7 @@ import type { FormInstance } from 'antd'
 import assetsApi from '@/api/assetsApi'
 import { uploadFile } from '@/api/common'
 import UploadMultifileCard from '@/components/common/upload/uploa-multifile-card'
-import { INPUT_FORMAT_TYPE } from '@/enum/common'
+import { INPUT_FORMAT_TYPE } from '@/enums/common'
 import { formatNumberNoRound } from '@/utils/number'
 import { addHttpsPrefix } from '@/utils/url'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -457,7 +457,10 @@ export function AddAsseteSecond({
           scaleStep: 0.5,
           src: addHttpsPrefix(fileDialog.url),
           onVisibleChange: (value) => {
-            setFileDialog({ visible: value, url: addHttpsPrefix(fileDialog.url) })
+            setFileDialog({
+              visible: value,
+              url: addHttpsPrefix(fileDialog.url)
+            })
           }
         }}
       />

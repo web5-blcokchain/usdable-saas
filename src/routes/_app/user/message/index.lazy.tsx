@@ -1,12 +1,10 @@
-import type {
-  MessageList
-} from '@/api/messageApi'
+import type { MessageList } from '@/api/messageApi'
 import {
   deleteMessage,
   getMessageList,
   markMessageRead
 } from '@/api/messageApi'
-import { MESSAGE_STATUS, MESSAGE_TYPE } from '@/enum/message'
+import { MESSAGE_STATUS, MESSAGE_TYPE } from '@/enums/message'
 import { useMessageStore } from '@/stores/message'
 import { formatSmartTime } from '@/utils/date'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -78,7 +76,14 @@ function RouteComponent() {
     isLoading,
     isFetching
   } = useQuery({
-    queryKey: ['getMessageList', pageInfo.page, pageInfo.pageSize, pageInfo.isReload, pageInfo.type, DEFAULT_PAGE_SIZE],
+    queryKey: [
+      'getMessageList',
+      pageInfo.page,
+      pageInfo.pageSize,
+      pageInfo.isReload,
+      pageInfo.type,
+      DEFAULT_PAGE_SIZE
+    ],
     queryFn: async () => {
       const res = await getMessageList({
         page: pageInfo.isReload ? 1 : pageInfo.page,

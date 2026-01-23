@@ -38,5 +38,23 @@ export const envConfig = {
   rentCustodyAddress: import.meta.env.VITE_PUBLIC_RENT_CUSTODY_CONTRACT,
 
   // 是否切换正式USDC地址
-  checkOfficial: import.meta.env.VITE_PUBLIC_CHECK_OFFICIAL
+  checkOfficial: import.meta.env.VITE_PUBLIC_CHECK_OFFICIAL,
+  isProd: import.meta.env.VITE_APP_IS_PROD === 'true' // 是否线上环境
+
+}
+
+export type EnvConfig = typeof envConfig
+
+/**
+ * 更新全局配置
+ * @param updates 需要更新的配置项
+ */
+export function updateEnvConfig(updates: Partial<EnvConfig>) {
+  Object.assign(envConfig, updates)
+}
+
+// 挂载到 window 对象以便在控制台调试
+if (typeof window !== 'undefined') {
+  ;(window as any).envConfig = envConfig
+  ;(window as any).updateEnvConfig = updateEnvConfig
 }

@@ -2,7 +2,7 @@ import type { CaseListResponse } from '@/api/evaluationApi'
 import assetsApi from '@/api/assetsApi'
 import * as evaluationApi from '@/api/evaluationApi'
 import { CommonDialog } from '@/components/common/dialog/common'
-import { ASSET_EVALUATIO_STATUS } from '@/enum/evaluation'
+import { ASSET_EVALUATIO_STATUS } from '@/enums/evaluation'
 import { formatNumberNoRound } from '@/utils/number'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
@@ -70,7 +70,7 @@ export function EvaluationInfoDialog({
     queryKey: ['getEvaluationDetail', evaluationInfo?.id],
     queryFn: async () => {
       const res = await assetsApi.getAssetInfo(
-        (`${evaluationInfo?.id}`) as string
+        `${evaluationInfo?.id}` as string
       )
       return res.data
     },

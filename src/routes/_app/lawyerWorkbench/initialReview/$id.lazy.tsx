@@ -1,7 +1,5 @@
 import type { AssetFile } from '@/api/assetsApi'
-import type {
-  rejectSubmissionModel
-} from '@/api/lawyerWorkbenchApi'
+import type { rejectSubmissionModel } from '@/api/lawyerWorkbenchApi'
 import assetsApi from '@/api/assetsApi'
 import {
   lawyerRejectSubmission,
@@ -9,7 +7,7 @@ import {
 } from '@/api/lawyerWorkbenchApi'
 import { CommonDialog } from '@/components/common/dialog/common'
 import { NoContent } from '@/components/common/NoContent'
-import { IS_REQUIRED, REVIEW_STATUS } from '@/enum/common'
+import { IS_REQUIRED, REVIEW_STATUS } from '@/enums/common'
 import { addHttpsPrefix } from '@/utils/url'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
@@ -433,7 +431,11 @@ function ImagePreview({
           preview={{ visible, onVisibleChange: vis => setVisible(vis) }}
         >
           {fileUrls.map((fileItem, index) => (
-            <Image key={fileItem + index} className="size-full object-cover" src={addHttpsPrefix(fileItem)} />
+            <Image
+              key={fileItem + index}
+              className="size-full object-cover"
+              src={addHttpsPrefix(fileItem)}
+            />
           ))}
         </Image.PreviewGroup>
       </div>

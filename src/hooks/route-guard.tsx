@@ -1,5 +1,5 @@
 import type { User } from '@/api/apiMyInfoApi'
-import { USER_AUDIT_STATUS, USER_TYPE } from '@/enum/user'
+import { USER_AUDIT_STATUS, USER_TYPE } from '@/enums/user'
 import { useUserStore } from '@/stores/user'
 import { screenToTop } from '@/utils'
 import { getToken } from '@/utils/user.ts'
@@ -27,8 +27,9 @@ export function useRouteGuard() {
 
     // 如果用户未登录或者未审核，则只能访问首页和注册页面
     if (
-      (!userData?.user?.id && !['/', '/register'].includes(currentPath))
-      || userData?.user?.audit_status !== USER_AUDIT_STATUS.PASS
+      !['/', '/register'].includes(currentPath)
+      && (!userData?.user?.id
+        || userData?.user?.audit_status !== USER_AUDIT_STATUS.PASS)
     ) {
       navigate({
         to: '/register'

@@ -3,8 +3,8 @@ import assetsApi from '@/api/assetsApi'
 import { uploadFile } from '@/api/common'
 import cloudIcon from '@/assets/images/register/cloud.png'
 import UploadMultifileCard from '@/components/common/upload/uploa-multifile-card'
-import { ASSET_AUDITOR_ROLE, ASSET_SUBMISSION_STATUS } from '@/enum/asset'
-import { REVIEW_STATUS } from '@/enum/common'
+import { ASSET_AUDITOR_ROLE, ASSET_SUBMISSION_STATUS } from '@/enums/asset'
+import { REVIEW_STATUS } from '@/enums/common'
 import { getFileExtension } from '@/utils/file'
 import { addHttpsPrefix } from '@/utils/url'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -612,6 +612,9 @@ function RouteComponent() {
                 {classifyFiles.rejected.length > 0
                   ? (
                       classifyFiles.rejected.map((item) => {
+                        const rejectedFile = rejectedFiles(
+                          item?.template_file_id || 0
+                        )
                         return (
                           <div key={item.id}>
                             {/* <div className="mb-4 fyc justify-between gap-3">
@@ -621,9 +624,7 @@ function RouteComponent() {
                             <div>{t('assete.info.viewErrorDetail')}</div>
                           </div>
                         </div> */}
-                            {rejectedFiles(
-                              item?.template_file_id || 0
-                            )?.file_urls.map((file, _index) => (
+                            {rejectedFile?.file_urls.map((file, _index) => (
                               <FileContent
                                 key={file}
                                 fileName={`${item?.file_info?.display_name}-${

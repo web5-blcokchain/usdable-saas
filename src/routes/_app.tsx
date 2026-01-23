@@ -1,6 +1,8 @@
+import { loadRpcConfig } from '@/api/common'
 import MainLayout from '@/components/layouts/main'
 import { OtherLayout } from '@/components/layouts/other'
 import { useRouteGuard } from '@/hooks/route-guard'
+import { envConfig, updateEnvConfig } from '@/utils/envConfig'
 import { createFileRoute, Outlet, useRouterState } from '@tanstack/react-router'
 import ReactDOM from 'react-dom'
 import { ToastContainer } from 'react-toastify'
@@ -14,6 +16,20 @@ function AppLayoutComponent() {
   useRouteGuard()
   const router = useRouterState()
   const pathKey = router.location.pathname // 每次路由变化时更新
+
+  // 获取RPC节点
+  useEffect(() => {
+    loadRpcConfig().then((res) => {
+      const { test_rpc, main_rpc } = res
+      updateEnvConfig({
+        rpcUrls: [envConfig.isProd ? main_rpc : test_rpc],
+        web3: {
+          ...envConfig.web3,
+          rpc: envConfig.isProd ? main_rpc : test_rpc
+        }
+      })
+    })
+  }, [])
 
   return (
     <div className="app-content h-100vh overflow-y-scroll">

@@ -1,7 +1,7 @@
 import type { ColumnsType } from 'antd/es/table'
 import * as evaluationApi from '@/api/evaluationApi'
 import { CommonTable } from '@/components/common/common-table'
-import { SUBMISSION_STATUS } from '@/enum/common'
+import { SUBMISSION_STATUS } from '@/enums/common'
 import { downloadFile } from '@/utils/file'
 import { cn } from '@/utils/style'
 import { useQuery } from '@tanstack/react-query'
