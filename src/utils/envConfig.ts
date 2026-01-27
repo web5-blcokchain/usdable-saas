@@ -54,7 +54,7 @@ export function updateEnvConfig(updates: Partial<EnvConfig>) {
 }
 
 // 挂载到 window 对象以便在控制台调试
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && import.meta.env.DEV) {
   ;(window as any).envConfig = envConfig
   ;(window as any).updateEnvConfig = updateEnvConfig
 }
