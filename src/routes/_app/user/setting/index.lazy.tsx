@@ -48,6 +48,7 @@ function RouteComponent() {
       form.setFieldValue('wallet_address', userWallet.address)
     }
   }, [wallets])
+  // 保存用户设置
   function saveUserSetting() {
     const formData = form.getFieldsValue()
     const sumbitData = {
@@ -218,7 +219,7 @@ function RouteComponent() {
                   : 'b-#374151 bg-#1F2937 text-#9CA3AF'
               )}
             >
-              {t('user.setting.unbound')}
+              { t(userData.user.wallet_address ? 'user.setting.unbound' : 'user.setting.unbound')}
             </div>
           </div>
           {!wallet_address && (
