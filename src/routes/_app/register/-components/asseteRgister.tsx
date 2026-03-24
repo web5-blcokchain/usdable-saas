@@ -24,6 +24,7 @@ interface UserForm {
   legal_rep_name?: string
   id_card_front_url: string
   id_card_back_url: string
+  business_registration_document?: string
 }
 // 资产方注册
 export function AsseteRgister({ back }: { back: () => void }) {
@@ -35,6 +36,10 @@ export function AsseteRgister({ back }: { back: () => void }) {
   const [errorMessage, setErrorMessage] = useState('Error')
   const idCardFrontUrl = Form.useWatch<string>('id_card_front_url', form)
   const idCardBackUrl = Form.useWatch<string>('id_card_back_url', form)
+  const businessRegistrationDocument = Form.useWatch<string>(
+    'business_registration_document',
+    form
+  )
   const { userData } = useUserStore()
   const navigate = useNavigate()
 
@@ -64,7 +69,9 @@ export function AsseteRgister({ back }: { back: () => void }) {
         if (res.code === 1) {
           if (index === 0)
             form.setFieldValue(`id_card_front_url`, res.data?.file.full_url)
-          else form.setFieldValue(`id_card_back_url`, res.data?.file.full_url)
+          else if (index === 1)
+            form.setFieldValue(`id_card_back_url`, res.data?.file.full_url)
+          else form.setFieldValue(`business_registration_document`, res.data?.file.full_url)
         }
       })
       .finally(() => {
@@ -292,6 +299,78 @@ export function AsseteRgister({ back }: { back: () => void }) {
               )
             }
           </div>
+          {
+            // 法定代表人姓名
+            type === 2 && (
+              <Form.Item
+                required
+                label={t('register.asset.businessLicenseAddress')}
+              >
+                <div className="grid grid-cols-1 gap-4 max-md:grid-cols-1">
+                  <Form.Item
+                    name="business_registration_document"
+                    rules={[
+                      {
+                        required: true,
+                        message: t(
+                          'register.asset.businessLicenseAddressPlaceholder'
+                        )
+                      }
+                    ]}
+                  >
+                    <div className="h-full">
+                      <UploadMultifileCard
+                        className={cn(
+                          'flex gap-3 [&>div>div>div>div]:b-2',
+                          `${errorFormItem.includes('business_registration_document') && !businessRegistrationDocument ? '[&>div>div>div>div]:b-#dc4446' : '[&>div>div>div>div]:b-#30363D'}`
+                        )}
+                        loading={uploadFileLoading.includes(2)}
+                        fileType="image/png,image/jpg"
+                        fileUrl={
+                          fileIsUrl(businessRegistrationDocument)
+                            ? [businessRegistrationDocument]
+                            : []
+                        }
+                        maxLength={1}
+                        width="100%"
+                        height="9.5rem"
+                        removeFile={() => {
+                          form.setFieldValue(
+                            'business_registration_document',
+                            ''
+                          )
+                        }}
+                        beforeUpload={(file) => {
+                          uploadIdCardFile(file, 2)
+                        }}
+                      >
+                        <div className="py-3">
+                          <div className="fcc pb-2">
+                            <img
+                              className="!h-8"
+                              src={
+                                new URL(
+                                  '@/assets/images/register/cloud.png',
+                                  import.meta.url
+                                ).href
+                              }
+                              alt=""
+                            />
+                          </div>
+                          <div className="w-full overflow-hidden text-center text-sm text-#9CA3AF">
+                            {t('register.asset.uploadIdFront')}
+                          </div>
+                          <div className="w-full overflow-hidden text-center text-xs text-#6B7280">
+                            {t('register.asset.fileSupport')}
+                          </div>
+                        </div>
+                      </UploadMultifileCard>
+                    </div>
+                  </Form.Item>
+                </div>
+              </Form.Item>
+            )
+          }
           <Form.Item required label={t('register.asset.idFrontAndBack')}>
             <div className="grid grid-cols-2 gap-4 max-md:grid-cols-1">
               <Form.Item

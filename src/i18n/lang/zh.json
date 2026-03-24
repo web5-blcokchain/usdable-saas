@@ -562,7 +562,7 @@
         },
         "1": {
           "title": "律师审核完成",
-          "description": "资产确权{name}已完成审核"
+          "description": "资产确权{{name}}已完成审核"
         },
         "2": {
           "title": "资料审核完成",
@@ -821,7 +821,9 @@
       "platformRegistrationServiceAgreement": "平台注册服务协议",
       "pleaseAgreePlatformRegistrationServiceAgreement": "请同意平台注册服务协议",
       "enterEvaluationTaskCenter": "进入评估任务中心",
-      "enterLawyerTaskCenter": "进入律师任务中心"
+      "enterLawyerTaskCenter": "进入律师任务中心",
+      "businessLicenseAddress": "营业执照",
+      "businessLicenseAddressPlaceholder": "请上传营业执照"
     },
     "evaluator": {
       "title": "评估机构注册",
@@ -1316,6 +1318,7 @@
       "walletAddress": "钱包地址",
       "bindingStatus": "绑定状态:",
       "unbound": "未绑定",
+      "isBound": "已绑定",
       "connectWallet": "连接钱包",
       "privacySetting": "隐私设置",
       "personalInfoVisibility": "个人信息可见性",

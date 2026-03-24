@@ -540,7 +540,21 @@
       "submitForReaudit": "再審査を提出",
       "assetBasicInfo": "資産基本情報",
       "auditRemark": "審査備考",
-      "auditProgress": "審査進捗"
+      "auditProgress": "審査進捗",
+      "progress": {
+        "0": {
+          "title": "資料提出成功",
+          "description": "資産確権申請資料を正常に提出しました"
+        },
+        "1": {
+          "title": "弁護士審査完了",
+          "description": "資産確権{{name}}の審査が完了しました"
+        },
+        "2": {
+          "title": "資料審査完了",
+          "description": "資産審査が完了しました"
+        }
+      }
     },
     "payRent": {
       "title": "家賃の支払い",
@@ -791,7 +805,9 @@
       "platformRegistrationServiceAgreement": "プラットフォーム登録サービス協定",
       "pleaseAgreePlatformRegistrationServiceAgreement": "同意プラットフォーム登録サービス合意してください",
       "enterEvaluationTaskCenter": "評価タスク中心に入る",
-      "enterLawyerTaskCenter": "弁護士タスク中心に入る"
+      "enterLawyerTaskCenter": "弁護士タスク中心に入る",
+      "businessLicenseAddress": "事業ライセンス",
+      "businessLicenseAddressPlaceholder": "事業ライセンスをアップロード"
     },
     "evaluator": {
       "title": "評価機関登録",
@@ -1286,6 +1302,7 @@
       "walletAddress": "ウォレットアドレス",
       "bindingStatus": "連携状況:",
       "unbound": "未連携",
+      "isBound": "既に紐付け済み",
       "connectWallet": "ウォレットを接続",
       "privacySetting": "プライバシー設定",
       "personalInfoVisibility": "個人情報の公開範囲",

@@ -540,7 +540,21 @@
       "submitForReaudit": "Submit for Re-audit",
       "assetBasicInfo": "Asset Basic Information",
       "auditRemark": "Audit Remarks",
-      "auditProgress": "Audit Progress"
+      "auditProgress": "Audit Progress",
+      "progress": {
+        "0": {
+          "title": "Submission Successful",
+          "description": "You have successfully submitted the asset ownership verification materials"
+        },
+        "1": {
+          "title": "Lawyer Review Completed",
+          "description": "Asset ownership verification {{name}} has been reviewed"
+        },
+        "2": {
+          "title": "Document Review Completed",
+          "description": "Asset review has been completed"
+        }
+      }
     },
     "payRent": {
       "title": "Pay Rent",
@@ -791,7 +805,9 @@
       "platformRegistrationServiceAgreement": "Platform Registration Service Agreement",
       "pleaseAgreePlatformRegistrationServiceAgreement": "Please agree to the Platform Registration Service Agreement",
       "enterEvaluationTaskCenter": "Enter Evaluation Task Center",
-      "enterLawyerTaskCenter": "Enter Lawyer Task Center"
+      "enterLawyerTaskCenter": "Enter Lawyer Task Center",
+      "businessLicenseAddress": "Business License",
+      "businessLicenseAddressPlaceholder": "Please upload business license"
     },
     "evaluator": {
       "title": "Evaluator Institution Registration",
@@ -1285,6 +1301,7 @@
       "walletAddress": "Wallet Address",
       "bindingStatus": "Binding Status:",
       "unbound": "Unbound",
+      "isBound": "Bound",
       "connectWallet": "Connect Wallet",
       "privacySetting": "Privacy Settings",
       "personalInfoVisibility": "Personal Information Visibility",
