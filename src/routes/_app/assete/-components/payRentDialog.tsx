@@ -5,7 +5,7 @@ import type {
 } from '@/api/assetsApi'
 import assetsApi from '@/api/assetsApi'
 import { CommonDialog } from '@/components/common/dialog/common'
-import { userPayRent } from '@/contract/composables/RentCustodyUtils'
+import { listenAndPayRent } from '@/contract/composables/RentCustodyUtils'
 import { getUsdcContractInstance } from '@/contract/composables/UsdcUtils'
 import { formatNumberNoRound } from '@/utils/number'
 import { useWallets } from '@privy-io/react-auth'
@@ -56,11 +56,12 @@ export function PayRentDialog({
       toast.error(t('contract.insufficient_balance'))
       return null
     }
-    return (await userPayRent(signer, {
+    // TODO 后续替换为Ponder监听
+    return await listenAndPayRent(signer, {
       depositId: data.payment?.properties_id || 0,
       amount: data.payment?.monthly_rent || 0,
       wallet_address: userWallet?.address || ''
-    })) as Promise<string>
+    })
   }
 
   const { mutateAsync: saveRentIncomeMutate } = useMutation({
@@ -75,12 +76,20 @@ export function PayRentDialog({
     if (!data.payment?.properties_id)
       return
     setRayRentLoading(true)
-    let hash
+    let hash, tx_id
     try {
-      hash = await rentPaymentOnChain()
+      const data = await rentPaymentOnChain()
+      if (data && data.tx_id && data.hash) {
+        tx_id = data.tx_id
+        hash = data.hash as string
+      }
+      else {
+        throw new Error(t('contract.contract_call_failed'))
+      }
     }
     catch {
       toast.error(t('contract.contract_call_failed'))
+      setRayRentLoading(false)
     }
 
     if (!hash) {
@@ -91,7 +100,8 @@ export function PayRentDialog({
       submission_id: data.payment?.submission_id.toString(),
       income_date: data.payment?.next_rent_month,
       income_amount: `${data.payment?.monthly_rent || 0}`,
-      tx_hash: hash
+      tx_hash: hash,
+      distribution_id: tx_id?.toString() || ''
     })
       .then((res) => {
         if (res.code === 1) {
