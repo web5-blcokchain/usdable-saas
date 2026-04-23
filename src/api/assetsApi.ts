@@ -984,6 +984,10 @@ export interface SaveRentIncome {
    * 交易哈希
    */
   tx_hash?: string
+  /**
+   * 充值id
+   */
+  distribution_id?: string
 }
 
 /**
