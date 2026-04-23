@@ -486,9 +486,17 @@ export function FileContent({
   // 文件大小转换,最小为kb
   // debugger
   const fileSizeConvert = (fileSize: number) => {
-    return fileSize / 1024 / 1024 > 0
-      ? fileSize / 1024 / 1024
-      : fileSize / 1024 / 1024 / 1024
+    const kb = fileSize / 1024
+    const mb = kb / 1024
+    const gb = mb / 1024
+    return mb > 1 ? (gb > 1 ? gb : mb) : kb
+  }
+
+  const fileSizeConvertType = (fileSize: number) => {
+    const kb = fileSize / 1024
+    const mb = kb / 1024
+    const gb = mb / 1024
+    return mb > 1 ? (gb > 1 ? 'GB' : 'MB') : 'KB'
   }
 
   // 展示文件(pdf打开网址，图片在页面打开显示)
@@ -522,7 +530,7 @@ export function FileContent({
               {' '}
               {formatNumberNoRound(fileSizeConvert(fileSize), 2, 0)}
               {' '}
-              {fileSize / 1024 / 1024 / 1024 < 0 ? 'KB' : 'MB'}
+              {fileSizeConvertType(fileSize)}
             </div>
           )}
         </div>

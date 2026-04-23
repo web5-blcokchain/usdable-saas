@@ -81,11 +81,12 @@ export function PayRentDialog({
     }
     catch {
       toast.error(t('contract.contract_call_failed'))
-      setRayRentLoading(false)
     }
 
-    if (!hash)
+    if (!hash) {
+      setRayRentLoading(false)
       return
+    }
     saveRentIncomeMutate({
       submission_id: data.payment?.submission_id.toString(),
       income_date: data.payment?.next_rent_month,

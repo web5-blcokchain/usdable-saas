@@ -65,7 +65,7 @@ function RouteComponent() {
     return (
       Array.from({ length: 5 }, (_, i) => i).map((item) => {
         const data = pendingOfflineDetailData?.process_steps.find(
-          step => step.type === item
+          step => step.type === item + 1
         )
         return {
           title: t(`lawyerWorkbench.offlineConfirmation.status.${item}`),
