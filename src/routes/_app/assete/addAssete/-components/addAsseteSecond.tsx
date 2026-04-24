@@ -90,7 +90,8 @@ export function AddAsseteSecond({
               size: res.data?.file.size,
               type: res.data?.file.suffix,
               name: res.data?.file.name,
-              id: res.data?.file.id
+              id: uploadType.id,
+              upload_id: res.data?.file.id
             }
           ])
         }
@@ -369,7 +370,7 @@ export function AddAsseteSecond({
                                   (
                                     form.getFieldValue(item.value) as any[]
                                   ).filter((item) => {
-                                    return file.id !== item.id
+                                    return file.upload_id !== item.upload_id
                                   })
                                 )
                                 forceUpdate(x => x + 1)
