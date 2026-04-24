@@ -95,8 +95,8 @@ function RouteComponent() {
     isPending: updateOfflineStepLoading
   } = useMutation({
     mutationKey: ['updateOfflineStep'],
-    mutationFn: (data: { status: PROCESS_STEP }) => {
-      return updateOfflineStep({
+    mutationFn: async (data: { status: PROCESS_STEP }) => {
+      return await updateOfflineStep({
         id: Number(pendingOfflineDetailData?.case_info?.id),
         status: data.status
       })

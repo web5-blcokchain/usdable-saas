@@ -44,10 +44,11 @@ function RouteComponent() {
     const userWallet = wallets.find(
       wallet => wallet.walletClientType !== 'privy'
     )
-    if (userWallet && userWallet.address && !wallet_address) {
-      form.setFieldValue('wallet_address', userWallet.address)
+
+    if (userWallet && userWallet.address) {
+      form.setFieldsValue({ wallet_address: userWallet.address })
     }
-  }, [wallets])
+  }, [wallets, form, wallet_address])
   // 保存用户设置
   function saveUserSetting() {
     const formData = form.getFieldsValue()
@@ -70,6 +71,8 @@ function RouteComponent() {
             ...sumbitData
           }
         })
+        // 刷新用户信息
+        getUserInfo()
         toast.success(t('user.setting.saveSuccess'))
       }
     })
@@ -85,7 +88,10 @@ function RouteComponent() {
       form.setFieldsValue({
         ga_2fa_enabled: !!Number(userData?.user?.ga_2fa_enabled),
         sms_2fa_enabled: !!Number(userData?.user?.sms_2fa_enabled),
-        wallet_address: userData?.user?.wallet_address || '',
+        wallet_address:
+          userData?.user?.wallet_address
+          || form.getFieldValue('wallet_address')
+          || '',
         notify_asset_status: !!Number(userData?.user?.notify_asset_status),
         notify_system_announcement: !!Number(
           userData?.user?.notify_system_announcement
@@ -95,7 +101,7 @@ function RouteComponent() {
         )
       })
     }
-  }, [userData])
+  }, [userData, form])
   useEffect(() => {
     getUserInfo()
   }, [getUserInfo])
@@ -214,12 +220,16 @@ function RouteComponent() {
             <div
               className={cn(
                 'w-fit b-1  rounded-9999px  px-2 py-1 text-sm ',
-                !wallet_address
+                userData.user.wallet_address
                   ? 'text-primary b-primary bg-#00E6FF33'
                   : 'b-#374151 bg-#1F2937 text-#9CA3AF'
               )}
             >
-              { t(userData.user.wallet_address ? 'user.setting.unbound' : 'user.setting.unbound')}
+              {t(
+                userData.user.wallet_address
+                  ? 'user.setting.isBound'
+                  : 'user.setting.unbound'
+              )}
             </div>
           </div>
           {!wallet_address && (
