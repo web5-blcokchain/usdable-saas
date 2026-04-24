@@ -383,7 +383,7 @@ export default function MainHeader() {
                             alt=""
                           />
                         </div>
-                        <div className="">{userData?.user?.nickname ?? 'User'}</div>
+                        <div className="">{userData?.user?.nickname || 'User'}</div>
                         <div
                           className={cn(
                             'i-mingcute:down-line text-#9ea3ae text-4  transition-all-300',

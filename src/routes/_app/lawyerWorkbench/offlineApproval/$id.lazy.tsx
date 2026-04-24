@@ -405,7 +405,7 @@ function RouteComponent() {
     }).then((res) => {
       if (res.code === 1) {
         toast.success(
-          status === undefined
+          status === 0
             ? t('lawyerWorkbench.offlineExecution.saveSuccess')
             : t('lawyerWorkbench.offlineExecution.submitSuccess')
         )

@@ -282,7 +282,7 @@ function FirstStep({
       return data?.map(item => ({
         value: item.id,
         label: (
-          <div>
+          <div key={item.id}>
             {i18n.language === 'en'
               ? item.name_en
               : i18n.language === 'zh'
@@ -547,7 +547,7 @@ export function SecondStep({
 }) {
   const { t } = useTranslation()
   const [errorFormItem, setErrorFormItem] = useState<string[]>([])
-  const officePhotos = useWatch('officePhotos', form)
+  const officePhotos = useWatch('office_photo', form)
   const antiMoneyLaunderingStatement = useWatch(
     'anti_money_laundering_statement',
     form
@@ -943,7 +943,7 @@ export function SecondStep({
                 className={cn(
                   'flex gap-3 [&>div>div>div>div]:b-2',
                   `${
-                    errorFormItem.includes('officePhotos')
+                    errorFormItem.includes('office_photo')
                       ? '[&>div>div>div>div]:b-#dc4446'
                       : '[&>div>div>div>div]:b-#30363D'
                   }`
@@ -955,10 +955,10 @@ export function SecondStep({
                 height="auto"
                 loading={uploadFileLoading.includes(4)}
                 removeFile={(_index) => {
-                  form.setFieldValue(`officePhotos`, '')
+                  form.setFieldValue(`office_photo`, '')
                 }}
                 beforeUpload={(file) => {
-                  uploadIdCardFile(file, `officePhotos`, 4)
+                  uploadIdCardFile(file, `office_photo`, 4)
                 }}
               >
                 <div className="py-3">

@@ -177,26 +177,24 @@ function RouteComponent() {
     }
   }
 
-  let lastStatus = 0
-  const selectComponent = useMemo(() => {
-    let status = selectStatus
-    // 如果未登录则返回表单首页
-    if (!authenticated && selectStatus > 0 && lastStatus !== status) {
+  useEffect(() => {
+    // 如果未登录则返回表单首页并提示
+    if (!authenticated && selectStatus > 0) {
       toast.error(t('login.pleaseLogin'))
       setSelectStatus(0)
-      status = 0
     }
+    // 如果已经审核通过则返回表单首页并提示
     else if (
       userData?.user?.audit_status === USER_AUDIT_STATUS.PASS
       && selectStatus > 0
-      && lastStatus !== status
     ) {
       toast.info(t('login.userRegistered'))
       setSelectStatus(0)
-      status = 0
     }
-    lastStatus = selectStatus
-    switch (status) {
+  }, [selectStatus, authenticated, userData?.user?.audit_status, t])
+
+  const selectComponent = useMemo(() => {
+    switch (selectStatus) {
       case 0:
         return (
           <AnimationComponent
@@ -256,7 +254,7 @@ function RouteComponent() {
           </AnimationComponent>
         )
     }
-  }, [selectStatus, i18n.language])
+  }, [selectStatus, i18n.language]) // 移除了无关的副作用变量，专注于渲染依赖
 
   return (
     <div>

@@ -90,7 +90,7 @@ export function AddAsseteSecond({
               size: res.data?.file.size,
               type: res.data?.file.suffix,
               name: res.data?.file.name,
-              id: uploadType.id
+              id: res.data?.file.id
             }
           ])
         }
@@ -365,7 +365,7 @@ export function AddAsseteSecond({
                               }}
                               removeImg={() => {
                                 form.setFieldValue(
-                                  [item.value],
+                                  item.value,
                                   (
                                     form.getFieldValue(item.value) as any[]
                                   ).filter((item) => {

@@ -136,6 +136,10 @@ export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, on
     }
   }, [assetTypeData])
 
+  useEffect(() => {
+    form.setFieldValue('chain_id', 10)
+  }, [form])
+
   return (
     <div className="bg-#000000 px-22 pb-15 pt-8 max-md:px-4">
       <div onClick={back} className="w-fit fcc gap-1 clickable">
@@ -226,7 +230,7 @@ export function AddAsseteFrist({ form, onFinish }: { form: FormInstance<any>, on
             </Form.Item>
             {/* 链ID */}
             <Form.Item name="chain_id" label={t('assete.addAsset.chainId')} required rules={[{ required: true, message: t('assete.addAsset.chainIdPlaceholder') }]}>
-              <InputNumber min={1} controls={false} placeholder={t('assete.addAsset.chainIdPlaceholder')} />
+              <InputNumber disabled min={1} controls={false} placeholder={t('assete.addAsset.chainIdPlaceholder')} />
             </Form.Item>
             {/* 月租金 */}
             <Form.Item name="monthly_rent" label={t('assete.addAsset.monthlyRent')}>

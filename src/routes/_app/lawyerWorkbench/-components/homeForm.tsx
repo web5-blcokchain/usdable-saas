@@ -33,7 +33,8 @@ export function HomeForm({
         ),
         labelZh: item.name,
         labelEn: item.name_en
-      }))
+      })),
+    refetchOnWindowFocus: false
   })
 
   const [searchCountry, setSearchCountry] = useState('')
