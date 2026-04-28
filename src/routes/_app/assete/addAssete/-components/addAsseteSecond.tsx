@@ -246,8 +246,8 @@ export function AddAsseteSecond({
   return (
     <div className="bg-#000000 px-22 pb-15 pt-8 max-md:px-4">
       <div onClick={backStep} className="w-fit fcc gap-1 clickable">
-        <div className="i-ic:round-arrow-back text-6 text-white"></div>
-        <div className="text-2xl font-600">
+        <div className="i-ic:round-arrow-back text-5 text-white"></div>
+        <div className="text-xl font-600">
           {t('assete.addAsset.previousStep')}
         </div>
       </div>
@@ -270,8 +270,15 @@ export function AddAsseteSecond({
               >
                 <div className="fyc justify-between">
                   <div className="fyc gap-1 text-xl font-600">
+                    {item.required && (
+                      <span
+                        className="text-#EF4444"
+                        style={{ fontFamily: 'SimSun, sans-serif' }}
+                      >
+                        *
+                      </span>
+                    )}
                     <span>{item.label}</span>
-                    {item.required && <span className="text-#EF4444">*</span>}
                   </div>
                   <div className="rexr-#9CA3AF text-xs">
                     {t('assete.addAsset.supportedFormat')}
@@ -348,7 +355,7 @@ export function AddAsseteSecond({
                 {Array.isArray(form.getFieldValue(item.value))
                   && form.getFieldValue(item.value).length > 0 && (
                   <div>
-                    <div className="fol gap-2">
+                    <div className="mt-2 fol gap-2">
                       {form
                         .getFieldValue(item.value)
                         .map((file: any, index: number) => {

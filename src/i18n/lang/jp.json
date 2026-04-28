@@ -82,7 +82,8 @@
     "submissionStatusApproved": "提出済み",
     "downloadFailed": "ダウンロード失敗",
     "fileSizeError": "サイズは {{size}} を超えられません",
-    "submitSuccess": "送信成功"
+    "submitSuccess": "送信成功",
+    "loginSuccess": "ログイン成功"
   },
   "contract": {
     "insufficient_balance": "USDC 残高不足",
@@ -856,7 +857,7 @@
       "serviceAgreementContent": "契約内容...",
       "onlineSign": "オンライン署名",
       "officePhotos": "オフィス写真",
-      "officePhotosDesc": "JPG (最大 5MB), 任意",
+      "officePhotosDesc": "JPG、PNG (最大 5MB), 任意",
       "submit": "登録",
       "back": "戻る",
       "selectEntityTypepPlaceholder": "タイプを選択",
@@ -1319,6 +1320,7 @@
       "bindingStatus": "状態:",
       "unbound": "未連携",
       "isBound": "連携済み",
+      "bindWallet": "ウォレットを紐付ける",
       "connectWallet": "連携する",
       "privacySetting": "プライバシー",
       "personalInfoVisibility": "公開設定",

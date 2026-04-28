@@ -176,8 +176,8 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
     <div className="mt-6 fccc px-66 pb-53 max-md:px-4">
       <div className="w-full">
         <div onClick={back} className="w-fit fcc gap-1 clickable">
-          <div className="i-ic:round-arrow-back text-6 text-white"></div>
-          <div>{t('register.lawOffice.back')}</div>
+          <div className="i-ic:round-arrow-back text-5 text-white"></div>
+          <div className="text-xl">{t('register.lawOffice.back')}</div>
         </div>
       </div>
       <div className="text-center text-12 font-600 leading-18 max-md:text-3xl">

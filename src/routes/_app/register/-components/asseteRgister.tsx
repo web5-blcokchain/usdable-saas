@@ -67,11 +67,18 @@ export function AsseteRgister({ back }: { back: () => void }) {
     await uploadIdCardFileMutate({ file: data })
       .then((res) => {
         if (res.code === 1) {
-          if (index === 0)
+          if (index === 0) {
             form.setFieldValue(`id_card_front_url`, res.data?.file.full_url)
-          else if (index === 1)
+          }
+          else if (index === 1) {
             form.setFieldValue(`id_card_back_url`, res.data?.file.full_url)
-          else form.setFieldValue(`business_registration_document`, res.data?.file.full_url)
+          }
+          else {
+            form.setFieldValue(
+              `business_registration_document`,
+              res.data?.file.full_url
+            )
+          }
         }
       })
       .finally(() => {
@@ -124,8 +131,8 @@ export function AsseteRgister({ back }: { back: () => void }) {
     <div className="mt-6 fccc px-66 pb-53 max-md:px-4">
       <div className="w-full">
         <div onClick={back} className="w-fit fcc gap-1 clickable">
-          <div className="i-ic:round-arrow-back text-6 text-white"></div>
-          <div>{t('register.asset.back')}</div>
+          <div className="i-ic:round-arrow-back text-5 text-white"></div>
+          <div className="text-xl">{t('register.asset.back')}</div>
         </div>
       </div>
       <div className="text-12 font-600 leading-18 max-md:text-3xl">
@@ -184,7 +191,7 @@ export function AsseteRgister({ back }: { back: () => void }) {
               ))}
             </Radio.Group>
           </Form.Item>
-          <div className="grid grid-cols-2 gap-x-6 max-md:grid-cols-1 max-md:gap-0">
+          <div className="grid grid-cols-2 mt-2 gap-x-6 gap-y-2 max-md:grid-cols-1 max-md:gap-0">
             {/* 姓名 */}
             <Form.Item
               required
@@ -304,6 +311,7 @@ export function AsseteRgister({ back }: { back: () => void }) {
             type === 2 && (
               <Form.Item
                 required
+                className="mt-2"
                 label={t('register.asset.businessLicenseAddress')}
               >
                 <div className="grid grid-cols-1 gap-4 max-md:grid-cols-1">
@@ -371,7 +379,7 @@ export function AsseteRgister({ back }: { back: () => void }) {
               </Form.Item>
             )
           }
-          <Form.Item required label={t('register.asset.idFrontAndBack')}>
+          <Form.Item className="mt-2" required label={t('register.asset.idFrontAndBack')}>
             <div className="grid grid-cols-2 gap-4 max-md:grid-cols-1">
               <Form.Item
                 name="id_card_front_url"
@@ -472,7 +480,7 @@ export function AsseteRgister({ back }: { back: () => void }) {
           <Form.Item
             valuePropName="checked"
             name="agree_asset_compliance"
-            className="mb-1"
+            className="mb-1 mt-2"
             rules={[
               {
                 validator: (_, value) =>

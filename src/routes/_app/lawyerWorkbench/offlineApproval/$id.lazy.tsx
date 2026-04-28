@@ -428,8 +428,10 @@ function RouteComponent() {
       <div className="px-22 py-13">
         <div className="w-full">
           <div onClick={back} className="w-fit fcc gap-1 clickable">
-            <div className="i-ic:round-arrow-back text-6 text-white"></div>
-            <div>{t('lawyerWorkbench.offlineExecution.back')}</div>
+            <div className="i-ic:round-arrow-back text-5 text-white"></div>
+            <div className="text-xl">
+              {t('lawyerWorkbench.offlineExecution.back')}
+            </div>
           </div>
         </div>
         <div className="mt-6 text-sm text-#9CA3AF">
@@ -569,8 +571,11 @@ function RouteComponent() {
         </div>
         {/* 线下办理备注 */}
         <div className="mt-6 rounded-2 bg-#161B22 p-6">
-          <div className="text-xl font-600">
-            {t('lawyerWorkbench.offlineExecution.offlineRemarks')}
+          <div className="flex">
+            <div className="mr-1 text-xl font-600">
+              {t('lawyerWorkbench.offlineExecution.offlineRemarks')}
+            </div>
+            <div className="text-xl text-red-500">*</div>
           </div>
           {/* 遇见\n换行 */}
           <Form.Item

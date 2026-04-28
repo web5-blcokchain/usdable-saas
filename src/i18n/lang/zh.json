@@ -82,7 +82,8 @@
     "submissionStatusApproved": "已提交",
     "downloadFailed": "下载文件失败",
     "fileSizeError": "文件大小不能超过 {{size}}",
-    "submitSuccess": "提交成功"
+    "submitSuccess": "提交成功",
+    "loginSuccess": "登录成功"
   },
   "contract": {
     "insufficient_balance": "当前 USDC 余额不足",
@@ -856,7 +857,7 @@
       "serviceAgreementContent": "本协议由评估机构（以下简称\"甲方\"）与平台运营方（以下简称\"乙方\"）共同签署... 甲方承诺遵守国家相关法律法规，提供真实有效的评估服务... 乙方负责提供技术支持和平台服务，保障评估流程的公正透明...",
       "onlineSign": "在线签署协议",
       "officePhotos": "办公场所照片",
-      "officePhotosDesc": "支持JPG格式，大小不超过5MB，可选辅助证明",
+      "officePhotosDesc": "支持JPG、PNG格式，大小不超过5MB，可选辅助证明",
       "submit": "提交注册",
       "back": "上一步",
       "selectEntityTypepPlaceholder": "请选择主体类型",
@@ -1319,6 +1320,7 @@
       "bindingStatus": "绑定状态:",
       "unbound": "未绑定",
       "isBound": "已绑定",
+      "bindWallet": "绑定钱包",
       "connectWallet": "连接钱包",
       "privacySetting": "隐私设置",
       "personalInfoVisibility": "个人信息可见性",

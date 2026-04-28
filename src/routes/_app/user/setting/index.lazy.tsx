@@ -77,6 +77,35 @@ function RouteComponent() {
       }
     })
   }
+
+  const [saveWalletLoading, setSaveWalletLoading] = useState(false)
+  function saveWallet() {
+    setSaveWalletLoading(true)
+    try {
+      const formData = form.getFieldsValue()
+      const sumbitData = {
+        wallet_address: formData?.wallet_address || ''
+      }
+      saveInfo(sumbitData).then((res) => {
+        if (res.code === 1) {
+          setUserData({
+            ...userData,
+            user: {
+              ...userData?.user,
+              ...sumbitData
+            }
+          })
+          // 刷新用户信息
+          getUserInfo()
+          toast.success(t('user.setting.saveSuccess'))
+        }
+      })
+    }
+    finally {
+      setSaveWalletLoading(false)
+    }
+  }
+
   function copyWalletAddress() {
     if (wallet_address) {
       navigator.clipboard.writeText(wallet_address)
@@ -213,25 +242,37 @@ function RouteComponent() {
               </div>
             </div>
           </div>
-          <div className="mt-6 fyc gap-2">
-            <div className="text-base text-#D1D5DB font-400">
-              {t('user.setting.bindingStatus')}
+          <div className="mt-6 flex items-center justify-between">
+            <div className="fyc gap-2">
+              <div className="text-base text-#D1D5DB font-400">
+                {t('user.setting.bindingStatus')}
+              </div>
+              <div
+                className={cn(
+                  'w-fit b-1  rounded-9999px  px-2 py-1 text-sm ',
+                  userData.user.wallet_address
+                    ? 'text-primary b-primary bg-#00E6FF33'
+                    : 'b-#374151 bg-#1F2937 text-#9CA3AF'
+                )}
+              >
+                {t(
+                  userData.user.wallet_address
+                    ? 'user.setting.isBound'
+                    : 'user.setting.unbound'
+                )}
+              </div>
             </div>
-            <div
-              className={cn(
-                'w-fit b-1  rounded-9999px  px-2 py-1 text-sm ',
-                userData.user.wallet_address
-                  ? 'text-primary b-primary bg-#00E6FF33'
-                  : 'b-#374151 bg-#1F2937 text-#9CA3AF'
-              )}
-            >
-              {t(
-                userData.user.wallet_address
-                  ? 'user.setting.isBound'
-                  : 'user.setting.unbound'
-              )}
-            </div>
+            {!userData.user.wallet_address && (
+              <Button
+                loading={saveWalletLoading}
+                onClick={saveWallet}
+                className="mt-2 px-3 py-1 text-sm"
+              >
+                {t('user.setting.bindWallet')}
+              </Button>
+            )}
           </div>
+
           {!wallet_address && (
             <Button
               onClick={connectWallet}

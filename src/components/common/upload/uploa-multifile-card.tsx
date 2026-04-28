@@ -123,7 +123,9 @@ function UploadMultifileCard({
                   />
                   <div className="remove-child absolute left-0 top-0 h-full w-full fcc gap-3 bg-black/50 opacity-0 transition-opacity duration-200">
                     <div
-                      onClick={() => {
+                      onClick={(e) => {
+                        // 禁止默认事件
+                        e.stopPropagation()
                         if (urlTofileType(item) === UploadFileType.Image) {
                           setImageList([item])
                           setPreviewVisible(true)
@@ -137,7 +139,11 @@ function UploadMultifileCard({
                       <div className="i-weui:eyes-on-outlined size-6"></div>
                     </div>
                     <div
-                      onClick={() => removeFile?.(index)}
+                      onClick={(e) => {
+                        // 禁止默认事件
+                        e.stopPropagation()
+                        removeFile?.(index)
+                      }}
                       className="cursor-pointer clickable"
                     >
                       <div className="i-material-symbols:delete-outline size-6 bg-white"></div>
@@ -147,17 +153,6 @@ function UploadMultifileCard({
               )
             )
           })}
-          <Image.PreviewGroup
-            items={imageList}
-            preview={{
-              visible: previewVisible,
-              current: previewCurrent,
-              onVisibleChange: vis => setPreviewVisible(vis),
-              onChange: current => setPreviewCurrent(current)
-            }}
-          >
-            {/* <img className="max-h-128 w-full" src={imageList[0]} alt="" /> */}
-          </Image.PreviewGroup>
           {(fileUrl.length < maxLength || isMultipleFiles) && (
             <div className="h-full">
               <Spin spinning={loading}>
@@ -177,6 +172,17 @@ function UploadMultifileCard({
           )}
         </div>
       </Upload>
+      <Image.PreviewGroup
+        items={imageList}
+        preview={{
+          visible: previewVisible,
+          current: previewCurrent,
+          onVisibleChange: vis => setPreviewVisible(vis),
+          onChange: current => setPreviewCurrent(current)
+        }}
+      >
+        {/* <img className="max-h-128 w-full" src={imageList[0]} alt="" /> */}
+      </Image.PreviewGroup>
     </div>
   )
 }

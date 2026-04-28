@@ -397,13 +397,16 @@ function RouteComponent() {
               <div className="text-3xl font-bold">
                 {assetInfo?.properties?.name}
               </div>
-              <Button
-                onClick={() => setIsSwitchModify(res => !res)}
-                className="h-10.5 fcc b-1 b-#00E5FF4D b-solid bg-#0A246480 px-4 text-base text-#00E5FF"
-              >
-                <div className="i-mage:edit-fill text-4"></div>
-                <span>{t('assete.info.editInfo')}</span>
-              </Button>
+              {assetInfo?.submission?.status
+                === ASSET_SUBMISSION_STATUS.REJECTED && (
+                <Button
+                  onClick={() => setIsSwitchModify(res => !res)}
+                  className="h-10.5 fcc b-1 b-#00E5FF4D b-solid bg-#0A246480 px-4 text-base text-#00E5FF"
+                >
+                  <div className="i-mage:edit-fill text-4"></div>
+                  <span>{t('assete.info.editInfo')}</span>
+                </Button>
+              )}
             </div>
             {assetInfo?.submission?.status
               === ASSET_SUBMISSION_STATUS.REJECTED && (

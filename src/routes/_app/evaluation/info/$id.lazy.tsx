@@ -61,8 +61,8 @@ function RouteComponent() {
     <div className="px-22 pb-13">
       <div className="mt-6">
         <div onClick={back} className="mb-8 w-fit fcc gap-1 clickable">
-          <div className="i-ic:round-arrow-back text-6 text-white"></div>
-          <div className="text-2xl font-600">{t('evaluation.info.back')}</div>
+          <div className="i-ic:round-arrow-back text-5 text-white"></div>
+          <div className="text-xl font-600">{t('evaluation.info.back')}</div>
         </div>
         {isPending
           ? (

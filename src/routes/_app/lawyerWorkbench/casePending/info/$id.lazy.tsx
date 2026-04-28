@@ -90,6 +90,7 @@ function RouteComponent() {
   }
 
   // 修改案件处理步骤
+  const [isPendingStep, setIsPendingStep] = useState<number | null>(null)
   const {
     mutateAsync: updateOfflineStepMutate,
     isPending: updateOfflineStepLoading
@@ -104,6 +105,9 @@ function RouteComponent() {
     onSuccess() {
       toast.success(t('common.submitSuccess'))
       refetch()
+    },
+    onSettled() {
+      setIsPendingStep(null)
     }
   })
 
@@ -149,18 +153,27 @@ function RouteComponent() {
             </div>
             {maxStep === index && (
               <Button
-                loading={updateOfflineStepLoading}
-                onClick={() => updateOfflineStepMutate({ status: index + 1 })}
+                loading={updateOfflineStepLoading && isPendingStep === index}
+                onClick={() => {
+                  setIsPendingStep(index)
+                  updateOfflineStepMutate({ status: index + 1 })
+                }}
                 className="h-8 b-#00FF85 bg-#00FF85 px-4.5 text-base text-black font-600 hover:!b-#00FF85 hover:!bg-transparent hover:!text-#00FF85"
               >
-                申请推进步骤
+                {t('lawyerWorkbench.offlineConfirmation.applicationProgressSteps')}
               </Button>
             )}
           </div>
         )
       } as TimelineItemProps
     })
-  }, [stepData])
+  }, [
+    stepData,
+    updateOfflineStepLoading,
+    isPendingStep,
+    updateOfflineStepMutate,
+    t
+  ])
 
   // 手机号隐藏，展示前三位和后三位
   const hidePhone = (phone: string) => {

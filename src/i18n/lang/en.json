@@ -82,7 +82,8 @@
     "submissionStatusApproved": "Submitted",
     "downloadFailed": "Failed to download file",
     "fileSizeError": "File size cannot exceed {{size}}",
-    "submitSuccess": "Submitted Successfully"
+    "submitSuccess": "Submitted Successfully",
+    "loginSuccess": "Login Successfully"
   },
   "contract": {
     "insufficient_balance": "Insufficient USDC balance",
@@ -856,7 +857,7 @@
       "serviceAgreementContent": "Agreement content...",
       "onlineSign": "Sign Online",
       "officePhotos": "Office Photos",
-      "officePhotosDesc": "JPG (Max 5MB), optional",
+      "officePhotosDesc": "JPG、PNG (Max 5MB), optional",
       "submit": "Register",
       "back": "Previous",
       "selectEntityTypepPlaceholder": "Select entity type",
@@ -1319,6 +1320,7 @@
       "bindingStatus": "Status:",
       "unbound": "Unbound",
       "isBound": "Bound",
+      "bindWallet": "Bind wallet",
       "connectWallet": "Connect Wallet",
       "privacySetting": "Privacy",
       "personalInfoVisibility": "Visibility",

@@ -93,7 +93,7 @@ function RouteComponent() {
 
   // 监听用户数据变化，如果用户未审核通过，则返回表单首页，并显示弹窗
   const [lastDialog, setLastDialog] = useState(0)
-  const [dialogButton, setDialogButton] = useState({
+  const [dialogButton, _setDialogButton] = useState({
     text: '',
     onClick: () => {}
   })
@@ -126,37 +126,41 @@ function RouteComponent() {
         }
 
         // 根据用户类型设置按钮文本和点击事件
-        let buttonConfig
+        // let buttonConfig
         switch (userData.user?.type) {
           case USER_TYPE.ASSET:
-            buttonConfig = {
-              text: t('register.asset.enterAssetCenter'),
-              onClick: () => {
-                navigate({ to: '/assete' })
-              }
-            }
+            navigate({ to: '/assete' })
+            // buttonConfig = {
+            //   text: t('register.asset.enterAssetCenter'),
+            //   onClick: () => {
+            //     navigate({ to: '/assete' })
+            //   }
+            // }
             break
           case USER_TYPE.ASSESS:
-            buttonConfig = {
-              text: t('register.asset.enterEvaluationTaskCenter'),
-              onClick: () => {
-                navigate({ to: '/evaluation' })
-              }
-            }
+            navigate({ to: '/evaluation' })
+            // buttonConfig = {
+            //   text: t('register.asset.enterEvaluationTaskCenter'),
+            //   onClick: () => {
+            //     navigate({ to: '/evaluation' })
+            //   }
+            // }
             break
           default:
-            buttonConfig = {
-              text: t('register.asset.enterLawyerTaskCenter'),
-              onClick: () => {
-                navigate({ to: '/lawyerWorkbench' })
-              }
-            }
+            navigate({ to: '/lawyerWorkbench' })
+          // buttonConfig = {
+          //   text: t('register.asset.enterLawyerTaskCenter'),
+          //   onClick: () => {
+          //     navigate({ to: '/lawyerWorkbench' })
+          //   }
+          // }
         }
+        toast.success(t('common.loginSuccess'))
 
-        setDialogButton(buttonConfig)
-        setRegisterStatus(1)
-        setLastDialog(Date.now())
-        setErrorMessage(userData.user?.review_remark)
+        // setDialogButton(buttonConfig)
+        // setRegisterStatus(1)
+        // setLastDialog(Date.now())
+        // setErrorMessage(userData.user?.review_remark)
       }
     }
   }, [userData, t, navigate, authenticated])

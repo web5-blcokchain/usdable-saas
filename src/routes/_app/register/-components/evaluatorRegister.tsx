@@ -298,8 +298,8 @@ function FirstStep({
     <div className={className}>
       <div className="w-full">
         <div onClick={back} className="w-fit fcc gap-1 clickable">
-          <div className="i-ic:round-arrow-back text-6 text-white"></div>
-          <div>{t('register.lawOffice.back')}</div>
+          <div className="i-ic:round-arrow-back text-5 text-white"></div>
+          <div className="text-xl">{t('register.lawOffice.back')}</div>
         </div>
       </div>
       <div className="text-center text-12 font-600 leading-18 max-md:text-3xl">
@@ -614,8 +614,8 @@ export function SecondStep({
     <div className={className}>
       <div className="w-full">
         <div onClick={back} className="w-fit fcc gap-1 clickable">
-          <div className="i-ic:round-arrow-back text-6 text-white"></div>
-          <div>{t('register.evaluator.back')}</div>
+          <div className="i-ic:round-arrow-back text-5 text-white"></div>
+          <div className="text-xl">{t('register.evaluator.back')}</div>
         </div>
       </div>
       <div className="mt-10 w-full b-2 b-#31363c rounded-lg b-solid bg-#161B2199 p-12 max-md:p-4">
@@ -948,7 +948,7 @@ export function SecondStep({
                       : '[&>div>div>div>div]:b-#30363D'
                   }`
                 )}
-                fileType="image/png,image/jpg,application/pdf"
+                fileType="image/png,image/jpg"
                 fileUrl={fileIsUrl(officePhotos) ? [officePhotos] : []}
                 maxLength={1}
                 width="100%"

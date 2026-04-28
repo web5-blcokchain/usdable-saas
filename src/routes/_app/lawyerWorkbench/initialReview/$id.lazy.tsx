@@ -118,8 +118,8 @@ function RouteComponent() {
     <div className="p-22">
       <div className="w-full">
         <div onClick={back} className="w-fit fcc gap-1 clickable">
-          <div className="i-ic:round-arrow-back text-6 text-white"></div>
-          <div>{t('register.asset.back')}</div>
+          <div className="i-ic:round-arrow-back text-5 text-white"></div>
+          <div className="text-xl">{t('register.asset.back')}</div>
         </div>
       </div>
       <div className="mt-10 flex justify-between gap-4 b-1 b-#3341554D rounded-3 b-solid bg-#161B22 px-6 py-16">
