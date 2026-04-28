@@ -194,6 +194,9 @@ function FirstStep({
   interface LocationData {
     value: number
     label: string
+    zh_label: string
+    en_label: string
+    code: string
   }
   // 地区数据
   const [locationData, setLocationData] = useState({
@@ -224,7 +227,10 @@ function FirstStep({
       const newData
         = data?.data?.map(item => ({
           value: item.id,
-          label: item.name
+          label: item.name,
+          zh_label: item.name,
+          en_label: item.name_en,
+          code: item.code
         })) || ([] as LocationData[])
 
       setLocationData((pre) => {
@@ -293,6 +299,37 @@ function FirstStep({
       }))
     }
   })
+
+  const reloadLocationData = (data: LocationData[]) =>
+    data.map((val) => {
+      return {
+        value: val.value,
+        zh_label: val.zh_label,
+        en_label: val.en_label,
+        code: val.code,
+        label:
+          i18n.language === 'zh' ? val.zh_label : val.en_label || val.zh_label
+      }
+    })
+
+  const countryList = useMemo(() => {
+    return reloadLocationData(locationData.country)
+  }, [locationData.country, i18n.language])
+
+  const provinceList = useMemo(() => {
+    return reloadLocationData(locationData.province)
+  }, [locationData.province, i18n.language])
+
+  const cityList = useMemo(() => {
+    return reloadLocationData(locationData.city)
+  }, [locationData.city, i18n.language])
+
+  const selectCity = (value: string, option?: LocationData) => {
+    return (
+      (option?.label ?? '').toLowerCase().includes(value.toLowerCase())
+      || (option?.code ?? '').toLowerCase().includes(value.toLowerCase())
+    )
+  }
 
   return (
     <div className={className}>
@@ -434,12 +471,14 @@ function FirstStep({
                 ]}
               >
                 <Select
+                  showSearch
                   placeholder={t('register.evaluator.country')}
                   loading={
                     locationDataLoading && selectPid.selectedLocation === 0
                   }
                   onChange={val => changeCity(val, 0)}
-                  options={locationData.country}
+                  options={countryList}
+                  filterOption={selectCity}
                 />
               </Form.Item>
               <Form.Item
@@ -452,6 +491,7 @@ function FirstStep({
                 ]}
               >
                 <Select
+                  showSearch
                   placeholder={t('register.evaluator.province')}
                   disabled={
                     locationDataLoading && selectPid.selectedLocation === 1
@@ -460,7 +500,8 @@ function FirstStep({
                     locationDataLoading && selectPid.selectedLocation === 1
                   }
                   onChange={val => changeCity(val, 1)}
-                  options={locationData.province}
+                  options={provinceList}
+                  filterOption={selectCity}
                 />
               </Form.Item>
               <Form.Item
@@ -473,6 +514,7 @@ function FirstStep({
                 ]}
               >
                 <Select
+                  showSearch
                   placeholder={t('register.evaluator.city')}
                   disabled={
                     locationDataLoading && selectPid.selectedLocation === 2
@@ -481,7 +523,8 @@ function FirstStep({
                     locationDataLoading && selectPid.selectedLocation === 2
                   }
                   onChange={val => changeCity(val, 2)}
-                  options={locationData.city}
+                  options={cityList}
+                  filterOption={selectCity}
                 />
               </Form.Item>
             </div>

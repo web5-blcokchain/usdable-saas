@@ -28,26 +28,39 @@ export function HomeForm({
     select: data =>
       data.map(item => ({
         value: item.id,
-        label: (
-          <div>{t(i18n.language === 'zh' ? item.name : item.name_en)}</div>
-        ),
-        labelZh: item.name,
-        labelEn: item.name_en
+        label: item.name,
+        zh_label: item.name,
+        en_label: item.name_en,
+        code: item.code
       })),
     refetchOnWindowFocus: false
   })
 
-  const [searchCountry, setSearchCountry] = useState('')
   // 搜索国家
-  const filteredCountryData = useMemo(() => {
-    const search = searchCountry?.trim() || ''
-    if (countryData && search) {
-      return countryData.filter((item) => {
-        return item.labelZh.includes(search) || item.labelEn.includes(search)
-      })
-    }
-    return countryData || []
-  }, [countryData, searchCountry])
+  const countryList = useMemo(() => {
+    return countryData?.map((val) => {
+      return {
+        value: val.value,
+        zh_label: val.zh_label,
+        en_label: val.en_label,
+        code: val.code,
+        label:
+          i18n.language === 'zh' ? val.zh_label : val.en_label || val.zh_label
+      }
+    })
+  }, [countryData, i18n.language])
+
+  type LocationData = typeof countryList
+
+  const selectCity = (
+    value: string,
+    option?: NonNullable<NonNullable<LocationData>[number]>
+  ) => {
+    return (
+      (option?.label ?? '').toLowerCase().includes(value.toLowerCase())
+      || (option?.code ?? '').toLowerCase().includes(value.toLowerCase())
+    )
+  }
   // 修改时间
   const changeDateRange = (
     dates: [start: Dayjs | null, end: Dayjs | null] | null
@@ -85,11 +98,11 @@ export function HomeForm({
         <Select
           value={filterParams.country_id || undefined}
           showSearch
-          onSearch={setSearchCountry}
+          allowClear
           defaultActiveFirstOption={false}
-          filterOption={false}
-          options={filteredCountryData}
+          options={countryList}
           loading={locationDataLoading}
+          filterOption={selectCity}
           onChange={value =>
             setFilterParams(prev => ({ ...prev, country_id: value }))}
           className="[&>.ant-select-selector]:!b-#334155"

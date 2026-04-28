@@ -99,7 +99,7 @@ function RouteComponent() {
               visible: true,
               type: 1,
               asseteInfo: {
-                code: res.data?.submission_id || '',
+                code: res.data?.code || '',
                 createTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
               },
               errorMessage: ''

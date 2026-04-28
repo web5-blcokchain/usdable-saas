@@ -1134,6 +1134,7 @@ export default {
     return apiClient.post<{
       properties_id: number
       submission_id: string
+      code: string
     }>('/api/assets/saveAssetInfo', data)
   },
   /**

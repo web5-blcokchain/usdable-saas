@@ -59,7 +59,7 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
       }
     })
   // 获取国家列表
-  const { data: countryList, isFetching: locationDataLoading } = useQuery({
+  const { data: countryListData, isFetching: locationDataLoading } = useQuery({
     queryKey: ['getLocation'],
     queryFn: async () => {
       const data = await getLocation({
@@ -69,14 +69,41 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
     },
     select(data) {
       // 处理数据,
-      const newData
-        = data?.map(item => ({
-          value: item.id,
-          label: item.name
-        })) || ([] as any[])
+      const newData = data?.map(item => ({
+        value: item.id,
+        label: item.name,
+        zh_label: item.name,
+        en_label: item.name_en,
+        code: item.code
+      }))
       return newData
     }
   })
+
+  const countryList = useMemo(() => {
+    return countryListData?.map((val) => {
+      return {
+        value: val.value,
+        zh_label: val.zh_label,
+        en_label: val.en_label,
+        code: val.code,
+        label:
+          i18n.language === 'zh' ? val.zh_label : val.en_label || val.zh_label
+      }
+    })
+  }, [countryListData, i18n.language])
+
+  type LocationData = typeof countryList
+
+  const selectCity = (
+    value: string,
+    option?: NonNullable<NonNullable<LocationData>[number]>
+  ) => {
+    return (
+      (option?.label ?? '').toLowerCase().includes(value.toLowerCase())
+      || (option?.code ?? '').toLowerCase().includes(value.toLowerCase())
+    )
+  }
 
   const { userData } = useUserStore()
   // 用户注册
@@ -230,11 +257,13 @@ export function LawOfficeRegister({ back }: { back: () => void }) {
               ]}
             >
               <Select
+                showSearch
                 placeholder={t(
                   'register.lawOffice.registrationAddressPlaceholder'
                 )}
                 options={countryList}
                 loading={locationDataLoading}
+                filterOption={selectCity}
               />
             </Form.Item>
           </div>
