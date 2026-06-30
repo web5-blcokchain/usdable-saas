@@ -305,9 +305,9 @@ export function AssetDetailModal({ visible, setVisible }: { visible: boolean, se
                 </div>
                 <div>
                   <div className="text-base">
-                    相关文件
+                    {t('lawyerWorkbench.completedCaseDetailDialog.relatedDocuments')}
                     {item}
-                    .pnf
+                    .png
                   </div>
                   <div className="mt-1 text-sm text-#9CA3AF">2.4 MB</div>
                 </div>

@@ -3,12 +3,13 @@ import type { ColumnsType } from 'antd/es/table'
 import assetsApi from '@/api/assetsApi'
 import { CommonTable } from '@/components/common/common-table'
 import { CommonDialog } from '@/components/common/dialog/common'
+import { TrustRecordAlert } from '@/components/common/TrustRecordAlert'
 import { ASSET_STATUS, RISK_STATUS } from '@/enums/asset'
 import { formatNumberNoRound } from '@/utils/number'
 import { addHttpsPrefix } from '@/utils/url'
 import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
-import { Button, Input, Modal } from 'antd'
+import { Button, Input, Modal, Spin } from 'antd'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { DefaultDetailsDialog } from './-components/defaultDetailsDialog'
@@ -841,6 +842,16 @@ function PropertyOperatingStatusDetailsDialog({
   data: AssetsOperationData
 }) {
   const { t } = useTranslation()
+
+  const { data: assetInfo, isFetching } = useQuery({
+    queryKey: ['getEvaluationDetail', data?.submission_id],
+    queryFn: async () => {
+      const res = await assetsApi.getAssetInfo(`${data?.submission_id}` as string)
+      return res.data
+    },
+    enabled: !!data?.id
+  })
+
   return (
     <CommonDialog
       open={visible}
@@ -860,90 +871,128 @@ function PropertyOperatingStatusDetailsDialog({
       footer={false}
       closable
     >
-      <div className="fol gap-6 py-6">
-        <img
-          src={addHttpsPrefix(data?.image_urls || '')}
-          className="h-64 w-full rounded-2"
-          alt=""
-        />
-        <div className="grid cols-2 gap-6 [&>div>div:last-child]:mt-1 [&>div>div:first-child]:text-sm [&>div>div:last-child]:text-lg [&>div>div:first-child]:text-#9CA3AF [&>div>div:last-child]:font-500">
-          <div>
-            <div>
-              {t('assete.propertyOperatingStatusDetailsDialog.propertyName')}
-            </div>
-            <div>{data?.name}</div>
-          </div>
-          <div>
-            <div>
-              {t('assete.propertyOperatingStatusDetailsDialog.location')}
-            </div>
-            <div>{data?.address}</div>
-          </div>
-          <div>
-            <div>
-              {t(
-                'assete.propertyOperatingStatusDetailsDialog.managementMethod'
-              )}
-            </div>
-            <div>{data?.hosting_method || '-'}</div>
-          </div>
-          <div>
-            <div>{t('assete.propertyOperatingStatusDetailsDialog.rent')}</div>
-            <div>
-              $
-              {formatNumberNoRound(data?.monthly_rent || 0, 6, 0)}
-              /
-              {t('common.month')}
-            </div>
-          </div>
-          <div>
-            <div>{t('assete.propertyOperatingStatusDetailsDialog.status')}</div>
-            <div
-              className={cn(
-                'fyc gap-2',
-                data.property_status === RISK_STATUS.NORMAL
-                  ? 'text-#00FF85'
-                  : 'text-#FF4D4F'
-              )}
-            >
-              <div
-                className={cn(
-                  'size-2 rounded-full',
-                  data.property_status === RISK_STATUS.NORMAL
-                    ? 'bg-#00FF85'
-                    : 'bg-#FF4D4F'
-                )}
-              >
+      <Spin spinning={isFetching}>
+        { !isFetching
+          ? (
+              <div className="fol gap-6 py-6">
+                <img
+                  src={addHttpsPrefix(
+                    assetInfo?.properties?.image_urls || data?.image_urls || ''
+                  )}
+                  className="h-64 w-full rounded-2"
+                  alt=""
+                />
+                <div className="grid cols-2 gap-6 [&>div>div:last-child]:mt-1 [&>div>div:first-child]:text-sm [&>div>div:last-child]:text-lg [&>div>div:first-child]:text-#9CA3AF [&>div>div:last-child]:font-500">
+                  <div>
+                    <div>
+                      {t('assete.propertyOperatingStatusDetailsDialog.propertyName')}
+                    </div>
+                    <div>{assetInfo?.properties?.name || data?.name}</div>
+                  </div>
+                  <div>
+                    <div>
+                      {t('assete.propertyOperatingStatusDetailsDialog.location')}
+                    </div>
+                    <div>{assetInfo?.properties?.address || data?.address}</div>
+                  </div>
+                  <div>
+                    <div>
+                      {t(
+                        'assete.propertyOperatingStatusDetailsDialog.managementMethod'
+                      )}
+                    </div>
+                    <div>
+                      {(assetInfo?.properties as any)?.hosting_method
+                        || data?.hosting_method
+                        || '-'}
+                    </div>
+                  </div>
+                  <div>
+                    <div>{t('assete.propertyOperatingStatusDetailsDialog.rent')}</div>
+                    <div>
+                      $
+                      {formatNumberNoRound(
+                        assetInfo?.properties?.monthly_rent
+                        || data?.monthly_rent
+                        || 0,
+                        6,
+                        0
+                      )}
+                      /
+                      {t('common.month')}
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      {t('assete.propertyOperatingStatusDetailsDialog.status')}
+                    </div>
+                    <div
+                      className={cn(
+                        'fyc gap-2',
+                        (assetInfo?.properties?.property_status
+                          ?? data.property_status) === RISK_STATUS.NORMAL
+                          ? 'text-#00FF85'
+                          : 'text-#FF4D4F'
+                      )}
+                    >
+                      <div
+                        className={cn(
+                          'size-2 rounded-full',
+                          (assetInfo?.properties?.property_status
+                            ?? data.property_status) === RISK_STATUS.NORMAL
+                            ? 'bg-#00FF85'
+                            : 'bg-#FF4D4F'
+                        )}
+                      >
+                      </div>
+                      <div></div>
+                      {t(
+                        `common.assetPropertyStatus.${
+                          (assetInfo?.properties?.property_status
+                            ?? data?.property_status) < RISK_STATUS.NORMAL
+                            || (assetInfo?.properties?.property_status
+                              ?? data?.property_status) > RISK_STATUS.AUCTION_FAILURE
+                            ? 'other'
+                            : (assetInfo?.properties?.property_status
+                              ?? data?.property_status)
+                            || 'other'
+                        }`
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      {t('assete.propertyOperatingStatusDetailsDialog.nextPayment')}
+                    </div>
+                    <div>
+                      {dayjs(
+                        (assetInfo?.properties as any)?.next_rent_date
+                        || data?.next_rent_date
+                        || ''
+                      ).format('MM-DD')}
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm text-#9CA3AF font-400">
+                    {t(
+                      'assete.propertyOperatingStatusDetailsDialog.propertyDescription'
+                    )}
+                  </div>
+                  <div className="mt-1 text-base text-#D1D5DB font-400">
+                    {assetInfo?.properties?.property_description
+                      || data?.property_description}
+                  </div>
+                </div>
+                <TrustRecordAlert count={assetInfo?.properties?.ledgerbox_witness_summary?.total_witness_count || 0} className="" />
               </div>
-              <div></div>
-              {t(
-                `common.assetPropertyStatus.${
-                  data?.property_status < RISK_STATUS.NORMAL
-                  || data?.property_status > RISK_STATUS.AUCTION_FAILURE
-                    ? 'other'
-                    : data?.property_status || 'other'
-                }`
-              )}
-            </div>
-          </div>
-          <div>
-            <div>
-              {t('assete.propertyOperatingStatusDetailsDialog.nextPayment')}
-            </div>
-            <div>{dayjs(data?.next_rent_date || '').format('MM-DD')}</div>
-          </div>
-        </div>
-        <div>
-          <div className="text-sm text-#9CA3AF font-400">
-            {t(
-              'assete.propertyOperatingStatusDetailsDialog.propertyDescription'
+            )
+          : (
+              <div className="min-h-80">
+
+              </div>
             )}
-          </div>
-          <div className="mt-1 text-base text-#D1D5DB font-400">
-            {data?.property_description}
-          </div>
-        </div>
-      </div>
+      </Spin>
     </CommonDialog>
   )
 }

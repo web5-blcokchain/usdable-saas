@@ -40,7 +40,6 @@
     "noContent": "コンテンツなし",
     "tokenExpired": "ログイン期限切れです、再ログインしてください",
     "assetStatus": {
-      "-1": "下書き",
       "0": "審査待ち",
       "1": "弁護士確認済み",
       "2": "審査却下",
@@ -51,6 +50,7 @@
       "7": "弁護士オフライン担当済み",
       "8": "弁護士資料アップロード中",
       "9": "資産オンチェーン済み",
+      "-1": "下書き",
       "other": "不明"
     },
     "assetRentStatus": {
@@ -83,7 +83,8 @@
     "downloadFailed": "ダウンロード失敗",
     "fileSizeError": "サイズは {{size}} を超えられません",
     "submitSuccess": "送信成功",
-    "loginSuccess": "ログイン成功"
+    "loginSuccess": "ログイン成功",
+    "trustRecord": "本案件の信頼できる記録は{{count}}台のLedgerBoxデバイスによって立証されており、ファイルの要約は検証済みで、変更は完全に追跡可能です。"
   },
   "contract": {
     "insufficient_balance": "USDC 残高不足",

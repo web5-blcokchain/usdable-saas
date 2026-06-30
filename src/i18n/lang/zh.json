@@ -40,7 +40,6 @@
     "noContent": "暂无内容",
     "tokenExpired": "登录已过期，请重新登录",
     "assetStatus": {
-      "-1": "草稿",
       "0": "待审核",
       "1": "律师已确认",
       "2": "审核驳回",
@@ -51,6 +50,7 @@
       "7": "律师已认领线下",
       "8": "律师线下上传材料",
       "9": "资产已上链",
+      "-1": "草稿",
       "other": "未知"
     },
     "assetRentStatus": {
@@ -83,7 +83,8 @@
     "downloadFailed": "下载文件失败",
     "fileSizeError": "文件大小不能超过 {{size}}",
     "submitSuccess": "提交成功",
-    "loginSuccess": "登录成功"
+    "loginSuccess": "登录成功",
+    "trustRecord": "本案件可信记录已由{{count}}台LedgerBox设备参与见证，文件摘要已校验、变更全程可追溯。"
   },
   "contract": {
     "insufficient_balance": "当前 USDC 余额不足",

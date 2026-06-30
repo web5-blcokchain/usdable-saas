@@ -1,5 +1,17 @@
-import type { ASSET_AUDIT_SUBMISSION_STATUS, ASSET_AUDITOR_ROLE, ASSET_STATUS, ASSET_SUBMISSION_STATUS, RISK_STATUS, SALE_STATUS } from '@/enums/asset'
-import type { INPUT_FORMAT_TYPE, INPUT_UI_TYPE, IS_REQUIRED, REVIEW_STATUS } from '@/enums/common'
+import type {
+  ASSET_AUDIT_SUBMISSION_STATUS,
+  ASSET_AUDITOR_ROLE,
+  ASSET_STATUS,
+  ASSET_SUBMISSION_STATUS,
+  RISK_STATUS,
+  SALE_STATUS
+} from '@/enums/asset'
+import type {
+  INPUT_FORMAT_TYPE,
+  INPUT_UI_TYPE,
+  IS_REQUIRED,
+  REVIEW_STATUS
+} from '@/enums/common'
 import type { DataListResponse } from './responseData'
 import apiClient from './client'
 
@@ -914,6 +926,22 @@ export interface Properties {
   tx_hash: string
   updated_date: number
   valuation_report: string
+  /**
+   * 资产证
+   */
+  ledgerbox_witness_summary: LedgerboxWitnessSummary
+}
+
+export interface LedgerboxWitnessSummary {
+  asset_id: string
+  proof_count: number
+  batched_proof_count: number
+  witnessed_batch_count: number
+  verified_device_count: number
+  total_witness_count: number
+  latest_witness_at: number
+  witness_status: string
+  display_text: string
 }
 
 /**
@@ -1091,7 +1119,9 @@ export default {
    * @returns 链上资产状态
    */
   getSubmissionStatistics() {
-    return apiClient.post<SubmissionStatistics>('/api/assets/submissionStatistics')
+    return apiClient.post<SubmissionStatistics>(
+      '/api/assets/submissionStatistics'
+    )
   },
   /**
    * 资产上链明细列表
@@ -1104,14 +1134,19 @@ export default {
     keyword?: string
     status?: string
   }) {
-    return apiClient.post<DataListResponse<SubmissionData>>('/api/assets/submissionList', data)
+    return apiClient.post<DataListResponse<SubmissionData>>(
+      '/api/assets/submissionList',
+      data
+    )
   },
   /**
    * 资产运营状态
    * @returns
    */
   getAssetsOperationSummary() {
-    return apiClient.post<AssetsOperationSummaryData>('/api/assetsInfo/operationSummary')
+    return apiClient.post<AssetsOperationSummaryData>(
+      '/api/assetsInfo/operationSummary'
+    )
   },
   /**
    * 资产运营状态明细
@@ -1123,7 +1158,10 @@ export default {
     keyword?: string
     status?: string
   }) {
-    return apiClient.post<DataListResponse<AssetsOperationData>>('/api/assetsInfo/operationList', data)
+    return apiClient.post<DataListResponse<AssetsOperationData>>(
+      '/api/assetsInfo/operationList',
+      data
+    )
   },
   /**
    * 提交资产信息
@@ -1159,7 +1197,9 @@ export default {
    * @returns
    */
   getAssetInfo(submission_id: string) {
-    return apiClient.post<AssetInfo>('/api/assets/submissionDetail', { submission_id })
+    return apiClient.post<AssetInfo>('/api/assets/submissionDetail', {
+      submission_id
+    })
   },
   /**
    * 保存资产租金收入
@@ -1195,9 +1235,10 @@ export default {
    * @param data 资产租金支付详情
    * @returns
    */
-  getRentPaymentDetails(data: {
-    submission_id: string
-  }) {
-    return apiClient.post<RentPaymentDetails>('/api/assetsInfo/rentPaymentDetails', data)
+  getRentPaymentDetails(data: { submission_id: string }) {
+    return apiClient.post<RentPaymentDetails>(
+      '/api/assetsInfo/rentPaymentDetails',
+      data
+    )
   }
 }

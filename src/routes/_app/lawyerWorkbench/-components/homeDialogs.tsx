@@ -1,6 +1,7 @@
 import assetsApi from '@/api/assetsApi'
 import * as lawyerWorkbenchApi from '@/api/lawyerWorkbenchApi'
 import { CommonDialog } from '@/components/common/dialog/common'
+import { TrustRecordAlert } from '@/components/common/TrustRecordAlert'
 import { formatNumberNoRound } from '@/utils/number'
 import { addHttpsPrefix } from '@/utils/url'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -564,7 +565,7 @@ export function CompletedCaseDetailDialog({
           <div className="mt-8 text-lg font-600">
             {t('lawyerWorkbench.completedCaseDetailDialog.relatedDocuments')}
           </div>
-          <div className="grid cols-3 mt-4 gap-4 pb-10">
+          <div className="grid cols-3 mt-4 gap-4">
             {assetInfo?.files.map(item => (
               item.file_urls.fileUrls.map((fileUrl, index) => (
                 <div
@@ -586,6 +587,7 @@ export function CompletedCaseDetailDialog({
               ))
             ))}
           </div>
+          <TrustRecordAlert count={assetInfo?.properties?.ledgerbox_witness_summary?.total_witness_count || 0} className="mb-10 mt-4" />
         </div>
       </Spin>
     </CommonDialog>

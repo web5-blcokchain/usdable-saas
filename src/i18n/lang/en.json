@@ -40,7 +40,6 @@
     "noContent": "No content available",
     "tokenExpired": "Login expired, please login again",
     "assetStatus": {
-      "-1": "Draft",
       "0": "Pending Review",
       "1": "Lawyer Confirmed",
       "2": "Review Rejected",
@@ -51,6 +50,7 @@
       "7": "Lawyer Claimed (Offline)",
       "8": "Lawyer Uploading Offline Materials",
       "9": "Asset On-chain",
+      "-1": "Draft",
       "other": "Unknown"
     },
     "assetRentStatus": {
@@ -83,7 +83,8 @@
     "downloadFailed": "Failed to download file",
     "fileSizeError": "File size cannot exceed {{size}}",
     "submitSuccess": "Submitted Successfully",
-    "loginSuccess": "Login Successfully"
+    "loginSuccess": "Login Successfully",
+    "trustRecord": "The trusted record of this case has been witnessed by {{count}} LedgerBox devices. The file digest has been verified and all changes are fully traceable."
   },
   "contract": {
     "insufficient_balance": "Insufficient USDC balance",

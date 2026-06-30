@@ -2,6 +2,7 @@ import type { CaseListResponse } from '@/api/evaluationApi'
 import assetsApi from '@/api/assetsApi'
 import * as evaluationApi from '@/api/evaluationApi'
 import { CommonDialog } from '@/components/common/dialog/common'
+import { TrustRecordAlert } from '@/components/common/TrustRecordAlert'
 import { ASSET_EVALUATIO_STATUS } from '@/enums/evaluation'
 import { formatNumberNoRound } from '@/utils/number'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -175,6 +176,7 @@ export function EvaluationInfoDialog({
               <div className="mt-1.5">
                 {assetInfo?.properties?.property_description || '-'}
               </div>
+              <TrustRecordAlert count={assetInfo?.properties?.ledgerbox_witness_summary?.total_witness_count || 0} className="mt-4" />
               <div className="mt-4 text-sm text-#8B949E">
                 {t('evaluation.infoDialog.assetList')}
               </div>
